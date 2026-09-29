@@ -1,0 +1,92 @@
+@model CMS_HotelBooking.ViewComponents.NavbarViewModel
+<div class="top-bar">
+    <div class="container">
+        <div>
+            <i class="fa-solid fa-phone"></i>
+            @Model.SiteSetting.Phone
+            &nbsp;&nbsp;
+            <i class="fa-solid fa-envelope"></i>
+            @Model.SiteSetting.Email
+        </div>
+        <div>
+            <i class="fa-solid fa-location-dot"></i>
+            @Model.SiteSetting.Address
+        </div>
+    </div>
+</div>
+<nav class="navbar-section">
+    <video autoplay muted loop playsinline class="navbar-video">
+        <source src="~/images/Nav/navbar3.mp4" type="video/mp4">
+    </video>
+    <div class="nav-overlay"></div>
+    <div class="navbar">
+        <a asp-controller="Home" asp-action="Index" class="logo">
+            <div class="logo-circle">
+                <img src="~/@(Model.SiteSetting.LogoPath ?? "images/logo2.png")" alt="@Model.SiteSetting.SiteName">
+            </div>
+            <div class="logo-content">
+                <h2>@Model.SiteSetting.SiteName</h2>
+                <p>@Model.SiteSetting.Tagline</p>
+            </div>
+        </a>
+        <ul class="nav-menu">
+            @foreach (var item in Model.Menu)
+            {
+                <li><a href="@item.Url">@item.Title</a></li>
+            }
+        </ul>
+
+        <div class="nav-actions">
+            <a asp-controller="Contact" asp-action="Index" class="book-btn">
+                Book Your Stay
+                <span>→</span>
+            </a>
+
+            <div class="user-menu">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <button class="user-menu-btn" id="userMenuBtn" type="button">
+                        <i class="fa-solid fa-user"></i>
+                        <span>@User.Identity.Name</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+                    </button>
+                    <div class="user-menu-dropdown" id="userMenuDropdown">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Dashboard"><i class="fa-solid fa-gauge"></i> Admin Panel</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Booking" asp-action="MyBookings"><i class="fa-solid fa-calendar-check"></i> My Bookings</a>
+                        }
+                        <a asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="user-menu-btn">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Login</span>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="nav-line"></div>
+</nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var btn = document.getElementById("userMenuBtn");
+        var dropdown = document.getElementById("userMenuDropdown");
+        if (btn && dropdown) {
+            btn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                dropdown.classList.toggle("open");
+            });
+            document.addEventListener("click", function () {
+                dropdown.classList.remove("open");
+            });
+        }
+    });
+</script>

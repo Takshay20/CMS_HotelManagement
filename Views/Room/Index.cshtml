@@ -1,0 +1,593 @@
+﻿@model CMS_HotelBooking.Controllers.RoomListViewModel
+﻿@{
+ViewData["Title"] = "Hotel Rooms";
+}
+<style>
+    .room-slider {
+        width: 100%;
+        height: 80vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .room-slide {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        transition: 1s ease;
+        overflow: hidden;
+    }
+
+        .room-slide.active {
+            left: 0;
+            z-index: 2;
+        }
+
+        .room-slide.prev {
+            left: -100%;
+        }
+
+        .room-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 6s linear;
+        }
+
+        .room-slide.active img {
+            transform: scale(1.19);
+        }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,.45);
+    }
+
+    .caption {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        text-align: center;
+        color: #fff;
+        z-index: 5;
+        width: 80%;
+        animation: caption .8s;
+    }
+
+        .caption h4 {
+            color: #D4AF37;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .caption h1 {
+            font-size: 65px;
+            margin-bottom: 20px;
+        }
+
+        .caption p {
+            font-size: 22px;
+            margin-bottom: 35px;
+            line-height: 35px;
+        }
+
+    .btn1,
+    .btn2 {
+        display: inline-block;
+        margin: 10px;
+        padding: 15px 35px;
+        text-decoration: none;
+        border-radius: 30px;
+        transition: .4s;
+    }
+
+    .btn1 {
+        background: #D4AF37;
+        color: #fff;
+    }
+
+    .btn2 {
+        border: 2px solid #fff;
+        color: #fff;
+    }
+
+    .btn1:hover {
+        transform: scale3d(1.08) translateY(-20px);
+        box-shadow: 0 10px 25px rgba(212,175,55,.5);
+    }
+
+    .btn2:hover {
+        background: #fff;
+        color: #000;
+        transform: translateY(-5px);
+    }
+
+    .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.2);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px;
+        cursor: pointer;
+        z-index: 10;
+        transition: .4s;
+    }
+
+        .arrow:hover {
+            background: #D4AF37;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+    .prev {
+        left: 30px;
+    }
+
+    .next {
+        right: 30px;
+    }
+
+    .dots {
+        position: absolute;
+        bottom: 30px;
+        width: 100%;
+        text-align: center;
+        z-index: 10;
+    }
+
+    .dot {
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        margin: 0 6px;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+        transition: .4s;
+    }
+
+        .dot.active {
+            width: 5px;
+            border-radius: 2px;
+            background: #D4AF37;
+        }
+
+    @@keyframes caption {
+        from {
+            opacity: 0;
+            transform: translate(-50%,-35%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%,-50%);
+        }
+    }
+
+    .room-section {
+        width: 90%;
+        margin: 80px auto;
+    }
+
+        .room-section h5 {
+            text-align: center;
+            color: #D4AF37;
+            letter-spacing: 2px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .room-section h2 {
+            text-align: center;
+            font-size: 42px;
+            color: #222;
+            margin-bottom: 15px;
+        }
+
+    .room-title {
+        width: 70%;
+        margin: 0 auto 50px;
+        text-align: center;
+        line-height: 30px;
+        color: #666;
+    }
+
+    .room-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 50px;
+        background: #fff;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    }
+
+    .room-image {
+        width: 50%;
+        position: relative;
+        overflow: hidden;
+        border-radius: 18px;
+    }
+
+        .room-image img {
+            width: 100%;
+            height: 520px;
+            display: block;
+            object-fit: cover;
+            border-radius: 18px;
+            transition: .5s;
+        }
+
+        .room-image:hover img {
+            transform: scale(1.08);
+        }
+
+    .room-price {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #D4AF37;
+        color: #fff;
+        padding: 12px 22px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .room-content {
+        width: 50%;
+    }
+
+        .room-content h2 {
+            text-align: left;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .room-content p {
+            color: #666;
+            line-height: 30px;
+            margin-bottom: 30px;
+        }
+
+    .room-facility {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 18px;
+        margin-bottom: 35px;
+    }
+
+        .room-facility div {
+            background: #f7f7f7;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: .4s;
+            cursor: pointer;
+        }
+
+            .room-facility div:hover {
+                background: #D4AF37;
+                color: #fff;
+                transform: translateY(-5px);
+            }
+
+    .room-button {
+        display: flex;
+        gap: 20px;
+    }
+
+        .room-button a {
+            padding: 15px 35px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: .4s;
+        }
+
+            .room-button a:first-child {
+                background: #222;
+                color: #fff;
+            }
+
+            .room-button a:last-child {
+                background: #D4AF37;
+                color: #fff;
+            }
+
+            .room-button a:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,.2);
+            }
+
+    .gallery-title {
+        margin: 70px 0 35px;
+        text-align: center;
+        font-size: 34px;
+        color: #222;
+    }
+
+    .room-gallery {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 25px;
+    }
+
+    .gallery-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,.12);
+        transition: .4s;
+        cursor: pointer;
+    }
+
+        .gallery-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            display: block;
+            transition: .5s;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-card h4 {
+            padding: 18px 18px 8px;
+            font-size: 22px;
+            color: #222;
+        }
+
+        .gallery-card p {
+            padding: 0 18px;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .gallery-card span {
+            display: inline-block;
+            margin: 0 18px 20px;
+            background: #D4AF37;
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+    @@media(max - width:992px) {
+        .room-box {
+            flex-direction: column;
+        }
+
+        .room-image,
+        .room-content {
+            width: 100%;
+        }
+
+        .room-gallery {
+            grid-template-columns: repeat(2,1fr);
+        }
+
+        .room-title {
+            width: 100%;
+        }
+    }
+
+    @@media(max - width:768px) {
+        .room-gallery {
+            grid-template-columns: 1fr;
+        }
+
+        .room-facility {
+            grid-template-columns: 1fr;
+        }
+
+        .room-button {
+            flex-direction: column;
+        }
+
+        .room-image img {
+            height: 350px;
+        }
+
+        .room-content h2 {
+            font-size: 30px;
+        }
+
+        .room-section h2 {
+            font-size: 34px;
+        }
+
+        .room-title {
+            font-size: 15px;
+        }
+    }
+
+    .room-cat-bar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(0,0,0,.08);
+    }
+
+    .room-cat-inner {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 14px 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .room-cat-pill {
+        display: inline-block;
+        padding: 9px 22px;
+        border: 1px solid #D4AF37;
+        border-radius: 30px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: .3px;
+        transition: all .25s ease;
+        white-space: nowrap;
+    }
+
+        .room-cat-pill:hover,
+        .room-cat-pill.active {
+            background: #D4AF37;
+            color: #fff;
+        }
+
+    @@media(max-width:600px) {
+        .room-cat-inner {
+            padding: 12px 14px;
+            gap: 8px;
+        }
+
+        .room-cat-pill {
+            padding: 7px 16px;
+            font-size: 13px;
+        }
+    }
+</style>
+<section class="room-slider">
+    @{
+        var rFirst = true;
+    }
+    @foreach (var s in Model.Sliders)
+    {
+        <div class="room-slide @(rFirst ? "active" : "")">
+            <img src="~/@s.ImagePath" />
+            <div class="overlay"></div>
+            <div class="caption">
+                <h4>WELCOME TO ROYAL PARADISE</h4>
+                <h1>@s.Title</h1>
+                <p>@s.SubTitle</p>
+                <a asp-controller="Room" asp-action="Index" class="btn1">Book Now</a>
+                <a asp-controller="Room" asp-action="Index" class="btn2">Explore Rooms</a>
+            </div>
+        </div>
+        rFirst = false;
+    }
+    @if (Model.Sliders.Count == 0)
+    {
+        <div class="room-slide active">
+            <img src="~/images/backgroud.png" />
+            <div class="overlay"></div>
+            <div class="caption">
+                <h4>WELCOME TO ROYAL PARADISE</h4>
+                <h1>Luxury Rooms & Suites</h1>
+                <p>Handpicked comfort for every kind of traveller</p>
+                <a asp-controller="Room" asp-action="Index" class="btn1">Book Now</a>
+                <a asp-controller="Room" asp-action="Index" class="btn2">Explore Rooms</a>
+            </div>
+        </div>
+    }
+    <div class="arrow prev">&#10094;</div>
+    <div class="arrow next">&#10095;</div>
+    <div class="dots">
+        @for (int i = 0; i < Model.Sliders.Count; i++)
+        {
+            <span class="dot @(i == 0 ? "active" : "")"></span>
+        }
+    </div>
+</section>
+
+@{
+    var activeCategories = Model.Categories
+        .Where(c => c.IsActive && Model.Rooms.Any(r => r.RoomCategoryId == c.RoomCategoryId))
+        .OrderBy(c => c.DisplayOrder)
+        .ToList();
+}
+@if (activeCategories.Count > 0)
+{
+    <div class="room-cat-bar">
+        <div class="room-cat-inner">
+            <a href="#" class="room-cat-pill active" data-target="all">All Rooms</a>
+            @foreach (var c in activeCategories)
+            {
+                <a href="#cat-@c.RoomCategoryId" class="room-cat-pill" data-target="cat-@c.RoomCategoryId">@c.Name</a>
+            }
+        </div>
+    </div>
+}
+
+@foreach (var category in activeCategories)
+{
+    var roomsInCategory = Model.Rooms.Where(r => r.RoomCategoryId == category.RoomCategoryId).ToList();
+    if (roomsInCategory.Count == 0) { continue; }
+    var headline = roomsInCategory.First();
+
+    <section class="room-section" id="cat-@category.RoomCategoryId">
+        <h5>OUR ROOMS</h5>
+        <h2>@category.Name</h2>
+        <p class="room-title">@category.Description</p>
+        <div class="room-box">
+            <div class="room-image">
+                <img src="~/@headline.ImagePath" alt="@headline.Title">
+                <span class="room-price">&#8377;@(headline.PricePerNight.ToString("N0")) / Night</span>
+            </div>
+            <div class="room-content">
+                <h2>@headline.Title</h2>
+                <p>@headline.Description</p>
+                <div class="room-facility">
+                    <div>👤 @headline.MaxGuests Guests</div>
+                    @if (!string.IsNullOrWhiteSpace(headline.SizeSqft))
+                    {
+                        <div>📐 @headline.SizeSqft</div>
+                    }
+                    <div>📶 Free Wi-Fi</div>
+                    <div>❄ Air Conditioning</div>
+                </div>
+                <div class="room-button">
+                    <a asp-controller="Room" asp-action="Details" asp-route-id="@headline.RoomId">View Details</a>
+                    <a asp-controller="Room" asp-action="Details" asp-route-id="@headline.RoomId">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        @if (roomsInCategory.Count > 1)
+        {
+            <h3 class="gallery-title">Available @category.Name Rooms</h3>
+            <div class="room-gallery">
+                @foreach (var r in roomsInCategory)
+                {
+                    <a asp-controller="Room" asp-action="Details" asp-route-id="@r.RoomId" style="text-decoration:none;color:inherit;">
+                        <div class="gallery-card">
+                            <img src="~/@r.ImagePath">
+                            <h4>@r.Title</h4>
+                            <p>Room No. @r.RoomNumber</p>
+                            <span>&#8377;@(r.PricePerNight.ToString("N0"))</span>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </section>
+}
+
+@section Scripts {
+    <script src="~/js/site.js">
+      
+    </script>
+}

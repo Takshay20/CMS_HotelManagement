@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "Facility";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Hotel Facilities</h2>
+            <p>Manage facilities like Pool, Spa, Restaurant, Gym shown on the About page</p>
+        </div>
+        <div class="header-right">
+            <input type="text" id="txtSearch" placeholder="Search Here..." />
+            <button id="btnAdd"><i class="fa fa-plus"></i> Add New</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Display Order</th>
+                    <th>Status</th>
+                    <th width="150">Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+        <h3>Facility</h3>
+        <span id="closeDrawer">&times;</span>
+    </div>
+    <div class="drawer-body">
+        <form id="frmData" enctype="multipart/form-data">
+            <input type="hidden" id="Id" value="0" />
+
+            <label>Title <span class="required-star">*</span></label>
+            <input type="text" id="Title" />
+            <span class="field-error" id="err-Title"></span>
+
+            <label>Description</label>
+            <textarea id="Description"></textarea>
+
+
+            <label>
+                <input type="checkbox" id="IsActive" checked style="width:auto;" /> Active
+            </label>
+
+            <label>Image <span class="required-star">*</span></label>
+            <input type="file" id="ImageFile" accept="image/*" />
+            <span class="field-error" id="err-ImageFile"></span>
+            <img id="imgPreview" src="" style="display:none;max-width:100%;margin-top:10px;border-radius:8px;" />
+
+            <div class="drawer-footer">
+                <button type="button" id="btnCancel">Cancel</button>
+                <button type="button" id="btnSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/Admin/js/Common.js"></script>
+<script src="~/Admin/js/Facility.js"></script>
+}

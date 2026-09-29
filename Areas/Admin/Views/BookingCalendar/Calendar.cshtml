@@ -1,0 +1,141 @@
+@{
+    ViewData["Title"] = "Booking Calendar";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<link href="~/Admin/css/booking-calendar.css" rel="stylesheet" />
+
+<style>
+
+    .bc-filters {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bc-filters .select2-container {
+        width: 220px !important;
+    }
+
+    .bc-filters .select2-selection--single {
+        height: 40px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .bc-filters .select2-selection__rendered {
+        line-height: 38px !important;
+        padding-left: 12px !important;
+    }
+
+    .bc-filters .select2-selection__arrow {
+        height: 38px !important;
+    }
+
+</style>
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <div>
+
+            <h2>Booking Calendar</h2>
+
+            <p>
+                Room-wise occupancy for the month
+                &mdash;
+                spot date clashes at a glance
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="bc-toolbar">
+
+        <div class="bc-nav">
+
+            <button id="bcPrev">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <h3 id="bcMonthLabel"></h3>
+
+            <button id="bcNext">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <button
+                id="bcToday"
+                style="width:auto;padding:0 14px;">
+                Today
+            </button>
+
+        </div>
+
+
+        <div class="bc-filters">
+
+            <label style="font-size:13px;color:#555;">
+                Category:
+            </label>
+
+            <select id="bcCategory">
+
+                <option value="0">
+                    All Categories
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="bc-legend">
+
+            <span>
+                <i class="bc-dot pending"></i>
+                Pending
+            </span>
+
+            <span>
+                <i class="bc-dot approved"></i>
+                Approved
+            </span>
+
+            <span>
+                <i class="bc-dot today"></i>
+                Today
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="bc-scroll">
+
+        <table
+            class="bc-grid"
+            id="bcGrid">
+        </table>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="~/Admin/js/Common.js"></script>
+
+    <script src="~/Admin/js/BookingCalendar.js"></script>
+
+}

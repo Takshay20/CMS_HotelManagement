@@ -1,0 +1,137 @@
+@{
+    ViewData["Title"] = "Booking";
+}
+ <link href="~/admin/css/booking.css" rel="stylesheet" />
+
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <h2>Bookings</h2>
+            <p>Review and approve/reject guest booking requests</p>
+        </div>
+
+        <div class="header-right">
+            <select id="ddlStatusFilter" style="padding:10px;">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+
+            <input type="text"
+                   id="txtSearch"
+                   placeholder="Search Here..." />
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Guest</th>
+                    <th>Room</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Guests</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th width="240">Action</th>
+                </tr>
+            </thead>
+
+            <tbody></tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="drawer" id="drawer">
+
+    <div class="drawer-header">
+        <h3>Change Room</h3>
+        <span id="closeDrawer">&times;</span>
+    </div>
+
+    <div class="drawer-body">
+
+        <form id="frmData">
+
+            <input type="hidden"
+                   id="crBookingId"
+                   value="0" />
+
+            <p id="crCurrentRoom"
+               style="margin-bottom:15px;color:#555;">
+            </p>
+
+            <label>
+                Select A Different Room
+                (same category, free for these dates)
+                <span class="required-star">*</span>
+            </label>
+
+            <select id="crRoomList"></select>
+
+            <span class="field-error"
+                  id="err-crRoomList">
+            </span>
+
+            <p id="crNoRooms"
+               style="display:none;color:#c0392b;margin-top:8px;">
+                No other room in this category is free for these dates.
+            </p>
+
+            <label>
+                Note To Guest (optional)
+            </label>
+
+            <textarea id="crNote"
+                      placeholder="e.g. Your original room had a scheduling conflict, we're moving you to a similar room.">
+            </textarea>
+
+            <div class="drawer-footer">
+
+                <button type="button"
+                        id="btnCancel">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        id="btnSave">
+                    Propose Change
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<div id="paymentModal">
+    <div class="payment-modal-box">
+        <div class="payment-modal-header">
+            <div>
+                <h3>Payment Details</h3>
+                <p>
+                    Booking Payment Information
+                </p>
+            </div>
+            <button type="button"
+                    class="payment-modal-close"
+                    id="btnClosePaymentModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="paymentDetailsContent">
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/Booking.js"></script>
+
+}

@@ -1,0 +1,200 @@
+<div class="logo">
+    <h2>Hotel CMS</h2>
+</div>
+
+<ul class="menu">
+
+    <li>
+        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Dashboard">
+            <i class="fa-solid fa-gauge"></i>
+            Dashboard
+        </a>
+    </li>
+
+    <li class="has-sub">
+        <a href="#" class="sub-toggle">
+            <i class="fa-solid fa-house"></i>
+            Home Page
+            <i class="fa-solid fa-chevron-down arrow"></i>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a asp-area="Admin" asp-controller="HomeWelcome" asp-action="HomeWelcome">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    Welcome Section
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="HomeWhyChooseUs" asp-action="HomeWhyChooseUs">
+                    <i class="fa-solid fa-star"></i>
+                    Why Choose Us
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="has-sub">
+        <a href="#" class="sub-toggle">
+            <i class="fa-solid fa-circle-info"></i>
+            About Page
+            <i class="fa-solid fa-chevron-down arrow"></i>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a asp-area="Admin" asp-controller="About" asp-action="About">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Welcome About
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="AboutStory" asp-action="AboutStory">
+                    <i class="fa-solid fa-book-open"></i>
+                    Story Content
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="AboutReception" asp-action="AboutReception">
+                    <i class="fa-solid fa-concierge-bell"></i>
+                    Reception
+                </a>
+            </li>
+            
+            <li>
+                <a asp-area="Admin" asp-controller="AboutCounter" asp-action="AboutCounter">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    Counter Box
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="AboutCta" asp-action="AboutCta">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    CTA
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="has-sub">
+        <a href="#" class="sub-toggle">
+            <i class="fa-solid fa-bed"></i>
+            Room
+            <i class="fa-solid fa-chevron-down arrow"></i>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a asp-area="Admin" asp-controller="Room" asp-action="Room">
+                    <i class="fa-solid fa-bed"></i>
+                    Rooms
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="RoomCategory" asp-action="RoomCategory">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Room Category
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="Amenity" asp-action="Amenity">
+                    <i class="fa-solid fa-wifi"></i>
+                    Amenity
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a asp-area="Admin" asp-controller="Gallery" asp-action="Gallery">
+            <i class="fa-solid fa-image"></i>
+            Gallery
+        </a>
+    </li>
+    <li>
+        <a asp-area="Admin" asp-controller="Facility" asp-action="Facility">
+            <i class="fa-solid fa-dumbbell"></i>
+            Facility
+        </a>
+    </li>
+
+    <li>
+        <a asp-area="Admin" asp-controller="Slider" asp-action="Slider">
+            <i class="fa-solid fa-images"></i>
+            Slider
+        </a>
+    </li>
+
+    <li>
+        <a asp-area="Admin" asp-controller="Booking" asp-action="Booking">
+            <i class="fa-solid fa-calendar-check"></i>
+            Booking
+        </a>
+    </li>
+
+    <li>
+        <a asp-area="Admin" asp-controller="BookingCalendar" asp-action="Calendar">
+            <i class="fa-solid fa-calendar-days"></i>
+            Booking Calendar
+        </a>
+    </li>
+
+    <li>
+        <a asp-area="Admin" asp-controller="Feedback" asp-action="Feedback">
+            <i class="fa-solid fa-comments"></i>
+            Feedback
+        </a>
+    </li>
+
+    <li>
+        <a asp-area="Admin" asp-controller="ContactMessage" asp-action="ContactMessage">
+            <i class="fa-solid fa-envelope-open-text"></i>
+            Messages
+        </a>
+    </li>
+
+    <li class="has-sub">
+        <a href="#" class="sub-toggle">
+            <i class="fa-solid fa-window-maximize"></i>
+            Site Content
+            <i class="fa-solid fa-chevron-down arrow"></i>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a asp-area="Admin" asp-controller="Navbar" asp-action="Navbar">
+                    <i class="fa-solid fa-bars"></i>
+                    Navbar
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="Footer" asp-action="Footer">
+                    <i class="fa-solid fa-window-maximize"></i>
+                    Footer
+                </a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="SocialMedia" asp-action="SocialMedia">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    Social Media
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a asp-area="Admin" asp-controller="User" asp-action="User">
+            <i class="fa-solid fa-users"></i>
+            Users
+        </a>
+    </li>
+
+    <li>
+        <a asp-area="Admin" asp-controller="SiteSetting" asp-action="SiteSetting">
+            <i class="fa-solid fa-gear"></i>
+            Site Setting
+        </a>
+    </li>
+    <li>
+        <a asp-area="Admin" asp-controller="RestoreRecords" asp-action="RestoreRecords">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Restore Records</span>
+        </a>
+    </li>
+
+</ul>

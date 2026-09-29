@@ -1,0 +1,192 @@
+.page-container {
+    padding: 0;
+}
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+    .page-header h2 {
+        font-size: 24px;
+        color: #16213e;
+        margin-bottom: 4px;
+    }
+    .page-header p {
+        color: #888;
+        font-size: 14px;
+    }
+.header-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#txtSearch,
+#ddlPageFilter,
+#ddlStatusFilter {
+    width: 240px;
+    padding: 11px 15px;
+    border: 1.5px solid #e2e6ee;
+    border-radius: 30px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    transition: .2s;
+}
+    #txtSearch:focus,
+    #ddlPageFilter:focus,
+    #ddlStatusFilter:focus {
+        border-color: #D4AF37;
+        box-shadow: 0 0 0 3px rgba(212,175,55,.15);
+    }
+#btnAdd {
+    padding: 11px 24px !important;
+    cursor: pointer !important;
+    border: none !important;
+    border-radius: 30px !important;
+    background: linear-gradient(135deg, #16213e, #0F172A) !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    transition: .25s;
+}
+    #btnAdd:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(15,23,42,.3);
+    }
+.table-container {
+    background: #fff;
+    padding: 10px 20px 20px;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.06);
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    border: 1px solid #e6e9f0;
+}
+    table thead {
+        background: #f7f9fc;
+    }
+    table th {
+        padding: 15px 14px;
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: #666;
+        font-weight: 700;
+        border: 1px solid #e6e9f0;
+    }
+    table td {
+        padding: 14px;
+        border: 1px solid #eef0f6;
+        text-align: left;
+        font-size: 14px;
+        color: #333;
+        vertical-align: middle;
+    }
+    table th:last-child,
+    table td:last-child {
+        white-space: nowrap;
+        min-width: 150px;
+    }
+
+    table tbody tr {
+        transition: .15s;
+    }
+
+        table tbody tr:hover {
+            background: #fbf9f2;
+        }
+
+    table img {
+        width: 70px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+table td span {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #eef7ee;
+    color: #2e7d32;
+    white-space: nowrap;
+}
+
+table td button {
+    border: none;
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 2px 4px 2px 0;
+    transition: .2s;
+    background: #eef0f5;
+    color: #333;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+    table td button:hover {
+        transform: translateY(-1px);
+    }
+
+    table td button:first-of-type {
+        background: rgba(212,175,55,.15);
+        color: #9c7c1f;
+    }
+
+        table td button:first-of-type:hover {
+            background: rgba(212,175,55,.28);
+        }
+
+    table td button:nth-of-type(2) {
+        background: rgba(220,53,69,.1);
+        color: #c0392b;
+    }
+
+        table td button:nth-of-type(2):hover {
+            background: rgba(220,53,69,.2);
+        }
+
+.status-Pending { 
+    background: #fff3cd !important; 
+    color: #856404 !important;
+
+}
+.status-Approved { 
+    background: #d4edda !important; 
+    color: #155724 !important; 
+
+}
+.status-Rejected { 
+    background: #f8d7da !important; 
+    color: #721c24 !important; 
+
+}
+.status-Cancelled { 
+    background: #e2e3e5 !important; 
+    color: #383d41 !important; 
+
+}
+
+table td.cell-wrap {
+    max-width: 320px;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 22px;
+}

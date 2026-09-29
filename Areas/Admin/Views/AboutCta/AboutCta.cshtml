@@ -1,0 +1,125 @@
+@model CMS_HotelBooking.ViewModels.AboutCtaVM
+
+@{
+    ViewData["Title"] = "About - CTA";
+}
+
+<style>
+    .img-preview {
+        width: 180px;
+        height: 120px;
+        object-fit: cover;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <h2>Call To Action (CTA)</h2>
+
+    <p class="text-muted">
+        Manage the booking call-to-action banner shown on the About page
+    </p>
+
+    <form id="aboutCtaForm"
+          enctype="multipart/form-data">
+
+        <input type="hidden"
+               id="AboutCtaId"
+               name="AboutCta.AboutCtaId"
+               value="@Model.AboutCta.AboutCtaId" />
+        <div class="mb-3">
+
+            <label class="form-label">
+                Heading <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="Heading"
+                   name="AboutCta.Heading"
+                   class="form-control"
+                   value="@Model.AboutCta.Heading"
+                   placeholder="Ready For A Memorable Stay?" />
+            <span class="field-error" id="err-Heading"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Sub Heading <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="SubHeading"
+                   name="AboutCta.SubHeading"
+                   class="form-control"
+                   value="@Model.AboutCta.SubHeading" />
+            <span class="field-error" id="err-SubHeading"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Button Text <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="ButtonText"
+                   name="AboutCta.ButtonText"
+                   class="form-control"
+                   value="@Model.AboutCta.ButtonText"
+                   placeholder="Book Now" />
+            <span class="field-error" id="err-ButtonText"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Button URL <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="ButtonUrl"
+                   name="AboutCta.ButtonUrl"
+                   class="form-control"
+                   value="@Model.AboutCta.ButtonUrl"
+                   placeholder="/Room/Index" />
+            <span class="field-error" id="err-ButtonUrl"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Background Image
+            </label>
+
+            <input type="file"
+                   id="ImageFile"
+                   name="ImageFile"
+                   class="form-control"
+                   accept="image/*" />
+
+            @if (!string.IsNullOrEmpty(Model.AboutCta.ImagePath))
+            {
+                <img src="/@Model.AboutCta.ImagePath" class="img-preview" />
+            }
+
+        </div>
+
+        <button type="submit"
+                class="btn">
+            Update Changes
+        </button>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/AboutCta.js"></script>
+}

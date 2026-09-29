@@ -1,0 +1,873 @@
+@model CMS_HotelBooking.Controllers.GalleryViewModel
+
+@{
+    ViewData["Title"] = "Gallery";
+
+    var categories = Model.Images
+        .Where(x => !string.IsNullOrWhiteSpace(x.Category))
+        .Select(x => x.Category)
+        .Distinct()
+        .ToList();
+}
+
+<style>
+    .rp-gallery-page {
+        background: #f7f5ef;
+        min-height: 100vh;
+        padding-bottom: 70px;
+    }
+    .rp-cinema-slider {
+        position: relative;
+        width: 100%;
+        height: 430px;
+        overflow: hidden;
+        background: #111;
+    }
+    .rp-cinema-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .8s ease;
+    }
+        .rp-cinema-slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+        }
+
+    .rp-cinema-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1.06);
+        transition: transform 6s ease;
+    }
+
+    .rp-cinema-slide.active .rp-cinema-image {
+        transform: scale(1);
+    }
+
+    .rp-cinema-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( 90deg, rgba(0,0,0,.82) 0%, rgba(0,0,0,.45) 38%, rgba(0,0,0,.12) 70%, rgba(0,0,0,.48) 100% );
+        z-index: 2;
+    }
+
+    .rp-cinema-bottom {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 45%;
+        background: linear-gradient( transparent, rgba(0,0,0,.65) );
+        z-index: 2;
+    }
+
+    .rp-cinema-content {
+        position: absolute;
+        left: 8%;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 5;
+        width: 55%;
+        color: #fff;
+    }
+
+    .rp-cinema-kicker {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 13px;
+        color: #d4af37;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 4px;
+    }
+
+        .rp-cinema-kicker:before {
+            content: "";
+            display: block;
+            width: 45px;
+            height: 2px;
+            background: #d4af37;
+        }
+
+    .rp-cinema-title {
+        margin: 0 0 10px;
+        color: #fff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 47px;
+        font-weight: 500;
+        line-height: 1.05;
+        text-shadow: 0 3px 18px rgba(0,0,0,.55);
+    }
+
+    .rp-cinema-subtitle {
+        margin: 0;
+        color: rgba(255,255,255,.9);
+        font-size: 14px;
+        letter-spacing: 1.5px;
+    }
+
+    .rp-cinema-number {
+        position: absolute;
+        left: 8%;
+        bottom: 30px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255,255,255,.65);
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+        .rp-cinema-number strong {
+            color: #d4af37;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+    .rp-cinema-number-line {
+        width: 55px;
+        height: 1px;
+        background: rgba(255,255,255,.45);
+    }
+
+    .rp-cinema-thumbnails {
+        position: absolute;
+        right: 5.5%;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 20;
+        width: 115px;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .rp-cinema-thumb {
+        position: relative;
+        width: 115px;
+        height: 58px;
+        padding: 0;
+        border: 2px solid rgba(255,255,255,.35);
+        background: #222;
+        overflow: hidden;
+        cursor: pointer;
+        opacity: .62;
+        transition: .35s;
+    }
+
+        .rp-cinema-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .4s ease;
+        }
+
+        .rp-cinema-thumb:hover {
+            opacity: 1;
+            transform: translateX(-5px);
+        }
+
+            .rp-cinema-thumb:hover img {
+                transform: scale(1.08);
+            }
+
+        .rp-cinema-thumb.active {
+            width: 135px;
+            border-color: #d4af37;
+            opacity: 1;
+            transform: translateX(-20px);
+            box-shadow: 0 5px 20px rgba(0,0,0,.35);
+        }
+
+    .rp-cinema-thumb-number {
+        position: absolute;
+        left: 7px;
+        bottom: 5px;
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 0 1px 4px #000;
+    }
+
+    .rp-cinema-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 25;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.55);
+        background: rgba(0,0,0,.25);
+        color: #fff;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .rp-cinema-arrow:hover {
+            background: #d4af37;
+            border-color: #d4af37;
+        }
+
+    .rp-cinema-prev {
+        left: 3%;
+    }
+
+    .rp-cinema-next {
+        right: 19%;
+    }
+
+    .rp-cinema-progress {
+        position: absolute;
+        left: 8%;
+        bottom: 17px;
+        width: 220px;
+        height: 2px;
+        background: rgba(255,255,255,.25);
+        z-index: 20;
+    }
+
+    .rp-cinema-progress-bar {
+        width: 0;
+        height: 100%;
+        background: #d4af37;
+        transition: width .4s ease;
+    }
+
+    .rp-gallery-content {
+        width: 90%;
+        max-width: 1350px;
+        margin: 65px auto 0;
+    }
+
+    .rp-gallery-heading {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+        .rp-gallery-heading span {
+            color: #b08a25;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 4px;
+        }
+
+        .rp-gallery-heading h2 {
+            margin: 10px 0 10px;
+            color: #182033;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 38px;
+            font-weight: 500;
+        }
+
+        .rp-gallery-heading p {
+            max-width: 650px;
+            margin: auto;
+            color: #777;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+    .rp-gallery-filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 35px;
+    }
+
+    .rp-gallery-filter {
+        padding: 9px 22px;
+        border: 1px solid #d4af37;
+        border-radius: 30px;
+        background: transparent;
+        color: #444;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .rp-gallery-filter:hover,
+        .rp-gallery-filter.active {
+            background: #d4af37;
+            color: #fff;
+        }
+
+    .rp-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
+    }
+
+    .rp-gallery-item {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        cursor: pointer;
+        background: #ddd;
+        box-shadow: 0 8px 25px rgba(0,0,0,.10);
+    }
+
+        .rp-gallery-item img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s ease;
+        }
+
+        .rp-gallery-item:hover img {
+            transform: scale(1.07);
+        }
+
+    .rp-gallery-item-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 20px;
+        opacity: 0;
+        color: #fff;
+        background: linear-gradient( transparent, rgba(0,0,0,.85) );
+        transition: .35s;
+    }
+
+    .rp-gallery-item:hover
+    .rp-gallery-item-overlay {
+        opacity: 1;
+    }
+
+    .rp-gallery-item-overlay small {
+        color: #d4af37;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+
+    .rp-gallery-item-overlay strong {
+        margin-top: 5px;
+        color: #fff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .rp-gallery-item.hide {
+        display: none;
+    }
+
+    .rp-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,.94);
+    }
+
+        .rp-lightbox.show {
+            display: flex;
+        }
+
+    .rp-lightbox-image {
+        max-width: 82%;
+        max-height: 80vh;
+        object-fit: contain;
+    }
+
+    .rp-lightbox-close {
+        position: absolute;
+        right: 25px;
+        top: 20px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.5);
+        background: rgba(0,0,0,.3);
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .rp-lightbox-close:hover {
+            background: #d4af37;
+            border-color: #d4af37;
+        }
+
+    .rp-lightbox-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.5);
+        background: rgba(0,0,0,.3);
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .rp-lightbox-arrow:hover {
+            background: #d4af37;
+        }
+
+    .rp-lightbox-prev {
+        left: 25px;
+    }
+
+    .rp-lightbox-next {
+        right: 25px;
+    }
+
+    .rp-lightbox-title {
+        position: absolute;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        color: #fff;
+        text-align: center;
+        font-size: 15px;
+    }
+
+    @@media(max-width:1000px) {
+
+        .rp-cinema-thumbnails {
+            right: 3%;
+        }
+
+        .rp-cinema-thumb {
+            width: 90px;
+            height: 50px;
+        }
+
+            .rp-cinema-thumb.active {
+                width: 105px;
+            }
+
+        .rp-cinema-next {
+            right: 15%;
+        }
+
+        .rp-gallery-grid {
+            columns: 3;
+        }
+    }
+
+    @@media(max-width:750px) {
+
+        .rp-cinema-slider {
+            height: 420px;
+        }
+
+        .rp-cinema-content {
+            left: 7%;
+            width: 70%;
+        }
+
+        .rp-cinema-title {
+            font-size: 34px;
+        }
+
+        .rp-cinema-thumbnails {
+            right: 3%;
+            width: 70px;
+        }
+
+        .rp-cinema-thumb {
+            width: 70px;
+            height: 45px;
+        }
+
+            .rp-cinema-thumb.active {
+                width: 80px;
+                transform: translateX(-10px);
+            }
+
+        .rp-cinema-next {
+            right: 13%;
+        }
+
+        .rp-cinema-progress {
+            width: 150px;
+        }
+
+        .rp-gallery-grid {
+            columns: 2;
+        }
+    }
+
+    @@media(max-width:550px) {
+
+        .rp-cinema-slider {
+            height: 390px;
+        }
+
+        .rp-cinema-content {
+            left: 7%;
+            width: 80%;
+        }
+
+        .rp-cinema-title {
+            font-size: 29px;
+        }
+
+        .rp-cinema-subtitle {
+            font-size: 12px;
+        }
+
+        .rp-cinema-thumbnails {
+            display: none;
+        }
+
+        .rp-cinema-next {
+            right: 6%;
+        }
+
+        .rp-cinema-prev {
+            left: 6%;
+        }
+
+        .rp-cinema-number {
+            left: 7%;
+        }
+
+        .rp-cinema-progress {
+            left: 7%;
+            width: 150px;
+        }
+
+        .rp-gallery-grid {
+            columns: 1;
+        }
+
+        .rp-gallery-heading h2 {
+            font-size: 30px;
+        }
+    }
+
+</style>
+
+<div class="rp-gallery-page">
+
+    <section class="rp-cinema-slider"
+             id="rpCinemaSlider">
+
+        @if (Model.Sliders != null &&
+             Model.Sliders.Count > 0)
+        {
+            var firstSlide = true;
+
+            foreach (var slider in Model.Sliders)
+            {
+                var sliderPath = slider.ImagePath ?? "";
+
+                if (!sliderPath.StartsWith(
+                    "http",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    sliderPath =
+                        "/" +
+                        sliderPath.TrimStart('~', '/');
+                }
+
+                <div class="rp-cinema-slide @(firstSlide ? "active" : "")"
+                     data-image="@sliderPath"
+                     data-title="@(slider.Title ?? "Royal Paradise")"
+                     data-subtitle="@(slider.SubTitle ?? "ROYAL PARADISE HOTEL")">
+
+                    <img class="rp-cinema-image"
+                         src="@sliderPath"
+                         alt="@slider.Title"
+                         onerror="this.onerror=null;this.src='/images/backgroud.png';" />
+
+                    <div class="rp-cinema-overlay"></div>
+
+                    <div class="rp-cinema-bottom"></div>
+
+                    <div class="rp-cinema-content">
+
+                        <div class="rp-cinema-kicker">
+                            @(string.IsNullOrWhiteSpace(slider.SubTitle)
+                                ? "ROYAL PARADISE HOTEL"
+                                : slider.SubTitle)
+                        </div>
+
+                        <h1 class="rp-cinema-title">
+                            @(string.IsNullOrWhiteSpace(slider.Title)
+                                ? "A Beautiful Experience"
+                                : slider.Title)
+                        </h1>
+
+                        <p class="rp-cinema-subtitle">
+                            Luxury • Elegance • Excellence
+                        </p>
+
+                    </div>
+
+                </div>
+
+                firstSlide = false;
+            }
+        }
+        else
+        {
+            <div class="rp-cinema-slide active"
+                 data-image="/images/backgroud.png"
+                 data-title="Royal Paradise"
+                 data-subtitle="ROYAL PARADISE HOTEL">
+
+                <img class="rp-cinema-image"
+                     src="/images/backgroud.png"
+                     alt="Royal Paradise" />
+
+                <div class="rp-cinema-overlay"></div>
+
+                <div class="rp-cinema-bottom"></div>
+
+                <div class="rp-cinema-content">
+
+                    <div class="rp-cinema-kicker">
+                        ROYAL PARADISE HOTEL
+                    </div>
+
+                    <h1 class="rp-cinema-title">
+                        A Beautiful Experience
+                    </h1>
+
+                    <p class="rp-cinema-subtitle">
+                        Luxury • Elegance • Excellence
+                    </p>
+
+                </div>
+
+            </div>
+        }
+
+        <div class="rp-cinema-number">
+
+            <strong id="rpCurrent">
+                01
+            </strong>
+
+            <span class="rp-cinema-number-line"></span>
+
+            <span id="rpTotal">
+                01
+            </span>
+
+        </div>
+
+        <div class="rp-cinema-progress">
+
+            <div class="rp-cinema-progress-bar"
+                 id="rpProgress">
+            </div>
+
+        </div>
+
+        <button type="button"
+                class="rp-cinema-arrow rp-cinema-prev"
+                id="rpPrev">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </button>
+
+        <button type="button"
+                class="rp-cinema-arrow rp-cinema-next"
+                id="rpNext">
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </button>
+
+        <div class="rp-cinema-thumbnails"
+             id="rpThumbnails">
+        </div>
+
+    </section>
+
+    <section class="rp-gallery-content">
+
+        <div class="rp-gallery-heading">
+
+            <span>
+                MOMENTS WORTH REMEMBERING
+            </span>
+
+            <h2>
+                Explore Our Gallery
+            </h2>
+
+            <p>
+                Discover the beauty, luxury and unforgettable
+                moments of Royal Paradise Hotel.
+            </p>
+
+        </div>
+
+        @if (categories.Count > 0)
+        {
+            <div class="rp-gallery-filters">
+
+                <button type="button"
+                        class="rp-gallery-filter active"
+                        data-filter="all">
+
+                    All
+
+                </button>
+
+                @foreach (var category in categories)
+                {
+                    <button type="button"
+                            class="rp-gallery-filter"
+                            data-filter="@category">
+
+                        @category
+
+                    </button>
+                }
+
+            </div>
+        }
+
+        @if (Model.Images != null &&
+                     Model.Images.Count > 0)
+        {
+            <div class="rp-gallery-grid">
+
+                @foreach (var image in Model.Images)
+                {
+                    var imagePath = image.ImagePath ?? "";
+
+                    if (!imagePath.StartsWith(
+                        "http",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        imagePath =
+                            "/" +
+                            imagePath.TrimStart('~', '/');
+                    }
+
+                    <div class="rp-gallery-item"
+                         data-category="@(image.Category ?? "")"
+                         data-image="@imagePath"
+                         data-title="@(image.Title ?? "Royal Paradise")">
+
+                        <img src="@imagePath"
+                             alt="@image.Title"
+                             loading="lazy"
+                             onerror="this.onerror=null;this.src='/images/backgroud.png';" />
+
+                        <div class="rp-gallery-item-overlay">
+
+                            <small>
+                                @(string.IsNullOrWhiteSpace(image.Category)
+                                    ? "ROYAL PARADISE"
+                                    : image.Category.ToUpper())
+                            </small>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(image.Title)
+                                    ? "Royal Paradise"
+                                    : image.Title)
+                            </strong>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div style="
+                background:#fff;
+                padding:70px 20px;
+                text-align:center;
+                color:#777;">
+
+                <i class="fa-regular fa-images"
+                   style="
+                    display:block;
+                    font-size:50px;
+                    color:#d4af37;
+                    margin-bottom:15px;">
+                </i>
+
+                <h3>
+                    Gallery Coming Soon
+                </h3>
+
+                <p>
+                    Beautiful moments will be added soon.
+                </p>
+
+            </div>
+        }
+
+    </section>
+
+</div>
+
+<div class="rp-lightbox"
+     id="rpLightbox">
+
+    <button type="button"
+            class="rp-lightbox-close"
+            id="rpLightboxClose">
+
+        <i class="fa-solid fa-xmark"></i>
+
+    </button>
+
+    <button type="button"
+            class="rp-lightbox-arrow rp-lightbox-prev"
+            id="rpLightboxPrev">
+
+        <i class="fa-solid fa-chevron-left"></i>
+
+    </button>
+
+    <img id="rpLightboxImage"
+         class="rp-lightbox-image"
+         src=""
+         alt="" />
+
+    <button type="button"
+            class="rp-lightbox-arrow rp-lightbox-next"
+            id="rpLightboxNext">
+
+        <i class="fa-solid fa-chevron-right"></i>
+
+    </button>
+
+    <div class="rp-lightbox-title"
+         id="rpLightboxTitle">
+    </div>
+
+</div>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+@section Scripts {
+
+    <script src="~/js/gallery.js">
+
+    </script>
+
+}

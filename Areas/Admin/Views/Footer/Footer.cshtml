@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Footer";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Footer Settings</h2>
+            <p>Manage the footer text and contact info shown on every page</p>
+        </div>
+    </div>
+
+    <div class="table-container settings-card">
+        <form id="frmData">
+            <input type="hidden" id="Id" value="0" />
+
+            <label>About Text <span class="required-star">*</span></label>
+            <textarea id="AboutText"></textarea>
+            <span class="field-error" id="err-AboutText"></span>
+
+            <label>Phone <span class="required-star">*</span></label>
+            <input type="text" id="Phone" />
+            <span class="field-error" id="err-Phone"></span>
+
+            <label>Email <span class="required-star">*</span></label>
+            <input type="text" id="Email" />
+            <span class="field-error" id="err-Email"></span>
+
+            <label>Address</label>
+            <input type="text" id="Address" />
+
+            <label>Copyright Text</label>
+            <input type="text" id="CopyrightText" />
+
+            <div class="drawer-footer" style="justify-content:flex-start;">
+                <button type="button" id="btnSave">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/Admin/js/Common.js"></script>
+<script src="~/Admin/js/Footer.js"></script>
+}

@@ -1,0 +1,186 @@
+body {
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-muted {
+    color: #888;
+}
+
+.text-danger {
+    color: #c0392b;
+}
+
+.status-new {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.cellMessage {
+    max-width: 300px;
+}
+
+.tableIcon {
+    font-size: 22px;
+}
+
+.amenityLabel {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.amenityCheckbox {
+    width: auto;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.badge-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badge-danger {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+.badge-danger-soft {
+    background: #fde0e0;
+    color: #c0392b;
+}
+
+.badge-success {
+    background: #d4f4dd;
+    color: #1e7e34;
+}
+
+.badge-muted {
+    background: #eee;
+    color: #777;
+}
+
+.details-row {
+    margin-bottom: 12px;
+}
+
+.details-row-img {
+    margin-bottom: 14px;
+}
+
+.details-label {
+    display:block;
+    color: #888;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.details-value {
+    color: #222;
+    font-size: 14.5px;
+}
+
+.details-img {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 8px;
+}
+
+.dashCard {
+    background: #fff;
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    border-left: 5px solid #ccc;
+}
+
+.dashCard .icon {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.dashCard .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+}
+
+.dashCard .label {
+    color: #888;
+    margin-top: 5px;
+}
+
+.card-rooms { 
+    border-left-color: #D4AF37;
+
+}
+.card-categories { 
+    border-left-color: #0F172A; 
+
+}
+.card-users { 
+    border-left-color: #2E86AB; 
+
+}
+.card-bookings { 
+    border-left-color: #8E44AD; 
+
+}
+.card-pending { 
+    border-left-color: #E67E22;
+
+}
+.card-approved { 
+    border-left-color: #27AE60;
+
+}
+.card-messages { 
+    border-left-color: #C0392B; 
+
+}
+.card-feedback { 
+    border-left-color: #16A085; 
+
+}
+.card-revenue {
+    border-left-color: #D4AF37;
+
+}
+.card-checkin { 
+    border-left-color: #2ECC71; 
+
+}
+.card-checkout { 
+    border-left-color: #E74C3C;
+
+}
+
+.reminderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f2f6;
+}
+
+.reminderRight {
+    text-align: right;
+}

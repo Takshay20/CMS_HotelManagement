@@ -1,0 +1,32 @@
+@model CMS_HotelBooking.ViewComponents.FooterViewModel
+<footer>
+    <div class="container footer-content">
+        <div>
+            <img src="~/images/logo2.png" style="height:70px;">
+            <p>@Model.Footer.AboutText</p>
+            <div class="footer-social">
+                @foreach (var social in Model.SocialLinks)
+                {
+                    <a href="@social.Url" target="_blank" title="@social.PlatformName"><i class="@social.IconClass"></i></a>
+                }
+            </div>
+        </div>
+        <div>
+            <h3>Quick Links</h3>
+            @foreach (var item in Model.Menu)
+            {
+                <p><a href="@item.Url">@item.Title</a></p>
+            }
+        </div>
+        <div>
+            <h3>Contact</h3>
+            <p>@Model.Footer.Phone</p>
+            <p>@Model.Footer.Email</p>
+            <p>@Model.Footer.Address</p>
+        </div>
+    </div>
+    <hr>
+    <p class="copyright">
+        @Model.Footer.CopyrightText
+    </p>
+</footer>

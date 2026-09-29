@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Registered Users</h2>
+            <p>Customers who have registered on the website</p>
+        </div>
+        <div class="header-right">
+            <input type="text" id="txtSearch" placeholder="Search Here..." />
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Registered On</th>
+                    <th>Status</th>
+                    <th width="180">Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/Admin/js/Common.js"></script>
+<script src="~/Admin/js/User.js"></script>
+}

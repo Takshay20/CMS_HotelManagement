@@ -1,0 +1,22 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    font-family: Segoe UI, sans-serif;
+    background: #f5f7fb;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+#btnAdd,
+#btnSave {
+    background: #2563eb;
+    color: #fff;
+}
+
+#btnCancel {
+    background: #efefef;
+}

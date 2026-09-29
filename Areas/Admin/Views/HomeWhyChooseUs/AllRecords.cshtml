@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Why Choose Us - All Records";
+}
+
+<link href="~/admin/css/homewhychooseus.css" rel="stylesheet" />
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Why Choose Us - All Records</h2>
+            <p>View all active, inactive and deleted Why Choose Us records</p>
+        </div>
+
+        <div class="header-right">
+
+            <select id="ddlFilter" class="record-filter">
+                <option value="All">All</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Deleted">Deleted</option>
+            </select>
+            <button type="button"
+                    id="btnBack"
+                    class="btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="table-container">
+
+        <table id="tblAllRecords">
+
+            <thead>
+
+                <tr>
+                    <th>Icon</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Display Order</th>
+                    <th>Status</th>
+                    <th>Deleted</th>
+                    <th width="150">Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/HomeWhyChooseUsAllRecords.js"></script>
+
+}

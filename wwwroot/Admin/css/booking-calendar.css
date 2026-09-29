@@ -1,0 +1,161 @@
+﻿.bc-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.bc-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .bc-nav button {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+        .bc-nav button:hover {
+            background: #f2f4f8;
+        }
+
+    .bc-nav h3 {
+        margin: 0;
+        min-width: 170px;
+        text-align: center;
+        font-size: 19px;
+        color: #222;
+    }
+
+.bc-filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .bc-filters select {
+        padding: 9px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+.bc-legend {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    font-size: 12.5px;
+    color: #555;
+}
+
+    .bc-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+.bc-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+    .bc-dot.pending {
+        background: #ffc857;
+    }
+
+    .bc-dot.approved {
+        background: #35c07a;
+    }
+
+    .bc-dot.today {
+        border: 2px solid #D4AF37;
+        background: #fff;
+    }
+
+.bc-scroll {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.06);
+}
+
+table.bc-grid {
+    border-collapse: collapse;
+    min-width: 100%;
+}
+
+    table.bc-grid th, table.bc-grid td {
+        border: 1px solid #eee;
+        text-align: center;
+        font-size: 11.5px;
+        padding: 0;
+    }
+
+        table.bc-grid th.bc-room-col, table.bc-grid td.bc-room-col {
+            position: sticky;
+            left: 0;
+            background: #fff;
+            z-index: 2;
+            text-align: left;
+            padding: 10px 14px;
+            min-width: 190px;
+            font-size: 13px;
+            border-right: 2px solid #ddd;
+        }
+
+    table.bc-grid thead th {
+        background: #16213e;
+        color: #fff;
+        padding: 8px 2px;
+        font-weight: 600;
+    }
+
+        table.bc-grid thead th.bc-room-col {
+            background: #16213e;
+        }
+
+        table.bc-grid thead th.bc-weekend {
+            background: #26315c;
+        }
+
+    table.bc-grid td.bc-day-cell {
+        width: 34px;
+        height: 46px;
+        cursor: default;
+        position: relative;
+    }
+
+        table.bc-grid td.bc-day-cell.bc-today-col {
+            background: rgba(212,175,55,.08);
+        }
+
+    table.bc-grid td.bc-booked {
+        cursor: pointer;
+    }
+
+        table.bc-grid td.bc-booked.bc-pending {
+            background: #ffe6b0;
+        }
+
+        table.bc-grid td.bc-booked.bc-approved {
+            background: #bdeed3;
+        }
+
+        table.bc-grid td.bc-booked:hover {
+            filter: brightness(0.92);
+        }
+
+.bc-empty-msg {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+}

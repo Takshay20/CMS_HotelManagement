@@ -1,0 +1,172 @@
+@model CMS_HotelBooking.ViewModels.AboutVM
+
+@{
+    ViewData["Title"] = "About Page";
+}
+
+<style>
+    .img-preview {
+        width: 180px;
+        height: 120px;
+        object-fit: cover;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <h2>About Page Content</h2>
+
+    <p class="text-muted">
+        Manage the content shown on the public About page
+    </p>
+
+    <form id="aboutForm"
+          enctype="multipart/form-data">
+
+        <input type="hidden"
+               id="AboutId"
+               name="About.AboutId"
+               value="@Model.About.AboutId" />
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Title <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="Title"
+                   name="About.Title"
+                   class="form-control"
+                   value="@Model.About.Title"
+                   placeholder="Enter title" />
+            <span class="field-error" id="err-Title"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Sub Title <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="SubTitle"
+                   name="About.SubTitle"
+                   class="form-control"
+                   value="@Model.About.SubTitle"
+                   placeholder="Enter sub title" />
+            <span class="field-error" id="err-SubTitle"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Short Description (used on Home page) <span class="text-danger">*</span>
+            </label>
+
+            <textarea id="ShortDescription"
+                      name="About.ShortDescription"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Enter short description">@Model.About.ShortDescription</textarea>
+            <span class="field-error" id="err-ShortDescription"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Full Description (used on About page) <span class="text-danger">*</span>
+            </label>
+
+            <textarea id="FullDescription"
+                      name="About.FullDescription"
+                      class="form-control"
+                      rows="5"
+                      placeholder="Enter full description">@Model.About.FullDescription</textarea>
+            <span class="field-error" id="err-FullDescription"></span>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Years of Experience <span class="text-danger">*</span></label>
+                <input type="text"
+                       id="YearsOfExperience"
+                       name="About.YearsOfExperience"
+                       class="form-control"
+                       value="@Model.About.YearsOfExperience" />
+                <span class="field-error" id="err-YearsOfExperience"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Total Rooms <span class="text-danger">*</span></label>
+                <input type="text"
+                       id="TotalRooms"
+                       name="About.TotalRooms"
+                       class="form-control"
+                       value="@Model.About.TotalRooms" />
+                <span class="field-error" id="err-TotalRooms"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Happy Guests <span class="text-danger">*</span></label>
+                <input type="text"
+                       id="HappyGuests"
+                       name="About.HappyGuests"
+                       class="form-control"
+                       value="@Model.About.HappyGuests" />
+                <span class="field-error" id="err-HappyGuests"></span>
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+
+    <label class="form-label">
+        Image 
+    </label>
+
+    <input type="hidden"
+           id="ExistingImage1"
+           name="About.Image1"
+           value="@Model.About.Image" />
+
+    <input type="file"
+           id="ImageFile"
+           name="Image1File"
+           class="form-control"
+           accept=".jpg,.jpeg,.png,.gif,.jfif,image/jpeg,image/png,image/gif" />
+
+    <span class="field-error" id="err-Image1File"></span>
+
+    <div id="image1Preview" style="margin-top:10px;">
+
+        @if (!string.IsNullOrEmpty(Model.About.Image))
+        {
+            <img src="@Url.Content("~/" + Model.About.Image)"
+                 class="img-preview"
+                 alt="About Image" />
+        }
+
+    </div>
+
+</div>
+
+        <button type="submit"
+                class="btn btn-primary">
+            Update Changes
+        </button>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/About.js"></script>
+}

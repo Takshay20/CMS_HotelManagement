@@ -1,0 +1,121 @@
+﻿@{
+    ViewData["Title"] = "Restore Records";
+}
+
+<link href="~/admin/css/restorerecords.css" rel="stylesheet" />
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Restore Records</h2>
+            <p>Manage active, inactive and deleted records</p>
+        </div>
+
+        <div class="header-right">
+
+            <div class="module-select" id="moduleSelect">
+
+                <button type="button"
+                        class="module-select-btn"
+                        id="btnModuleSelect">
+
+                    <span id="selectedModule">
+                        <i class="fa-solid fa-layer-group"></i>
+                        Select Module
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+                </button>
+
+                <div class="module-dropdown" id="moduleDropdown">
+
+                    <div class="module-search">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input type="text"
+                               id="txtModuleSearch"
+                               placeholder="Search Module..." />
+                    </div>
+                    <div class="module-list">
+                        <div class="module-option"
+                             data-value="CounterBox"
+                             data-name="Counter Box">
+                            <i class="fa-solid fa-chart-simple"></i>
+                            <span>Counter Box</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="Rooms"
+                             data-name="Rooms">
+                            <i class="fa-solid fa-bed"></i>
+                            <span>Rooms</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="WhyChooseUs"
+                             data-name="Why Choose Us">
+                            <i class="fa-solid fa-star"></i>
+                            <span>Why Choose Us</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="RoomCategory"
+                             data-name="Room Category">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span>Room Category</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="Amenity"
+                             data-name="Amenity">
+                            <i class="fa-solid fa-bell-concierge"></i>
+                            <span>Amenity</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="Gallery"
+                             data-name="Gallery">
+                            <i class="fa-solid fa-images"></i>
+                            <span>Gallery</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="Facility"
+                             data-name="Facility">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span>Facility</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="Slider"
+                             data-name="Slider">
+                            <i class="fa-solid fa-sliders"></i>
+                            <span>Slider</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="Navbar"
+                             data-name="Navbar">
+                            <i class="fa-solid fa-bars"></i>
+                            <span>Navbar</span>
+                        </div>
+                        <div class="module-option"
+                             data-value="SocialMedia"
+                             data-name="Social Media">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            <span>Social Media</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="recordContainer" class="restore-empty">
+        <div class="restore-empty-content">
+            <i class="fa-solid fa-rotate-left"></i>
+            <h3>Select a Module</h3>
+            <p>
+                Select a module above to manage its records.
+            </p>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/Admin/js/RestoreRecords.js"></script>
+}

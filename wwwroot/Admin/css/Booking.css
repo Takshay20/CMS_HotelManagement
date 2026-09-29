@@ -1,0 +1,109 @@
+﻿#paymentModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 999999;
+    align-items: center;
+    justify-content: center;
+}
+
+    #paymentModal.active {
+        display: flex;
+    }
+
+.payment-modal-box {
+    width: 520px;
+    max-width: 92%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+
+.payment-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+}
+
+    .payment-modal-header h3 {
+        margin: 0;
+        color: #172554;
+    }
+
+    .payment-modal-header p {
+        margin: 5px 0 0;
+        color: #777;
+        font-size: 13px;
+    }
+
+.payment-modal-close {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: #f3f4f6;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+    .payment-modal-close:hover {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+#paymentDetailsContent {
+    padding: 24px;
+}
+
+.payment-detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+}
+
+    .payment-detail-row span {
+        color: #777;
+    }
+
+    .payment-detail-row strong {
+        color: #222;
+        text-align: right;
+        word-break: break-word;
+    }
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+    .status-badge.success {
+        background: #e8f7ee !important;
+        color: #198754 !important;
+    }
+
+    .status-badge.warning {
+        background: #fff3cd !important;
+        color: #856404 !important;
+    }
+
+    .status-badge.danger {
+        background: #fde8e8 !important;
+        color: #dc2626 !important;
+    }
+
+    .status-badge.info {
+        background: #eaf2ff !important;
+        color: #2563eb !important;
+    }

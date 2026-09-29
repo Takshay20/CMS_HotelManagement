@@ -1,0 +1,362 @@
+﻿@model CMS_HotelBooking.Models.Room
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<style>
+    .rd-slider {
+        width: 100%;
+        height: 60vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .rd-slide {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity .8s ease;
+    }
+
+    .rd-slide.active {
+        opacity: 1;
+        z-index: 2;
+    }
+
+    .rd-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .rd-wrap {
+        width: 90%;
+        max-width: 1200px;
+        margin: 60px auto;
+        display: flex;
+        gap: 50px;
+        flex-wrap: wrap;
+    }
+
+    .rd-main {
+        flex: 2;
+        min-width: 320px;
+    }
+
+    .rd-side {
+        flex: 1;
+        min-width: 300px;
+        background: #fff;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.12);
+        height: fit-content;
+    }
+
+    .rd-main h1 {
+        font-size: 34px;
+        margin-bottom: 10px;
+        color: #222;
+    }
+
+    .rd-price {
+        color: #D4AF37;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .rd-main p.desc {
+        color: #666;
+        line-height: 30px;
+        margin-bottom: 25px;
+    }
+
+    .rd-amenities {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .rd-amenities div {
+        background: #f7f7f7;
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+    .rd-thumbs {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .rd-thumbs img {
+        width: 100px;
+        height: 75px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .rd-side h3 {
+        margin-bottom: 20px;
+        color: #222;
+    }
+
+    .rd-side input,
+    .rd-side textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 14px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+
+    .rd-side button {
+        width: 100%;
+        padding: 14px;
+        background: #D4AF37;
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: .3s;
+    }
+
+    .rd-side button:hover:not(:disabled) {
+        background: #b8952f;
+    }
+
+    .rd-side button:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+    }
+
+    .rd-total {
+        background: #f7f7f7;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 14px;
+        font-weight: 600;
+        text-align: center;
+    }
+</style>
+
+<section class="rd-slider">
+
+    @{
+        var dFirst = true;
+    }
+
+    @if (Model.Images != null && Model.Images.Count > 0)
+    {
+        foreach (var img in Model.Images)
+        {
+            <div class="rd-slide @(dFirst ? "active" : "")">
+                <img src="~/@img.ImagePath" alt="@Model.Title" />
+            </div>
+
+            dFirst = false;
+        }
+    }
+    else
+    {
+        <div class="rd-slide active">
+            <img src="~/@Model.ImagePath" alt="@Model.Title" />
+        </div>
+    }
+
+</section>
+
+<div class="rd-wrap">
+
+    <div class="rd-main">
+
+        <h1>@Model.Title</h1>
+
+        <div class="rd-price">
+            &#8377;@Model.PricePerNight.ToString("N0") / Night
+        </div>
+
+        <p class="desc">
+            @Model.Description
+        </p>
+
+        <div class="rd-amenities">
+
+            <div>
+                👤 Up to @Model.MaxGuests Guests
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.SizeSqft))
+            {
+                <div>
+                    📐 @Model.SizeSqft
+                </div>
+            }
+
+            @if (Model.AmenityList != null)
+            {
+                foreach (var a in Model.AmenityList)
+                {
+                    <div>
+                        <i class="@a.IconClass"></i>
+                        @a.Name
+                    </div>
+                }
+            }
+
+        </div>
+
+        @if (Model.Images != null && Model.Images.Count > 1)
+        {
+            <div class="rd-thumbs">
+
+                @foreach (var img in Model.Images)
+                {
+                    <img
+                        src="~/@img.ImagePath"
+                        alt="@Model.Title" />
+                }
+
+            </div>
+        }
+
+    </div>
+
+    <div class="rd-side">
+
+        <h3>Book This Room</h3>
+
+        <div id="bookingAlert"></div>
+
+        <form
+            id="bookingForm"
+            data-price-per-night="@Model.PricePerNight.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+            data-room-id="@Model.RoomId"
+            data-is-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")"
+            data-check-availability-url="@Url.Action("CheckAvailability", "Booking")"
+            data-create-booking-url="@Url.Action("Create", "Booking")"
+            data-login-url="@Url.Action("Login", "Account")">
+
+            @Html.AntiForgeryToken()
+
+            <input
+                type="hidden"
+                name="RoomId"
+                value="@Model.RoomId" />
+
+            <input
+                type="text"
+                name="FullName"
+                value="@ViewBag.PrefillName"
+                placeholder="Full Name"
+                minlength="3"
+                maxlength="150"
+                required />
+
+            <input
+                type="email"
+                name="Email"
+                value="@ViewBag.PrefillEmail"
+                placeholder="Email Address"
+                maxlength="150"
+                required />
+
+            <input
+                type="tel"
+                name="Phone"
+                value="@ViewBag.PrefillPhone"
+                placeholder="Phone Number"
+                pattern="[0-9+\-\s]{7,15}"
+                title="Enter a valid phone number (7-15 characters)"
+                maxlength="15"
+                required />
+
+            <input
+                type="date"
+                name="CheckInDate"
+                id="checkInDate"
+                required />
+
+            <input
+                type="date"
+                name="CheckOutDate"
+                id="checkOutDate"
+                required />
+
+            <div
+                id="availabilityMsg"
+                style="font-size:13px;margin:-4px 0 6px;">
+            </div>
+
+            <input
+                type="number"
+                name="Guests"
+                min="1"
+                max="@Model.MaxGuests"
+                value="1"
+                placeholder="Guests"
+                required />
+
+            <textarea
+                name="SpecialRequest"
+                rows="3"
+                maxlength="500"
+                placeholder="Special Request (optional)">
+            </textarea>
+
+            <div
+                class="rd-total"
+                id="rdTotal">
+                Select dates to see total
+            </div>
+
+            <button
+                type="submit"
+                disabled>
+                Request Booking
+            </button>
+
+        </form>
+
+        <p
+            style="font-size:13px;color:#888;margin-top:12px;text-align:center;">
+
+            Your booking request will be confirmed by our team shortly after submission.
+
+        </p>
+
+        <div
+            style="font-size:12px;color:#999;margin-top:14px;text-align:center;line-height:19px;border-top:1px solid #eee;padding-top:12px;">
+
+            <strong style="color:#666;">
+                Cancellation Policy:
+            </strong>
+
+            Full refund if cancelled 48+ hrs before check-in &middot;
+            50% refund 24-48 hrs before &middot;
+            No refund within 24 hrs.
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="~/js/details.js"></script>
+
+} 

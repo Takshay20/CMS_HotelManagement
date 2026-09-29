@@ -1,0 +1,95 @@
+﻿@model CMS_HotelBooking.Models.Payment
+
+@{
+    ViewData["Title"] = "Make Payment";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4">
+                        Complete Your Payment
+                    </h2>
+
+                    <div class="mb-3">
+                        <strong>Booking ID:</strong>
+                        @Model.BookingId
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Amount:</strong>
+                        ₹@Model.Amount.ToString("N2")
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Status:</strong>
+
+                        @if (Model.PaymentStatus == "Paid")
+                        {
+                            <span class="badge bg-success">
+                                Paid
+                            </span>
+                        }
+                        else if (Model.PaymentStatus == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+                                @Model.PaymentStatus
+                            </span>
+                        }
+                    </div>
+
+
+                    @if (Model.PaymentStatus == "Paid")
+                    {
+                        <div class="alert alert-success text-center">
+                            Payment already completed successfully.
+                        </div>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                id="payButton"
+                                class="btn btn-dark w-100 py-3"
+                                data-key="@ViewBag.RazorpayKey"
+                                data-order-id="@ViewBag.OrderId"
+                                data-amount="@Convert.ToInt32(Math.Round(Model.Amount * 100))">
+
+                            Pay ₹@Model.Amount.ToString("N2")
+
+                        </button>
+
+                        <div id="paymentMessage"
+                             class="mt-3 text-center">
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (Model.PaymentStatus != "Paid")
+{
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script src="~/js/payment.js"></script>
+}

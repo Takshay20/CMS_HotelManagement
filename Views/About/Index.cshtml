@@ -1,0 +1,712 @@
+@model CMS_HotelBooking.Controllers.AboutViewModel
+
+@{
+    ViewData["Title"] = "About Royal Paradise Hotel";
+}
+<link href="~/css/about.css" rel="stylesheet" />
+
+<section class="luxury-slider">
+
+    <div class="luxury-slides">
+
+        @if (Model.Sliders != null && Model.Sliders.Any())
+        {
+            var firstSlide = true;
+            var slideNumber = 1;
+
+            foreach (var slider in Model.Sliders)
+            {
+                var imagePath = slider.ImagePath ?? "";
+
+                if (!imagePath.StartsWith(
+                    "http",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    imagePath =
+                        "/" +
+                        imagePath.TrimStart('~', '/');
+                }
+
+                <div class="luxury-slide @(firstSlide ? "active" : "")">
+
+                    <div class="luxury-content">
+
+                        <div class="luxury-number">
+
+                            @(slideNumber < 10
+                                ? "0" + slideNumber
+                                : slideNumber.ToString())
+
+                        </div>
+
+                        <div class="luxury-small-title">
+
+                            ROYAL PARADISE
+
+                        </div>
+
+                        <h1>
+
+                            @(string.IsNullOrWhiteSpace(slider.Title)
+                                ? "Experience Luxury"
+                                : slider.Title)
+
+                        </h1>
+
+                        <p>
+
+                            Discover a world of refined
+                            hospitality, elegant spaces,
+                            premium comfort and unforgettable
+                            experiences.
+
+                        </p>
+
+                        <a asp-controller="Room"
+                           asp-action="Index"
+                           class="luxury-button">
+
+                            Explore Rooms
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                    <div class="luxury-image">
+
+                        <img src="@imagePath"
+                             alt="@slider.Title"
+                             onerror="this.onerror=null;this.src='/images/About/About13.jfif';" />
+
+                        <div class="image-caption">
+
+                            Luxury · Comfort · Hospitality
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                firstSlide = false;
+
+                slideNumber++;
+            }
+        }
+        else
+        {
+            
+            <div class="luxury-slide active">
+
+                <div class="luxury-content">
+
+                    <div class="luxury-number">
+                        01
+                    </div>
+
+                    <div class="luxury-small-title">
+                        ROYAL PARADISE
+                    </div>
+
+                    <h1>
+                        Welcome To
+                        Royal Paradise
+                    </h1>
+
+                    <p>
+                        Experience luxury, comfort
+                        and exceptional hospitality
+                        at Royal Paradise Hotel.
+                    </p>
+
+                    <a asp-controller="Room"
+                       asp-action="Index"
+                       class="luxury-button">
+
+                        Explore Rooms
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="luxury-image">
+
+                    <img src="/images/About/About13.jfif"
+                         alt="Royal Paradise Hotel" />
+
+                    <div class="image-caption">
+
+                        Luxury · Comfort · Hospitality
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+    <div class="luxury-progress">
+
+        <span class="progress-number"
+              id="luxuryCurrent">
+
+            01
+
+        </span>
+
+        <div class="progress-line">
+
+            <div class="progress-fill"
+                 id="luxuryProgress">
+            </div>
+
+        </div>
+
+        <span class="progress-number"
+              id="luxuryTotal">
+
+            01
+
+        </span>
+
+    </div>
+
+    <div class="luxury-thumbnails">
+
+        @if (Model.Sliders != null &&
+             Model.Sliders.Any())
+        {
+            var thumbIndex = 0;
+
+            foreach (var slider in Model.Sliders)
+            {
+                var thumbPath =
+                    slider.ImagePath ?? "";
+
+                if (!thumbPath.StartsWith(
+                    "http",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    thumbPath =
+                        "/" +
+                        thumbPath.TrimStart('~', '/');
+                }
+
+                <div class="luxury-thumb @(thumbIndex == 0 ? "active" : "")"
+                     data-slide="@thumbIndex">
+
+                    <img src="@thumbPath"
+                         alt="@slider.Title"
+                         onerror="this.onerror=null;this.src='/images/About/About13.jfif';" />
+
+                </div>
+
+                thumbIndex++;
+            }
+        }
+        else
+        {
+            <div class="luxury-thumb active"
+                 data-slide="0">
+
+                <img src="/images/About/About13.jfif"
+                     alt="Hotel" />
+
+            </div>
+        }
+
+    </div>
+
+    <div class="luxury-arrows">
+
+        <button type="button"
+                class="luxury-arrow"
+                id="luxuryPrev">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </button>
+
+        <button type="button"
+                class="luxury-arrow"
+                id="luxuryNext">
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+</section>
+
+<section class="about-section">
+
+    <div class="about-image">
+
+        <img src="/@(Model.About?.Image
+                    ?? "images/About/About10.jfif")"
+             alt="Royal Paradise Hotel" />
+
+    </div>
+
+    <div class="about-text">
+
+        <span class="section-label">
+            WELCOME TO ROYAL PARADISE
+        </span>
+
+        <h2>
+            @(Model.About?.SubTitle
+                ?? "Where Luxury Meets Comfort")
+        </h2>
+
+        <p>
+            @(Model.About?.FullDescription
+                ?? "Welcome to Royal Paradise Hotel, where luxury, comfort and exceptional hospitality come together to create unforgettable experiences.")
+        </p>
+
+        <div class="about-stats">
+
+            <div class="about-stat">
+                <h3>
+                    @(Model.About?.YearsOfExperience ?? "15")+
+                </h3>
+
+                <p>
+                    Years Experience
+                </p>
+            </div>
+
+            <div class="about-stat">
+                <h3>
+                    @(Model.About?.TotalRooms ?? "120")+
+                </h3>
+
+                <p>
+                    Luxury Rooms
+                </p>
+            </div>
+
+            <div class="about-stat">
+                <h3>
+                    @(Model.About?.HappyGuests ?? "5000")+
+                </h3>
+
+                <p>
+                    Happy Guests
+                </p>
+            </div>
+
+        </div>
+
+        <a asp-controller="Room"
+           asp-action="Index"
+           class="dark-button">
+
+            Explore Our Rooms
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>
+@{
+    var story =
+        Model.Stories?.FirstOrDefault();
+}
+
+<section class="about-section reverse">
+
+    <div class="about-image">
+
+        <img src="/@(story?.ImagePath
+                    ?? "images/About/About5.jfif")"
+             alt="Our Story" />
+
+    </div>
+
+    <div class="about-text">
+
+        <span class="section-label">
+            OUR STORY
+        </span>
+
+        <h2>
+
+            @(story?.Heading
+                ?? "Creating Memorable Experiences")
+
+        </h2>
+
+        <p>
+
+            @(story?.Description
+                ?? "Royal Paradise Hotel was established with the vision of providing exceptional hospitality, luxurious accommodation and unforgettable guest experiences.")
+
+        </p>
+
+    </div>
+
+</section>
+
+@if (Model.Receptions != null && Model.Receptions.Any())
+{
+    foreach (var reception in Model.Receptions
+        .Where(x => x.IsActive)
+        .OrderBy(x => x.DisplayOrder))
+    {
+        <section class="about-section">
+
+            <div class="about-image">
+                <img src="/@(reception.ImagePath
+                                    ?? "images/About/About2.jfif")"
+                     alt="@reception.Title" />
+            </div>
+
+            <div class="about-text">
+
+                <span class="section-label">
+                    WELCOME
+                </span>
+
+                <h2>
+                    @reception.Title
+                </h2>
+
+                @if (!string.IsNullOrWhiteSpace(reception.Description))
+                {
+                    <p>
+                        @reception.Description
+                    </p>
+                }
+
+            </div>
+
+        </section>
+    }
+}
+
+<section class="gallery-section">
+
+    <div class="section-heading">
+
+        <span>
+            HOTEL GALLERY
+        </span>
+
+        <h2>
+            Explore Royal Paradise
+        </h2>
+
+    </div>
+
+    <div class="gallery-grid">
+
+        @{
+            var galleryImages =
+                Model.GalleryImages?
+                .Take(8)
+                .ToList();
+        }
+
+        @if (galleryImages == null ||
+             galleryImages.Count == 0)
+        {
+            <div class="gallery-item">
+                <img src="/images/About/About1.jfif"
+                     alt="Gallery" />
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/About/About2.jfif"
+                     alt="Gallery" />
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/About/About3.jfif"
+                     alt="Gallery" />
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/About/About4.jfif"
+                     alt="Gallery" />
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/About/About5.jfif"
+                     alt="Gallery" />
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/About/About6.jfif"
+                     alt="Gallery" />
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/About/About10.jfif"
+                     alt="Gallery" />
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/About/About13.jfif"
+                     alt="Gallery" />
+            </div>
+        }
+        else
+        {
+            foreach (var gallery in galleryImages)
+            {
+                var galleryPath =
+                    gallery.ImagePath ?? "";
+
+                if (!galleryPath.StartsWith(
+                    "http",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    galleryPath =
+                        "/" +
+                        galleryPath.TrimStart('~', '/');
+                }
+
+                <div class="gallery-item">
+
+                    <img src="@galleryPath"
+                         alt="@gallery.Title" />
+
+                </div>
+            }
+        }
+
+    </div>
+
+</section>
+
+<section class="why-section">
+
+    <div class="section-heading">
+
+        <span>
+            WHY CHOOSE US
+        </span>
+
+        <h2>
+            Why Guests Love Us
+        </h2>
+
+    </div>
+
+    <div class="why-grid">
+
+        @if (Model.WhyChooseUs == null ||
+             Model.WhyChooseUs.Count == 0)
+        {
+            <div class="why-card">
+
+                <div class="why-icon">
+
+                    <i class="fa-solid fa-bed"></i>
+
+                </div>
+
+                <h3>
+                    Luxury Rooms
+                </h3>
+
+                <p>
+                    Elegant rooms with modern
+                    facilities and premium comfort.
+                </p>
+
+            </div>
+
+            <div class="why-card">
+
+                <div class="why-icon">
+
+                    <i class="fa-solid fa-utensils"></i>
+
+                </div>
+
+                <h3>
+                    Fine Dining
+                </h3>
+
+                <p>
+                    Delicious cuisines prepared
+                    by experienced chefs.
+                </p>
+
+            </div>
+
+            <div class="why-card">
+
+                <div class="why-icon">
+
+                    <i class="fa-solid fa-person-swimming"></i>
+
+                </div>
+
+                <h3>
+                    Swimming Pool
+                </h3>
+
+                <p>
+                    Relax and refresh yourself
+                    in our premium pool area.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            foreach (var item in Model.WhyChooseUs)
+            {
+                <div class="why-card">
+
+                    <div class="why-icon">
+
+                        @if (!string.IsNullOrWhiteSpace(
+                            item.IconClass))
+                        {
+                            <i class="@item.IconClass"></i>
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-star"></i>
+                        }
+
+                    </div>
+
+                    <h3>
+                        @item.Title
+                    </h3>
+
+                    <p>
+                        @item.Description
+                    </p>
+
+                </div>
+            }
+        }
+
+    </div>
+
+</section>
+
+<section class="counter-section">
+
+    @if (Model.Counters == null ||
+         Model.Counters.Count == 0)
+    {
+        <div class="counter-item">
+
+            <h2>
+                @(Model.About?.HappyGuests ?? "5000")+
+            </h2>
+
+            <p>
+                Happy Guests
+            </p>
+
+        </div>
+
+        <div class="counter-item">
+
+            <h2>
+                @(Model.About?.TotalRooms ?? "120")+
+            </h2>
+
+            <p>
+                Luxury Rooms
+            </p>
+
+        </div>
+
+        <div class="counter-item">
+
+            <h2>
+                @(Model.About?.YearsOfExperience ?? "15")+
+            </h2>
+
+            <p>
+                Years Experience
+            </p>
+
+        </div>
+
+        <div class="counter-item">
+
+            <h2>
+                4.9
+            </h2>
+
+            <p>
+                Guest Rating
+            </p>
+
+        </div>
+    }
+    else
+    {
+        foreach (var counter in Model.Counters)
+        {
+            <div class="counter-item">
+
+                <h2>
+                    @counter.Number@counter.Suffix
+                </h2>
+
+                <p>
+                    @counter.Label
+                </p>
+
+            </div>
+        }
+    }
+
+</section>
+
+<section class="about-cta">
+
+    <span>
+        BOOK YOUR STAY
+    </span>
+
+    <h2>
+
+        @(Model.Cta?.Heading
+            ?? "Experience Luxury Like Never Before")
+
+    </h2>
+
+    <p>
+
+        @(Model.Cta?.SubHeading
+            ?? "Discover premium comfort, world-class hospitality and unforgettable moments at Royal Paradise Hotel.")
+
+    </p>
+
+    <a asp-controller="Room"
+       asp-action="Index"
+       class="cta-button">
+
+        @(Model.Cta?.ButtonText
+            ?? "Book Your Stay")
+
+    </a>
+
+</section>
+
+@section Scripts {
+
+    <script src="/js/About.js"></script>
+
+}

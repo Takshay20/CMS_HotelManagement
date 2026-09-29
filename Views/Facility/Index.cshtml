@@ -1,0 +1,1137 @@
+@model CMS_HotelBooking.Controllers.FacilityViewModel
+
+@{
+    ViewData["Title"] = "Facilities";
+}
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: #f7f5ef;
+        color: #222;
+    }
+
+    .facility-slider {
+        position: relative;
+        width: 100%;
+        height: 510px;
+        overflow: hidden;
+        background: #111824;
+    }
+
+    .facility-slide {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .7s ease;
+    }
+
+        .facility-slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+        }
+
+    .facility-slide-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+        .facility-slide-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.08);
+            transition: transform 6s ease;
+        }
+
+    .facility-slide.active
+    .facility-slide-bg img {
+        transform: scale(1);
+    }
+
+    .facility-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( 90deg, rgba(7,12,20,.88) 0%, rgba(7,12,20,.68) 35%, rgba(7,12,20,.28) 70%, rgba(7,12,20,.18) 100% );
+        z-index: 1;
+    }
+
+    .facility-slide-content {
+        position: absolute;
+        z-index: 5;
+        left: 8%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 570px;
+        color: #fff;
+    }
+
+    .facility-number {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+        color: #d4af37;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 4px;
+    }
+
+        .facility-number span {
+            width: 40px;
+            height: 1px;
+            background: #d4af37;
+        }
+
+    .facility-slide-content h1 {
+        margin: 0 0 15px;
+        color: #fff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 52px;
+        line-height: 1.1;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .facility-slide-content p {
+        max-width: 500px;
+        margin: 0 0 25px;
+        color: rgba(255,255,255,.82);
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .facility-explore-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 24px;
+        color: #fff;
+        background: #d4af37;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: .35s;
+    }
+
+        .facility-explore-btn:hover {
+            background: #fff;
+            color: #111;
+        }
+
+        .facility-explore-btn i {
+            transition: .3s;
+        }
+
+        .facility-explore-btn:hover i {
+            transform: translateX(5px);
+        }
+
+    .facility-mini-card {
+        position: absolute;
+        z-index: 6;
+        right: 8%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 250px;
+        background: rgba(255,255,255,.96);
+        padding: 10px;
+        box-shadow: 0 20px 50px rgba(0,0,0,.30);
+    }
+
+    .facility-mini-image {
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
+    }
+
+        .facility-mini-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .facility-mini-content {
+        padding: 15px 12px 10px;
+    }
+
+        .facility-mini-content span {
+            color: #b18b25;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .facility-mini-content h3 {
+            margin: 6px 0 0;
+            color: #172033;
+            font-family: Georgia, serif;
+            font-size: 20px;
+        }
+
+    .facility-arrow {
+        position: absolute;
+        z-index: 10;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.5);
+        background: rgba(0,0,0,.28);
+        color: #fff;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+    .facility-prev {
+        left: 30px;
+    }
+
+    .facility-next {
+        right: 30px;
+    }
+
+    .facility-arrow:hover {
+        background: #d4af37;
+        border-color: #d4af37;
+    }
+
+    .facility-bottom {
+        position: absolute;
+        z-index: 10;
+        left: 8%;
+        right: 8%;
+        bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .facility-counter {
+        color: #fff;
+        font-size: 13px;
+        letter-spacing: 2px;
+        white-space: nowrap;
+    }
+
+        .facility-counter .current {
+            color: #d4af37;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+    .facility-progress {
+        position: relative;
+        width: 180px;
+        height: 2px;
+        background: rgba(255,255,255,.35);
+    }
+
+    .facility-progress-fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0%;
+        height: 100%;
+        background: #d4af37;
+        transition: width .5s ease;
+    }
+
+    .facility-dots {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .facility-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.5);
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .facility-dot.active {
+            width: 27px;
+            border-radius: 20px;
+            background: #d4af37;
+        }
+
+    .facility-slide.active
+    .facility-number {
+        animation: facilityFade .7s ease both;
+    }
+
+    .facility-slide.active
+    h1 {
+        animation: facilityHeading .8s ease both;
+    }
+
+    .facility-slide.active
+    p {
+        animation: facilityFade 1s ease both;
+    }
+
+    .facility-slide.active
+    .facility-explore-btn {
+        animation: facilityButton 1.15s ease both;
+    }
+
+    @@keyframes facilityFade {
+
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes facilityHeading {
+
+        from {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @@keyframes facilityButton {
+
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .facility-highlights {
+        position: relative;
+        z-index: 20;
+        width: 90%;
+        max-width: 1050px;
+        margin: -35px auto 65px;
+        padding: 25px 30px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 12px 35px rgba(0,0,0,.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 45px;
+        flex-wrap: wrap;
+    }
+
+    .facility-highlight {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .facility-highlight-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(212,175,55,.14);
+        color: #d4af37;
+        font-size: 17px;
+    }
+
+    .facility-highlight strong {
+        display: block;
+        color: #222;
+        font-size: 14px;
+    }
+
+    .facility-highlight span {
+        display: block;
+        margin-top: 3px;
+        color: #888;
+        font-size: 12px;
+    }
+
+    .facility-wrapper {
+        width: 90%;
+        max-width: 1300px;
+        margin: 0 auto 90px;
+    }
+
+    .facility-heading {
+        text-align: center;
+        margin-bottom: 45px;
+    }
+
+    .facility-heading-label {
+        display: block;
+        color: #b18b25;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        margin-bottom: 10px;
+    }
+
+    .facility-heading h2 {
+        margin: 0;
+        color: #172033;
+        font-family: Georgia, serif;
+        font-size: 38px;
+    }
+
+    .facility-heading p {
+        max-width: 650px;
+        margin: 15px auto 0;
+        color: #777;
+        line-height: 1.7;
+        font-size: 15px;
+    }
+
+    .facility-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+    }
+
+    .facility-card {
+        position: relative;
+        overflow: hidden;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 8px 25px rgba(0,0,0,.08);
+        border-bottom: 3px solid transparent;
+        transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+
+        .facility-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 38px rgba(0,0,0,.14);
+            border-color: #d4af37;
+        }
+
+    .facility-card-image {
+        position: relative;
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+    }
+
+        .facility-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .6s ease;
+        }
+
+    .facility-card:hover
+    .facility-card-image img {
+        transform: scale(1.09);
+    }
+
+    .facility-card-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( transparent 50%, rgba(0,0,0,.45) );
+    }
+
+    .facility-icon {
+        position: absolute;
+        z-index: 5;
+        left: 20px;
+        bottom: 18px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #d4af37;
+        color: #fff;
+        font-size: 18px;
+        box-shadow: 0 6px 15px rgba(0,0,0,.25);
+    }
+
+    .facility-card-body {
+        padding: 25px 22px 24px;
+    }
+
+        .facility-card-body h3 {
+            margin: 0 0 10px;
+            color: #172033;
+            font-family: Georgia, serif;
+            font-size: 22px;
+        }
+
+        .facility-card-body p {
+            margin: 0;
+            color: #707070;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+    .facility-empty {
+        padding: 60px 20px;
+        text-align: center;
+        color: #777;
+        background: #fff;
+        border-radius: 8px;
+    }
+
+    @@media(max-width:1000px) {
+
+        .facility-slide-content {
+            left: 7%;
+            width: 550px;
+        }
+
+            .facility-slide-content h1 {
+                font-size: 45px;
+            }
+
+        .facility-mini-card {
+            right: 5%;
+            width: 210px;
+        }
+
+        .facility-grid {
+            grid-template-columns: repeat(2,1fr);
+        }
+    }
+
+    @@media(max-width:768px) {
+
+        .facility-slider {
+            height: 500px;
+        }
+
+        .facility-slide-content {
+            left: 8%;
+            top: 45%;
+            width: 75%;
+        }
+
+            .facility-slide-content h1 {
+                font-size: 37px;
+            }
+
+            .facility-slide-content p {
+                font-size: 13px;
+                line-height: 1.6;
+                margin-bottom: 18px;
+            }
+
+        .facility-mini-card {
+            display: none;
+        }
+
+        .facility-prev {
+            left: 12px;
+        }
+
+        .facility-next {
+            right: 12px;
+        }
+
+        .facility-arrow {
+            width: 42px;
+            height: 42px;
+        }
+
+        .facility-bottom {
+            left: 8%;
+            right: 8%;
+            bottom: 22px;
+        }
+
+        .facility-progress {
+            width: 100px;
+        }
+
+        .facility-highlights {
+            width: 88%;
+            margin: -25px auto 50px;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .facility-wrapper {
+            width: 88%;
+        }
+
+        .facility-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .facility-heading h2 {
+            font-size: 32px;
+        }
+    }
+
+    @@media(max-width:480px) {
+
+        .facility-slider {
+            height: 470px;
+        }
+
+        .facility-slide-content {
+            width: 78%;
+        }
+
+            .facility-slide-content h1 {
+                font-size: 30px;
+            }
+
+        .facility-number {
+            font-size: 10px;
+            letter-spacing: 3px;
+        }
+
+        .facility-slide-content p {
+            font-size: 12px;
+        }
+
+        .facility-explore-btn {
+            padding: 11px 18px;
+            font-size: 12px;
+        }
+
+        .facility-dots {
+            display: none;
+        }
+
+        .facility-progress {
+            width: 80px;
+        }
+
+        .facility-highlights {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .facility-card-image {
+            height: 200px;
+        }
+    }
+</style>
+
+@if (Model.Sliders != null && Model.Sliders.Count > 0)
+{
+    <section class="facility-slider">
+
+        @{
+            var firstSlide = true;
+            var slideIndex = 1;
+        }
+
+        @foreach (var s in Model.Sliders)
+        {
+            var imagePath = s.ImagePath ?? "";
+
+            if (!imagePath.StartsWith(
+                "http",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                imagePath =
+                    "/" +
+                    imagePath.TrimStart('~', '/');
+            }
+
+            <div class="facility-slide @(firstSlide ? "active" : "")">
+
+                <div class="facility-slide-bg">
+
+                    <img src="@imagePath"
+                         alt="@s.Title"
+                         onerror="this.onerror=null;this.src='/images/backgroud.png';" />
+
+                </div>
+
+                <div class="facility-overlay"></div>
+
+                <div class="facility-slide-content">
+
+                    <div class="facility-number">
+
+                        <span></span>
+
+                        @(slideIndex < 10
+                            ? "0" + slideIndex
+                            : slideIndex.ToString())
+
+                        <span></span>
+
+                    </div>
+
+                    <h1>
+
+                        @(string.IsNullOrWhiteSpace(s.Title)
+                            ? "World Class Facilities"
+                            : s.Title)
+
+                    </h1>
+
+                    <p>
+
+                        @(string.IsNullOrWhiteSpace(s.SubTitle)
+                            ? "Enjoy premium facilities, modern amenities and exceptional services designed for a comfortable and memorable stay."
+                            : s.SubTitle)
+
+                    </p>
+
+                    <a href="#facilities"
+                       class="facility-explore-btn">
+
+                        Explore Facility
+
+                        <i class="fa-solid fa-arrow-down"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="facility-mini-card">
+
+                    <div class="facility-mini-image">
+
+                        <img src="@imagePath"
+                             alt="@s.Title" />
+
+                    </div>
+
+                    <div class="facility-mini-content">
+
+                        <span>
+                            ROYAL PARADISE
+                        </span>
+
+                        <h3>
+                            @(string.IsNullOrWhiteSpace(s.Title)
+                                ? "Premium Facility"
+                                : s.Title)
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            firstSlide = false;
+
+            slideIndex++;
+        }
+
+        @if (Model.Sliders.Count > 1)
+        {
+            <button type="button"
+                    class="facility-arrow facility-prev">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+            </button>
+
+            <button type="button"
+                    class="facility-arrow facility-next">
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+        }
+
+        <div class="facility-bottom">
+
+            <div class="facility-counter">
+
+                <span class="current"
+                      id="facilityCurrent">
+
+                    01
+
+                </span>
+
+                /
+
+                <span id="facilityTotal">
+
+                    01
+
+                </span>
+
+            </div>
+
+            <div class="facility-progress">
+
+                <div class="facility-progress-fill"
+                     id="facilityProgress">
+                </div>
+
+            </div>
+
+            <div class="facility-dots">
+            </div>
+
+        </div>
+
+    </section>
+}
+else
+{
+
+    <section class="facility-slider">
+
+        <div class="facility-slide active">
+
+            <div class="facility-slide-bg">
+
+                <img src="/images/backgroud.png"
+                     alt="Royal Paradise Facilities" />
+
+            </div>
+
+            <div class="facility-overlay"></div>
+
+            <div class="facility-slide-content">
+
+                <div class="facility-number">
+
+                    <span></span>
+
+                    01
+
+                    <span></span>
+
+                </div>
+
+                <h1>
+                    World Class Facilities
+                </h1>
+
+                <p>
+                    Enjoy premium facilities,
+                    modern amenities and
+                    exceptional hospitality.
+                </p>
+
+                <a href="#facilities"
+                   class="facility-explore-btn">
+
+                    Explore Facility
+
+                    <i class="fa-solid fa-arrow-down"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="facility-bottom">
+
+            <div class="facility-counter">
+
+                <span class="current">
+                    01
+                </span>
+
+                /
+                01
+
+            </div>
+
+        </div>
+
+    </section>
+}
+
+<div class="facility-highlights">
+
+    <div class="facility-highlight">
+
+        <div class="facility-highlight-icon">
+
+            <i class="fa-solid fa-medal"></i>
+
+        </div>
+
+        <div>
+
+            <strong>
+                Premium Quality
+            </strong>
+
+            <span>
+                Top-tier upkeep & service
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="facility-highlight">
+
+        <div class="facility-highlight-icon">
+
+            <i class="fa-solid fa-clock"></i>
+
+        </div>
+
+        <div>
+
+            <strong>
+                Always Available
+            </strong>
+
+            <span>
+                Ready when you need them
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="facility-highlight">
+
+        <div class="facility-highlight-icon">
+
+            <i class="fa-solid fa-heart"></i>
+
+        </div>
+
+        <div>
+
+            <strong>
+                Guest Favorite
+            </strong>
+
+            <span>
+                Loved by every visitor
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+@functions {
+
+    string GetFacilityIcon(string title)
+    {
+        var t =
+            (title ?? "").ToLower();
+
+        if (
+            t.Contains("pool") ||
+            t.Contains("swim"))
+        {
+            return
+                "fa-solid fa-water-ladder";
+        }
+
+        if (
+            t.Contains("restaurant") ||
+            t.Contains("dining") ||
+            t.Contains("food"))
+        {
+            return
+                "fa-solid fa-utensils";
+        }
+
+        if (
+            t.Contains("spa") ||
+            t.Contains("wellness") ||
+            t.Contains("massage"))
+        {
+            return
+                "fa-solid fa-spa";
+        }
+
+        if (
+            t.Contains("gym") ||
+            t.Contains("fitness"))
+        {
+            return
+                "fa-solid fa-dumbbell";
+        }
+
+        if (t.Contains("parking"))
+        {
+            return
+                "fa-solid fa-square-parking";
+        }
+
+        if (
+            t.Contains("wifi") ||
+            t.Contains("internet"))
+        {
+            return
+                "fa-solid fa-wifi";
+        }
+
+        if (
+            t.Contains("bar") ||
+            t.Contains("lounge"))
+        {
+            return
+                "fa-solid fa-martini-glass";
+        }
+
+        if (
+            t.Contains("banquet") ||
+            t.Contains("hall") ||
+            t.Contains("event") ||
+            t.Contains("conference"))
+        {
+            return
+                "fa-solid fa-users-rectangle";
+        }
+
+        if (
+            t.Contains("shuttle") ||
+            t.Contains("airport") ||
+            t.Contains("transport"))
+        {
+            return
+                "fa-solid fa-shuttle-van";
+        }
+
+        if (t.Contains("laundry"))
+        {
+            return
+                "fa-solid fa-shirt";
+        }
+
+        return
+            "fa-solid fa-star";
+    }
+
+}
+
+<div class="facility-wrapper"
+     id="facilities">
+
+    <div class="facility-heading">
+
+        <span class="facility-heading-label">
+
+            WHAT WE OFFER
+
+        </span>
+
+        <h2>
+            Facilities & Amenities
+        </h2>
+
+        <p>
+
+            Everything you need for a relaxing,
+            comfortable and memorable stay at
+            Royal Paradise Hotel.
+
+        </p>
+
+    </div>
+
+    @if (Model.Facilities != null &&
+         Model.Facilities.Count > 0)
+    {
+
+        <div class="facility-grid">
+
+            @foreach (var f in Model.Facilities)
+            {
+
+                var facilityImage =
+                    string.IsNullOrWhiteSpace(f.ImagePath)
+                    ? "/images/backgroud.png"
+                    : "/" +
+                      f.ImagePath.TrimStart('~', '/');
+
+                <div class="facility-card">
+
+                    <div class="facility-card-image">
+
+                        <img src="@facilityImage"
+                             alt="@f.Title"
+                             onerror="this.onerror=null;this.src='/images/backgroud.png';" />
+
+                        <div class="facility-icon">
+
+                            <i class="@GetFacilityIcon(f.Title)"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="facility-card-body">
+
+                        <h3>
+                            @f.Title
+                        </h3>
+
+                        <p>
+                            @f.Description
+                        </p>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+    }
+    else
+    {
+
+        <div class="facility-empty">
+
+            Facilities will be added soon.
+            Please check back later.
+
+        </div>
+
+    }
+
+</div>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+@section Scripts {
+
+    <script src="~/js/facility.js">
+    </script>
+
+}

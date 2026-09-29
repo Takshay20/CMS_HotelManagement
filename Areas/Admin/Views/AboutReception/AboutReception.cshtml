@@ -1,0 +1,94 @@
+@model CMS_HotelBooking.ViewModels.AboutReceptionVM
+
+@{
+    ViewData["Title"] = "About - Reception";
+}
+
+<style>
+    .img-preview {
+        width: 180px;
+        height: 120px;
+        object-fit: cover;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <h2>Reception</h2>
+
+    <p class="text-muted">
+        Manage the Reception content block shown on the About page
+    </p>
+
+    <form id="aboutReceptionForm"
+          enctype="multipart/form-data">
+
+        <input type="hidden"
+               id="AboutReceptionId"
+               name="AboutReception.AboutReceptionId"
+               value="@Model.AboutReception.AboutReceptionId" />
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Title <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="Title"
+                   name="AboutReception.Title"
+                   class="form-control"
+                   value="@Model.AboutReception.Title"
+                   placeholder="A Warm Welcome Awaits" />
+            <span class="field-error" id="err-Title"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Description <span class="text-danger">*</span>
+            </label>
+
+            <textarea id="Description"
+                      name="AboutReception.Description"
+                      class="form-control"
+                      rows="5"
+                      placeholder="Enter description">@Model.AboutReception.Description</textarea>
+            <span class="field-error" id="err-Description"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Image
+            </label>
+
+            <input type="file"
+                   id="ImageFile"
+                   name="ImageFile"
+                   class="form-control"
+                   accept="image/*" />
+
+            @if (!string.IsNullOrEmpty(Model.AboutReception.ImagePath))
+            {
+                <img src="/@Model.AboutReception.ImagePath" class="img-preview" />
+            }
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary">
+            Update Changes
+        </button>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/AboutReception.js"></script>
+}

@@ -1,0 +1,121 @@
+﻿@model CMS_HotelBooking.Models.Payment
+
+@{
+    var status = (Model.PaymentStatus ?? "Pending").ToLower();
+
+    var statusColor = "#856404";
+    var statusBg = "#fff3cd";
+
+    if (status == "paid")
+    {
+        statusColor = "#198754";
+        statusBg = "#e8f7ee";
+    }
+    else if (status == "failed")
+    {
+        statusColor = "#dc2626";
+        statusBg = "#fde8e8";
+    }
+    else if (status == "refunded")
+    {
+        statusColor = "#2563eb";
+        statusBg = "#eaf2ff";
+    }
+}
+
+<div>
+
+    <div style="
+        display:inline-flex;
+        align-items:center;
+        gap:7px;
+        padding:8px 15px;
+        border-radius:20px;
+        background:@statusBg;
+        color:@statusColor;
+        font-weight:600;
+        margin-bottom:15px;">
+
+        <i class="fa-solid fa-circle"></i>
+
+        @Model.PaymentStatus
+
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Payment ID</span>
+        <strong>#@Model.PaymentId</strong>
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Booking ID</span>
+        <strong>#@Model.BookingId</strong>
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Amount</span>
+        <strong>₹@Model.Amount.ToString("N2")</strong>
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Status</span>
+        <strong>@Model.PaymentStatus</strong>
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Order ID</span>
+
+        <strong>
+            @(string.IsNullOrWhiteSpace(Model.OrderId)
+                ? "Not Generated"
+                : Model.OrderId)
+        </strong>
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Gateway Payment ID</span>
+
+        <strong>
+            @(string.IsNullOrWhiteSpace(Model.GatewayPaymentId)
+                ? "Not Available"
+                : Model.GatewayPaymentId)
+        </strong>
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Payment Date</span>
+
+        <strong>
+            @(Model.PaymentDate.HasValue
+                ? Model.PaymentDate.Value.ToString("dd/MM/yyyy, hh:mm:ss tt")
+                : "Not Paid")
+        </strong>
+    </div>
+
+    <div class="payment-detail-row">
+        <span>Created Date</span>
+
+        <strong>
+            @Model.CreatedDate.ToString("dd/MM/yyyy, hh:mm:ss tt")
+        </strong>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.FailureReason))
+    {
+        <div style="
+            margin-top:18px;
+            padding:14px;
+            background:#fde8e8;
+            color:#dc2626;
+            border-radius:10px;">
+
+            <strong>Failure Reason</strong>
+
+            <div style="margin-top:5px;">
+                @Model.FailureReason
+            </div>
+
+        </div>
+    }
+
+</div>

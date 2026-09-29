@@ -1,0 +1,139 @@
+@model List<CMS_HotelBooking.Models.ContactMessage>
+@{
+    ViewData["Title"] = "Track My Message";
+}
+<style>
+    .tm-wrap { 
+        width:90%;
+        max-width:800px; 
+        margin:60px auto;
+    }
+    .tm-wrap h1 { 
+        color:#222;
+        margin-bottom:10px; 
+    }
+    .tm-wrap p.sub { 
+        color:#777; 
+        margin-bottom:30px; 
+    }
+    .tm-form {
+        display:flex; 
+        gap:12px; 
+        margin-bottom:35px; 
+        flex-wrap:wrap; 
+    }
+    .tm-form input { 
+        flex:1;
+        min-width:220px; 
+        padding:14px 16px;
+        border:1.5px solid #ddd; 
+        border-radius:8px; 
+        font-size:15px;
+    }
+    .tm-form button { 
+        padding:14px 28px; 
+        background:#D4AF37; 
+        color:#fff; 
+        border:none;
+        border-radius:8px; 
+        font-weight:600; 
+        cursor:pointer; 
+        transition:.25s;
+    }
+    .tm-form button:hover {
+        background:#b8952f;
+    }
+    .tm-card {
+        background:#fff;
+        border-radius:14px; 
+        padding:24px; 
+        margin-bottom:20px;
+        box-shadow:0 8px 20px rgba(0,0,0,.08);
+    }
+    .tm-card .tm-meta { 
+        display:flex; 
+        justify-content:space-between;
+        color:#888; font-size:13px;
+        margin-bottom:10px; 
+        flex-wrap:wrap; gap:8px;
+    }
+    .tm-card h3 { 
+        color:#222; 
+        margin-bottom:8px;
+    }
+    .tm-card p.msg { 
+        color:#555; 
+        line-height:24px;
+        margin-bottom:15px;
+    }
+    .tm-reply { 
+        background:#faf6ea;
+        border-left:4px solid #D4AF37;
+        border-radius:8px; 
+        padding:15px; 
+    }
+    .tm-reply strong {
+        color:#9c7c1f; 
+        display:block; 
+        margin-bottom:6px; 
+    }
+    .tm-pending { 
+        color:#e67e22; 
+        font-weight:600; 
+        font-size:14px;
+    }
+    .tm-empty {
+        text-align:center; 
+        color:#888; 
+        padding:50px 0; 
+    }
+</style>
+
+<div class="tm-wrap">
+    <h1>Track My Message</h1>
+    <p class="sub">Enter the email address you used to contact us, and we'll show your messages and any reply from our team.</p>
+
+    <form class="tm-form" method="post" asp-action="TrackMessage">
+        <input type="email" name="email" value="@ViewBag.SearchedEmail" placeholder="you@example.com" required>
+        <button type="submit">Search</button>
+    </form>
+
+    @if (ViewBag.Searched == true)
+    {
+        if (Model.Count == 0)
+        {
+            <div class="tm-empty">
+                <p>No messages found for this email address.</p>
+            </div>
+        }
+        else
+        {
+            foreach (var m in Model)
+            {
+                <div class="tm-card">
+                    <div class="tm-meta">
+                        <span>Subject: <strong>@(string.IsNullOrWhiteSpace(m.Subject) ? "(No subject)" : m.Subject)</strong></span>
+                        <span>@m.CreatedDate.ToString("dd MMM yyyy, hh:mm tt")</span>
+                    </div>
+                    <p class="msg">@m.Message</p>
+
+                    @if (!string.IsNullOrWhiteSpace(m.AdminReply))
+                    {
+                        <div class="tm-reply">
+                            <strong>Reply from Royal Paradise Hotel</strong>
+                            @m.AdminReply
+                            @if (m.RepliedDate.HasValue)
+                            {
+                                <div style="margin-top:8px;font-size:12px;color:#999;">@m.RepliedDate.Value.ToString("dd MMM yyyy, hh:mm tt")</div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="tm-pending">⏳ Awaiting reply from our team</p>
+                    }
+                </div>
+            }
+        }
+    }
+</div>

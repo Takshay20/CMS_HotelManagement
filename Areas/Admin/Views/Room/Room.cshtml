@@ -1,0 +1,150 @@
+@{
+    ViewData["Title"] = "Room";
+}
+<style>
+    #RoomCategoryId + .select2 {
+    width: 100% !important;
+}
+
+#RoomCategoryId + .select2 .select2-selection--single {
+    height: 44px !important;
+    border: 1.5px solid #e2e6ee !important;
+    border-radius: 8px !important;
+    background: #fafbfd !important;
+    box-sizing: border-box !important;
+}
+
+#RoomCategoryId + .select2 .select2-selection__rendered {
+    line-height: 42px !important;
+    padding-left: 12px !important;
+    color: #222 !important;
+}
+
+#RoomCategoryId + .select2 .select2-selection__arrow {
+    height: 42px !important;
+}
+
+.select2-search--dropdown .select2-search__field {
+    width: 100% !important;
+    padding: 8px 10px !important;
+    border: 1px solid #e2e6ee !important;
+    border-radius: 6px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+
+.select2-dropdown {
+    border: 1px solid #e2e6ee !important;
+    border-radius: 0 0 8px 8px !important;
+}
+
+.select2-results__option {
+    padding: 9px 10px !important;
+    font-size: 14px !important;
+}
+
+.select2-results__option--highlighted {
+    background: #f1f3f7 !important;
+    color: #222 !important;
+}
+</style>
+
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Rooms</h2>
+            <p>Manage individual hotel rooms</p>
+        </div>
+        <div class="header-right">
+            <input type="text" id="txtSearch" placeholder="Search Here..." />
+            <button id="btnAdd"><i class="fa fa-plus"></i> Add New</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Room No.</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Price/Night</th>
+                    <th>Featured</th>
+                    <th>Status</th>
+                    <th width="150">Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="drawer drawer-wide" id="drawer">
+    <div class="drawer-header">
+        <h3>Room</h3>
+        <span id="closeDrawer">&times;</span>
+    </div>
+    <div class="drawer-body">
+        <form id="frmData" enctype="multipart/form-data">
+            <input type="hidden" id="Id" value="0" />
+
+            <label>Room Category <span class="required-star">*</span></label>
+            <select id="RoomCategoryId"></select>
+            <span class="field-error" id="err-RoomCategoryId"></span>
+
+            <label>Room Number <span class="required-star">*</span></label>
+            <input type="text" id="RoomNumber" />
+            <span class="field-error" id="err-RoomNumber"></span>
+
+            <label>Title <span class="required-star">*</span></label>
+            <input type="text" id="Title" />
+            <span class="field-error" id="err-Title"></span>
+
+            <label>Description</label>
+            <textarea id="Description"></textarea>
+
+            <label>Price Per Night (₹) <span class="required-star">*</span></label>
+            <input type="number" id="PricePerNight" step="0.01" />
+            <span class="field-error" id="err-PricePerNight"></span>
+
+            <label>Max Guests</label>
+            <input type="number" id="MaxGuests" value="2" />
+
+            <label>Size (e.g. 350 sqft)</label>
+            <input type="text" id="SizeSqft" />
+
+            <label>Amenities</label>
+            <div id="amenityChecklist" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:15px;"></div>
+
+
+            <label style="display:inline-block;margin-right:20px;">
+                <input type="checkbox" id="IsFeatured" style="width:auto;" /> Show in "Popular Rooms" (Home page)
+            </label>
+            <label style="display:inline-block;">
+                <input type="checkbox" id="IsAvailable" checked style="width:auto;" /> Available for booking
+            </label>
+
+            <label>Cover Image <span class="required-star">*</span></label>
+            <input type="file" id="ImageFile" accept="image/*" />
+            <span class="field-error" id="err-ImageFile"></span>
+            <img id="imgPreview" src="" style="display:none;max-width:100%;margin-top:10px;border-radius:8px;" />
+
+            <label>Additional Gallery Images (room detail page slider)</label>
+            <input type="file" id="GalleryFiles" accept="image/*" multiple />
+
+            <div class="drawer-footer">
+                <button type="button" id="btnCancel">Cancel</button>
+                <button type="button" id="btnSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/Room.js"></script>
+}
+

@@ -1,0 +1,195 @@
+﻿@model CMS_HotelBooking.ViewModels.HomeWelcomeVM
+
+@{
+    ViewData["Title"] = "Home Welcome";
+}
+
+<style>
+    .img-preview {
+        width: 180px;
+        height: 120px;
+        object-fit: cover;
+        margin-top: 10px;
+    }
+
+    .field-error {
+        display: block;
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <h2>Home Welcome</h2>
+
+    <p class="text-muted">
+        Manage the Welcome section shown on the Home page
+    </p>
+
+    <form id="homeWelcomeForm"
+          enctype="multipart/form-data">
+        <input type="hidden"
+               id="HomeWelcomeId"
+               name="HomeWelcome.HomeWelcomeId"
+               value="@Model.HomeWelcome.HomeWelcomeId" />
+        <div class="mb-3">
+
+            <label class="form-label">
+                Heading <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="Heading"
+                   name="HomeWelcome.Heading"
+                   class="form-control"
+                   value="@Model.HomeWelcome.Heading"
+                   placeholder="Enter heading" />
+            <span class="field-error" id="err-Heading"></span>
+        </div>
+        <div class="mb-3">
+
+            <label class="form-label">
+                Sub Heading <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="SubHeading"
+                   name="HomeWelcome.SubHeading"
+                   class="form-control"
+                   value="@Model.HomeWelcome.SubHeading"
+                   placeholder="Enter sub heading" />
+            <span class="field-error" id="err-SubHeading"></span>
+
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                Description <span class="text-danger">*</span>
+            </label>
+            <textarea id="Description"
+                      name="HomeWelcome.Description"
+                      class="form-control"
+                      rows="5"
+                      placeholder="Enter welcome description">@Model.HomeWelcome.Description</textarea>
+            <span class="field-error" id="err-Description"></span>
+        </div>
+        <div class="mb-3">
+
+            <label class="form-label">
+                Experience Years <span class="text-danger">*</span>
+            </label>
+            <input type="number"
+                   id="ExperienceYears"
+                   name="HomeWelcome.ExperienceYears"
+                   class="form-control"
+                   value="@Model.HomeWelcome.ExperienceYears"
+                   min="0" />
+            <span class="field-error" id="err-ExperienceYears"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                Button Text <span class="text-danger">*</span>
+            </label>
+            <input type="text"
+                   id="ButtonText"
+                   name="HomeWelcome.ButtonText"
+                   class="form-control"
+                   value="@Model.HomeWelcome.ButtonText"
+                   placeholder="Example: Discover More" />
+            <span class="field-error" id="err-ButtonText"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                Button URL <span class="text-danger">*</span>
+            </label>
+            <input type="text"
+                   id="ButtonUrl"
+                   name="HomeWelcome.ButtonUrl"
+                   class="form-control"
+                   value="@Model.HomeWelcome.ButtonUrl"
+                   placeholder="Example: /Room/Index" />
+            <span class="field-error" id="err-ButtonUrl"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+    Image 1 <span class="text-danger">*</span>
+</label>
+            <input type="hidden"
+       name="HomeWelcome.Image1Path"
+       value="@Model.HomeWelcome.Image1Path" />
+
+<input type="file"
+       id="Image1File"
+       name="Image1File"
+       class="form-control"
+       accept=".jpg,.jpeg,.png,.gif,.jfif,image/jpeg,image/png,image/gif" />
+
+<span class="field-error" id="err-Image1File"></span>
+
+@if (!string.IsNullOrEmpty(Model.HomeWelcome.Image1Path))
+{
+    <img src="/@Model.HomeWelcome.Image1Path"
+         style="width:180px;height:120px;object-fit:cover;margin-top:10px;" />
+}
+
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+    Image 2 <span class="text-danger">*</span>
+</label>
+            <input type="hidden"
+       name="HomeWelcome.Image2Path"
+       value="@Model.HomeWelcome.Image2Path" />
+
+<input type="file"
+       id="Image2File"
+       name="Image2File"
+       class="form-control"
+       accept=".jpg,.jpeg,.png,.gif,.jfif,image/jpeg,image/png,image/gif" />
+
+<span class="field-error" id="err-Image2File"></span>
+
+@if (!string.IsNullOrEmpty(Model.HomeWelcome.Image2Path))
+{
+    <img src="/@Model.HomeWelcome.Image2Path"
+         style="width:180px;height:120px;object-fit:cover;margin-top:10px;" />
+}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+    Image 3 <span class="text-danger">*</span>
+</label>
+            <input type="hidden"
+       name="HomeWelcome.Image3Path"
+       value="@Model.HomeWelcome.Image3Path" />
+
+<input type="file"
+       id="Image3File"
+       name="Image3File"
+       class="form-control"
+       accept=".jpg,.jpeg,.png,.gif,.jfif,image/jpeg,image/png,image/gif" />
+
+<span class="field-error" id="err-Image3File"></span>
+
+@if (!string.IsNullOrEmpty(Model.HomeWelcome.Image3Path))
+{
+    <img src="/@Model.HomeWelcome.Image3Path"
+         style="width:180px;height:120px;object-fit:cover;margin-top:10px;" />
+}
+        </div>
+        <button type="submit"
+                class="btn btn-primary">
+            Update Changes
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/HomeWelcome.js"></script>
+}

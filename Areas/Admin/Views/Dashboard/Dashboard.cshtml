@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-container dashboard-page">
+
+    <div class="page-header">
+        <div>
+            <h2>Dashboard</h2>
+            <p>Overview of your hotel's website activity</p>
+        </div>
+    </div>
+
+    <div id="dashGrid" class="dashboard-grid"></div>
+
+    <div class="dashboard-charts">
+
+        <div class="dashboard-box">
+            <h3>Key Metrics Overview</h3>
+            <canvas id="metricsChart" height="220"></canvas>
+        </div>
+
+        <div class="dashboard-box">
+            <h3>Booking Status</h3>
+            <canvas id="bookingChart" height="220"></canvas>
+        </div>
+
+    </div>
+
+    <div class="dashboard-arrivals">
+
+        <div class="dashboard-box">
+
+            <h3>🛎️ Today & Tomorrow — Check-ins</h3>
+
+            <p class="dashboard-subtitle">
+                Approved bookings arriving soon
+            </p>
+
+            <div id="arrivalsList">
+                <p class="dashboard-loading">Loading...</p>
+            </div>
+
+        </div>
+
+        <div class="dashboard-box">
+
+            <h3>🧳 Today & Tomorrow — Check-outs</h3>
+
+            <p class="dashboard-subtitle">
+                Approved bookings departing soon
+            </p>
+
+            <div id="departuresList">
+                <p class="dashboard-loading">Loading...</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/DashboardChart.js"></script>
+    <script src="~/Admin/js/Dashboard.js"></script>
+}

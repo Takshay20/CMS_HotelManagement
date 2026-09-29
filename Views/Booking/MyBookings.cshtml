@@ -1,0 +1,504 @@
+﻿@model List<CMS_HotelBooking.Models.Booking>
+@using CMS_HotelBooking.Helpers
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<style>
+    .mb-wrap {
+        width: 90%;
+        max-width: 1000px;
+        margin: 60px auto;
+    }
+
+        .mb-wrap h1 {
+            margin-bottom: 30px;
+            color: #222;
+        }
+
+    .mb-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+        .mb-card h3 {
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .mb-card p {
+            color: #666;
+            margin: 3px 0;
+        }
+
+    .mb-status {
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+        .mb-status.Pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .mb-status.Approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .mb-status.Rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .mb-status.Cancelled {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+    .mb-pay {
+        display: inline-block;
+        background: #198754;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        margin-right: 8px;
+    }
+
+        .mb-pay:hover {
+            background: #146c43;
+            color: #fff;
+            text-decoration: none;
+        }
+
+    .mb-cancel {
+        background: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+        .mb-cancel:hover {
+            background: #bb2d3b;
+        }
+
+    .mb-empty {
+        text-align: center;
+        color: #888;
+        padding: 60px 0;
+    }
+
+    .mb-reminder {
+        background: linear-gradient(135deg,#D4AF37,#b8952f);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+    .mb-roomchange {
+        background: #fff8e6;
+        border: 1px solid #D4AF37;
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-top: 14px;
+        width: 100%;
+    }
+
+        .mb-roomchange h4 {
+            color: #8a6d1f;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .mb-roomchange p {
+            color: #555;
+            margin: 4px 0;
+        }
+
+        .mb-roomchange .mb-rc-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+        }
+
+    .mb-btn-continue {
+        background: #198754;
+        color: #fff;
+        border: none;
+        padding: 9px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .mb-btn-cancel2 {
+        background: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 9px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .mb-refund-note {
+        font-size: 11.5px;
+        color: #888;
+        margin-top: 8px;
+        max-width: 200px;
+        line-height: 16px;
+    }
+
+    .mb-policy-box {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 18px 22px;
+        margin-bottom: 25px;
+        font-size: 13px;
+        color: #555;
+        line-height: 22px;
+    }
+
+        .mb-policy-box strong {
+            color: #222;
+        }
+    .mb-paid {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #e8f7ee;
+    color: #198754;
+    border: 1px solid #b7e4c7;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 8px;
+    min-width: 110px;
+    box-sizing: border-box;
+}
+
+.mb-paid i {
+    font-size: 14px;
+}
+
+.mb-paid:hover {
+    background: #d4edda;
+    color: #146c43;
+}
+</style>
+
+@functions {
+
+    string GetRefundNote(DateTime checkInDate)
+    {
+        var hours = (checkInDate - DateTime.Now).TotalHours;
+
+        if (hours >= 48)
+            return "Cancel now for a full refund.";
+
+        if (hours >= 24)
+            return "Cancelling now: 50% refund applies.";
+
+        return "Cancelling now: no refund (within 24 hrs of check-in).";
+    }
+
+}
+
+<div class="mb-wrap">
+
+    <h1>My Bookings</h1>
+
+    <div class="mb-policy-box">
+
+        <strong>Cancellation &amp; Refund Policy:</strong>
+
+        Cancel <strong>48+ hours</strong> before check-in
+        for a <strong>full refund</strong>.
+
+        Cancel <strong>24-48 hours</strong> before check-in
+        for a <strong>50% refund</strong>.
+
+        Cancellations within <strong>24 hours</strong>
+        of check-in are <strong>not eligible for a refund</strong>.
+
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="mb-empty">
+
+            <p>You haven't made any bookings yet.</p>
+
+            <a asp-controller="Room"
+               asp-action="Index"
+               class="btn">
+
+                Browse Rooms
+
+            </a>
+
+        </div>
+    }
+    else
+    {
+        var today = DateTime.Today;
+        var paymentStatuses =
+            ViewBag.PaymentStatuses as Dictionary<int, string>;
+
+        foreach (var b in Model)
+        {
+            string? reminder = null;
+            string paymentStatus = "NotPaid";
+            if (paymentStatuses != null &&
+                paymentStatuses.ContainsKey(b.BookingId))
+            {
+                paymentStatus =
+                    paymentStatuses[b.BookingId];
+            }
+
+            if (b.Status == "Approved")
+            {
+                if (b.CheckInDate.Date == today)
+                {
+                    reminder =
+                        "🛎️ Your check-in is TODAY!";
+                }
+                else if (b.CheckInDate.Date ==
+                         today.AddDays(1))
+                {
+                    reminder =
+                        "🛎️ Your check-in is TOMORROW!";
+                }
+                else if (b.CheckOutDate.Date == today)
+                {
+                    reminder =
+                        "🧳 Your check-out is TODAY!";
+                }
+                else if (b.CheckOutDate.Date ==
+                         today.AddDays(1))
+                {
+                    reminder =
+                        "🧳 Your check-out is TOMORROW!";
+                }
+            }
+
+            <div class="mb-card"
+                 data-id="@b.BookingId">
+
+                <div>
+
+                    <h3>
+
+                        @b.RoomTitle
+
+                        (Room #@b.RoomNumber)
+
+                    </h3>
+
+                    <p>
+
+                        Check-in:
+
+                        @b.CheckInDate.ToString(
+                            "dd MMM yyyy")
+
+                        &nbsp;|&nbsp;
+
+                        Check-out:
+
+                        @b.CheckOutDate.ToString(
+                            "dd MMM yyyy")
+
+                    </p>
+
+                    <p>
+
+                        Guests:
+                        @b.Guests
+
+                        &nbsp;|&nbsp;
+
+                        Total:
+                        &#8377;@(b.TotalPrice.ToString("N0"))
+
+                    </p>
+
+                    @if (reminder != null)
+                    {
+                        <div class="mb-reminder">
+
+                            @reminder
+
+                        </div>
+                    }
+
+                    @if (b.RoomChangeStatus == "Pending")
+                    {
+                        <div class="mb-roomchange">
+
+                            <h4>
+
+                                &#9888;
+                                Room Change Requested By Hotel
+
+                            </h4>
+
+                            <p>
+
+                                Your original room is unavailable
+                                for these dates due to another
+                                confirmed booking.
+
+                                We'd like to move you to:
+
+                                <strong>
+
+                                    @b.ProposedRoomTitle
+
+                                    (Room #@b.ProposedRoomNumber)
+
+                                </strong>
+
+                            </p>
+
+                            @if (!string.IsNullOrWhiteSpace(
+                                b.RoomChangeNote))
+                            {
+                                <p>
+
+                                    <em>
+
+                                        Note from hotel:
+                                        "@b.RoomChangeNote"
+
+                                    </em>
+
+                                </p>
+                            }
+
+                            <div class="mb-rc-actions">
+
+                                <button class="mb-btn-continue"
+                                        onclick="respondRoomChange(
+                                    @b.BookingId,
+                                    true)">
+
+                                    Continue With New Room
+
+                                </button>
+
+                                <button class="mb-btn-cancel2"
+                                        onclick="respondRoomChange(
+                                    @b.BookingId,
+                                    false)">
+
+                                    Cancel Booking
+
+                                </button>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+                <div style="text-align:right;">
+
+                    <span class="mb-status @b.Status">
+
+                        @b.Status
+
+                    </span>
+
+                    <br />
+                    <br />
+
+                    @if (b.Status == "Approved")
+                    {
+
+                        @if (string.Equals(paymentStatus,"Paid",StringComparison.OrdinalIgnoreCase))
+                        {
+                            <span class="mb-paid">
+                                <i class="fa-solid fa-credit-card"></i>
+                                Paid
+                            </span>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Pay","Payment",new { id = b.BookingId })"
+                               class="mb-pay">
+                                <i class="fa-solid fa-credit-card"></i>
+                                Pay Now
+                            </a>
+                        }
+                        <button class="mb-cancel"
+                                onclick="cancelBooking(
+                            @b.BookingId,
+                            '@b.CheckInDate.ToString("yyyy-MM-ddTHH:mm:ss")',
+                            @b.TotalPrice)">
+                            Cancel
+                        </button>
+                        <div class="mb-refund-note">
+                            @GetRefundNote(b.CheckInDate)
+                        </div>
+                    }
+                    @if (b.Status == "Pending")
+                    {
+                        <button class="mb-cancel"
+                                onclick="cancelBooking(
+                            @b.BookingId,
+                            '@b.CheckInDate.ToString("yyyy-MM-ddTHH:mm:ss")',
+                            @b.TotalPrice)">
+                            Cancel
+                        </button>
+                        <div class="mb-refund-note">
+                            @GetRefundNote(b.CheckInDate)
+                        </div>
+                    }
+                    @if (b.Status == "Cancelled"&& b.RefundPercentage.HasValue)
+                    {
+                        <div class="mb-refund-note"
+                             style="color:#721c24;">
+                            Refund:
+                            @b.RefundPercentage%
+                            (₹;@(b.RefundAmount?.ToString("N0")))
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/MyBooking.js"></script>
+}

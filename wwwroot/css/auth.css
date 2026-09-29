@@ -1,0 +1,211 @@
+.auth-wrap {
+    width: 90%;
+    max-width: 450px;
+    margin: 30px auto 60px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+.forgot-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: rgba(212,175,55,.12);
+    border: 2px solid #D4AF37;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #D4AF37;
+    font-size: 28px;
+}
+.auth-wrap h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #222;
+    font-family: Georgia, serif;
+}
+.auth-wrap p.sub {
+    text-align: center;
+    color: #888;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    font-size: 14px;
+}
+.auth-wrap label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+    .input-box i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #D4AF37;
+        font-size: 15px;
+    }
+.auth-wrap input[type="email"] {
+    width: 100%;
+    padding: 13px 13px 13px 44px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: .3s;
+    font-size: 14px;
+}
+    .auth-wrap input[type="email"]:focus {
+        border-color: #D4AF37;
+        box-shadow: 0 0 0 3px rgba(212,175,55,.12);
+    }
+.auth-wrap button {
+    width: 100%;
+    padding: 14px;
+    background: #D4AF37;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .3s;
+    margin-top: 5px;
+}
+    .auth-wrap button:hover {
+        background: #0F172A;
+    }
+.back-login {
+    text-align: center;
+    margin-top: 22px;
+}
+    .back-login a {
+        color: #D4AF37;
+        font-weight: 600;
+        text-decoration: none;
+    }
+        .back-login a:hover {
+            color: #0F172A;
+        }
+.security-box {
+    margin-top: 25px;
+    padding: 13px 15px;
+    background: #faf8ef;
+    border: 1px solid #eee1b7;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+    .security-box i {
+        color: #D4AF37;
+        margin-top: 2px;
+    }
+    .security-box p {
+        margin: 0;
+        color: #777;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+.alert {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+.alert-success {
+    background: #edf8f0;
+    border: 1px solid #b8ddc2;
+    color: #287a45;
+}
+.alert-danger {
+    background: #fff1f0;
+    border: 1px solid #e5b8b3;
+    color: #c0392b;
+}
+@media (max-width: 500px) {
+    .auth-wrap {
+        padding: 30px 24px;
+    }
+        .auth-wrap h1 {
+            font-size: 28px;
+        }
+}
+
+.auth-wrap {
+    width: 90%;
+    max-width: 450px;
+    margin: 30px auto 60px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+
+    .auth-wrap h1 {
+        text-align: center;
+        margin-bottom: 10px;
+        color: #222;
+    }
+
+    .auth-wrap p.sub {
+        text-align: center;
+        color: #888;
+        margin-bottom: 30px;
+    }
+
+    .auth-wrap label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .auth-wrap input {
+        width: 100%;
+        padding: 13px;
+        margin-bottom: 18px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .auth-wrap select {
+        width: 100%;
+        padding: 13px;
+        margin-bottom: 18px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        font-family: inherit;
+    }
+
+    .auth-wrap button {
+        width: 100%;
+        padding: 14px;
+        background: #D4AF37;
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .auth-wrap button:hover {
+            background: #0F172A;
+        }
+
+    .auth-wrap .switch {
+        text-align: center;
+        margin-top: 20px;
+        color: #666;
+    }
+
+        .auth-wrap .switch a {
+            color: #D4AF37;
+            font-weight: 600;
+        }

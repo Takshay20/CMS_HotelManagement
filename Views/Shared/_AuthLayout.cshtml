@@ -1,0 +1,70 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Royal Paradise Hotel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.75)), url('/images/About/About13.jfif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .auth-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 25px 20px 0;
+            text-decoration: none;
+        }
+
+        .auth-header .logo-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(212,175,55,.4);
+        }
+
+        .auth-header .logo-circle img {
+            width: 48px;
+        }
+
+        .auth-header h2 {
+            color: #D4AF37;
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    <a asp-controller="Home" asp-action="Index" class="auth-header">
+        <div class="logo-circle">
+            <img src="~/images/logo2.png" alt="Royal Paradise Hotel">
+        </div>
+        <h2>Royal Paradise Hotel</h2>
+    </a>
+
+    @RenderBody()
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

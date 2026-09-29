@@ -1,0 +1,222 @@
+#frmData label,
+form label {
+    display: block !important;
+    width: 100% !important;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+    margin-top: 16px;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+    form label:first-of-type {
+        margin-top: 0;
+    }
+
+#frmData input[type="text"],
+#frmData input[type="email"],
+#frmData input[type="password"],
+#frmData input[type="number"],
+#frmData input[type="date"],
+#frmData input[type="file"],
+#frmData textarea,
+#frmData select,
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form input[type="date"],
+form input[type="file"],
+form textarea,
+form select {
+    display: block !important;
+    width: 100% !important;
+    padding: 12px 14px !important;
+    border: 1.5px solid #e2e6ee !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-family: inherit !important;
+    background: #fafbfd !important;
+    color: #222 !important;
+    outline: none;
+    box-sizing: border-box !important;
+    transition: .2s ease;
+    margin-bottom: 4px;
+}
+
+    form input[type="text"]:focus,
+    form input[type="email"]:focus,
+    form input[type="password"]:focus,
+    form input[type="number"]:focus,
+    form input[type="date"]:focus,
+    form textarea:focus,
+    form select:focus {
+        border-color: #D4AF37;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(212,175,55,.15);
+    }
+
+form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+form select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+
+form input[type="file"] {
+    padding: 9px 14px;
+    cursor: pointer;
+}
+
+form input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: #D4AF37;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+form label[style*="font-weight:400"],
+form label[style*="font-weight: 400"] {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.drawer-footer button,
+form button[type="button"],
+form button[type="submit"],
+#frmData button {
+    padding: 12px 26px !important;
+    border: none !important;
+    border-radius: 30px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: .25s ease;
+    display: inline-block;
+}
+
+.drawer-footer #btnCancel,
+#btnCancel {
+    background: #eef0f5 !important;
+    color: #444 !important;
+}
+
+    .drawer-footer #btnCancel:hover {
+        background: #e2e5ec;
+    }
+
+.drawer-footer #btnSave,
+#btnSave {
+    background: linear-gradient(135deg, #D4AF37, #b8952f) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(212,175,55,.35);
+}
+
+    .drawer-footer #btnSave:hover,
+    #btnSave:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(212,175,55,.45);
+    }
+
+form img[id*="imgPreview"] {
+    display: block;
+    max-width: 180px;
+    border-radius: 10px;
+    margin-top: 10px;
+    border: 1px solid #eee;
+}
+
+#amenityChecklist label {
+    text-transform: none;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0;
+    background: #fafbfd;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+
+.required-star {
+    color: #c0392b;
+}
+
+.field-error {
+    display: none;
+    color: #c0392b;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: -2px;
+    margin-bottom: 2px;
+}
+
+    .field-error.show {
+        display: block;
+    }
+
+#frmData input.invalid,
+#frmData select.invalid,
+#frmData textarea.invalid,
+form input.invalid,
+form select.invalid,
+form textarea.invalid {
+    border-color: #c0392b !important;
+    background: #fff6f6 !important;
+}
+
+.view-box {
+    background: #f7f9fc;
+    border: 1px solid #e6e9f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.btn {
+    background-color: bisque;
+    border-radius: 50px;
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 25px;
+}
+
+form select,
+#frmData select {
+    width: 100% !important;
+    height: 44px !important;
+    padding: 10px 36px 10px 14px !important;
+    border: 1.5px solid #e2e6ee !important;
+    border-radius: 8px !important;
+    background: #fafbfd !important;
+    color: #222 !important;
+    font-size: 14px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
+    form select:focus,
+    #frmData select:focus {
+        border-color: #D4AF37 !important;
+        background-color: #fff !important;
+        box-shadow: 0 0 0 3px rgba(212,175,55,.15) !important;
+    }

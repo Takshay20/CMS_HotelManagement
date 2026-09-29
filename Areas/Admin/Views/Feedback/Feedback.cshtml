@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Feedback";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Guest Feedback</h2>
+            <p>Approve guest testimonials before they appear on the Home page</p>
+        </div>
+        <div class="header-right">
+            <input type="text" id="txtSearch" placeholder="Search Here..." />
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Rating</th>
+                    <th>Message</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th width="200">Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/Admin/js/Common.js"></script>
+<script src="~/Admin/js/Feedback.js"></script>
+}

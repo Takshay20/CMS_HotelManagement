@@ -1,0 +1,180 @@
+@{
+    ViewData["Title"] = "About - Counter Box";
+}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    #IconClass + .select2 {
+        width: 100% !important;
+    }
+
+        #IconClass + .select2 .select2-selection--single {
+            height: 44px !important;
+            border: 1.5px solid #e2e6ee !important;
+            border-radius: 8px !important;
+            background: #fafbfd !important;
+            box-sizing: border-box !important;
+        }
+
+        #IconClass + .select2 .select2-selection__rendered {
+            line-height: 42px !important;
+            padding-left: 12px !important;
+            color: #222 !important;
+        }
+
+        #IconClass + .select2.select2-container--open .select2-selection--single {
+            border-color: #D4AF37 !important;
+            background: #fff !important;
+            box-shadow: 0 0 0 3px rgba(212,175,55,.15) !important;
+        }
+
+    .select2-search--dropdown .select2-search__field {
+        border: 1px solid #e2e6ee !important;
+        border-radius: 6px !important;
+        padding: 8px 12px !important;
+        outline: none !important;
+    }
+
+        .select2-search--dropdown .select2-search__field:focus {
+            border-color: #D4AF37 !important;
+        }
+
+    .icon-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .icon-option i,
+        .icon-selected i {
+            color: #D4AF37;
+            width: 20px;
+            text-align: center;
+        }
+</style>
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Counter Box</h2>
+            <p>Manage the stat counters (Years, Rooms, Guests, etc.) shown on the About page</p>
+        </div>
+
+        <div class="header-right">
+            <input type="text" id="txtSearch" placeholder="Search Here..." />
+            <button id="btnAdd">
+                <i class="fa fa-plus"></i> Add New
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Icon</th>
+                    <th>Number</th>
+                    <th>Label</th>
+                    <th>Display Order</th>
+                    <th>Status</th>
+                    <th width="150">Action</th>
+                </tr>
+            </thead>
+
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="drawer" id="drawer">
+
+    <div class="drawer-header">
+        <h3>Counter Box</h3>
+        <span id="closeDrawer">&times;</span>
+    </div>
+
+    <div class="drawer-body">
+
+        <form id="frmData" novalidate>
+
+            <input type="hidden" id="Id" value="0" />
+
+            <label>
+                Icon (Font Awesome)
+                <span class="required-star">*</span>
+            </label>
+
+            <select id="IconClass" style="width:100%;">
+                <option value="">-- Select Icon --</option>
+            </select>
+
+            <span class="field-error" id="err-IconClass"></span>
+
+
+            <label>
+                Number
+                <span class="required-star">*</span>
+            </label>
+
+            <input type="text"
+                   id="Number"
+                   placeholder="50"
+                   autocomplete="off" />
+
+            <span class="field-error" id="err-Number"></span>
+
+
+            <label>
+                Suffix
+            </label>
+
+            <input type="text"
+                   id="Suffix"
+                   placeholder="+"
+                   autocomplete="off" />
+
+
+            <label>
+                Label
+                <span class="required-star">*</span>
+            </label>
+
+            <input type="text"
+                   id="Label"
+                   placeholder="Total Rooms"
+                   autocomplete="off" />
+
+            <span class="field-error" id="err-Label"></span>
+
+
+            <label style="text-transform:none;letter-spacing:0;font-size:14px;font-weight:500;color:#333;">
+                <input type="checkbox"
+                       id="IsActive"
+                       checked
+                       style="width:auto;" />
+                Active
+            </label>
+
+
+            <div class="drawer-footer">
+
+                <button type="button" id="btnCancel">
+                    Cancel
+                </button>
+
+                <button type="button" id="btnSave">
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/AboutCounter.js"></script>
+}

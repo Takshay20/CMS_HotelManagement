@@ -1,0 +1,975 @@
+@model CMS_HotelBooking.Controllers.HomeViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    body {
+        background-image: url("../images/backgroud.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed; /* Optional */
+    }
+
+    .slider {
+        width: 100%;
+        height: 55vh;
+        max-height: 450px;
+        min-height: 280px;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+    }
+
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 1;
+        transition: opacity 0.8s ease-in-out;
+        overflow: hidden;
+    }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform .6s;
+        }
+
+    .slider:hover .slide.active img {
+        transform: scale(1.1);
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,.35);
+    }
+
+    .caption {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 3;
+        color: white;
+        text-align: center;
+        width: 80%;
+    }
+
+        .caption h2 {
+            animation: blink 1.4s infinite;
+        }
+
+    @@keyframes blink {
+        0%, 100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.3;
+        }
+    }
+
+    .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 5;
+        background: rgba(0,0,0,0.4);
+        color: #fff;
+        border: none;
+        font-size: 28px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+    }
+
+        .slider-arrow:hover {
+            background: rgba(0,0,0,0.7);
+        }
+
+    .prev-arrow {
+        left: 20px;
+    }
+
+    .next-arrow {
+        right: 20px;
+    }
+
+    .welcome {
+        width: 90%;
+        margin: 60px auto;
+        text-align: center;
+    }
+
+        .welcome h1 {
+            font-size: 40px;
+        }
+
+        .welcome > p {
+            color: #d4af37;
+            margin: 10px 0 40px;
+        }
+
+    .about {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .text {
+        flex: 1;
+        text-align: left;
+    }
+
+        .text p {
+            margin-top: 15px;
+            line-height: 28px;
+            color: #555;
+        }
+
+    .images {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 10px;
+    }
+
+        .images img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all .4s ease;
+        }
+
+            .images img:first-child {
+                grid-row: span 2;
+                height: 370px;
+            }
+
+            .images img:hover {
+                transform: scale(1.2);
+                box-shadow: 0 15px 30px rgba(0,0,0,.25);
+                border-radius: 25px;
+            }
+
+    .why {
+        width: 90%;
+        margin: 80px auto;
+        text-align: center;
+    }
+
+        .why h1 {
+            font-size: 40px;
+        }
+
+        .why > p {
+            color: #D4AF37;
+            margin: 10px 0 40px;
+        }
+
+    .choose {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 25px;
+    }
+
+    .box {
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.15);
+        transition: .4s;
+    }
+
+        .box h2 {
+            font-size: 45px;
+        }
+
+        .box h3 {
+            margin: 15px 0;
+        }
+
+        .box p {
+            color: #666;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+            background: #D4AF37;
+            color: #fff;
+        }
+
+            .box:hover h2,
+            .box:hover h3,
+            .box:hover p,
+            .box:hover i {
+                color: #fff;
+            }
+
+    /* Room Section */
+
+    .rooms {
+        width: 90%;
+        margin: 80px auto;
+        text-align: center;
+    }
+
+        .rooms h1 {
+            margin-bottom: 10px;
+        }
+
+    .sub-heading {
+        color: #D4AF37;
+        margin: 10px 0;
+    }
+
+    .room-text {
+        width: 70%;
+        margin: 20px auto 40px;
+        color: #666;
+        line-height: 1.7;
+    }
+
+    .room-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .room {
+        position: relative;
+        overflow: hidden;
+        height: 340px;
+        background: #111;
+        border-radius: 12px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+    }
+
+        .room img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.6s ease;
+        }
+
+        .room:hover img {
+            transform: scale(1.10);
+            filter: brightness(40%);
+        }
+
+    .price {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        padding: 11px 20px;
+        background: #D4AF37;
+        color: #fff;
+        border-radius: 30px;
+        font-size: 18px;
+        font-weight: 700;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .room-name {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 15px;
+        background: rgba(0, 0, 0, 0.78);
+        color: #D4AF37;
+        font-size: 25px;
+        font-weight: 700;
+        text-align: center;
+        z-index: 4;
+        transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .room:hover .room-name {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .info {
+        position: absolute;
+        left: 0;
+        bottom: -100%;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 75px 25px 20px;
+        background: rgba(0, 0, 0, .84);
+        color: #fff;
+        z-index: 8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: center;
+        transition: bottom .5s ease;
+    }
+
+    .room:hover .info {
+        bottom: 0;
+    }
+
+    .info h3 {
+        width: 100%;
+        margin: 0 0 12px;
+        padding: 0 10px;
+        color: #D4AF37;
+        font-size: 27px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .info p {
+        width: 90%;
+        margin: 0 auto 16px;
+        color: #f2f2f2;
+        font-size: 15px;
+        line-height: 1.45;
+        text-align: center;
+    }
+
+    .info ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 0;
+        margin: 0 0 18px;
+        list-style: none;
+    }
+
+    .info li {
+        min-width: 125px;
+        padding: 9px 14px;
+        background: rgba(255, 255, 255, .10);
+        border: 1px solid rgba(212, 175, 55, .45);
+        border-radius: 10px;
+        color: #fff;
+        font-size: 15px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .info a {
+        display: inline-block;
+        padding: 11px 30px;
+        background: #D4AF37;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 28px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.2;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+        transition: .3s ease;
+    }
+
+        .info a:hover {
+            background: #b8941f;
+            transform: translateY(-2px);
+        }
+
+    .info h3 {
+        width: 100%;
+        margin: 0 0 18px;
+        padding: 0 20px;
+        box-sizing: border-box;
+        color: #D4AF37;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .info p {
+        width: 90%;
+        max-width: 550px;
+        margin: 0 auto 22px;
+        color: #f2f2f2;
+        font-size: 15px;
+        line-height: 1.55;
+        text-align: center;
+    }
+
+    .info ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 0;
+        margin: 0 0 25px;
+        list-style: none;
+    }
+
+    .info li {
+        min-width: 125px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.10);
+        border: 1px solid rgba(212, 175, 55, 0.45);
+        border-radius: 10px;
+        color: #fff;
+        font-size: 15px;
+        text-align: center;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+
+    .info a {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #D4AF37;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 28px;
+        font-size: 16px;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+        .info a:hover {
+            background: #b8941f;
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 992px) {
+
+        .room-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .room-text {
+            width: 85%;
+        }
+    }
+
+    @@media (max-width: 600px) {
+
+        .rooms {
+            width: 94%;
+        }
+
+        .room-container {
+            grid-template-columns: 1fr;
+        }
+
+        .room {
+            height: 330px;
+        }
+
+        .room-text {
+            width: 100%;
+        }
+
+        .room-name {
+            font-size: 22px;
+        }
+
+        .price {
+            top: 12px;
+            right: 12px;
+            padding: 8px 14px;
+            font-size: 16px;
+        }
+
+        .info {
+            padding: 25px 18px 20px;
+        }
+
+            .info h3 {
+                width: 80%;
+                font-size: 24px;
+            }
+
+            .info p {
+                width: 95%;
+                font-size: 14px;
+            }
+
+            .info ul {
+                gap: 8px;
+            }
+
+            .info li {
+                min-width: auto;
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+    }
+
+    .tagline {
+        margin-top: 50px;
+        color: #555;
+        font-style: italic;
+    }
+
+    .testimonial {
+        width: 90%;
+        margin: 80px auto;
+        text-align: center;
+    }
+
+        .testimonial h1 {
+            font-size: 42px;
+            color: #D4AF37;
+        }
+
+    .sub-title {
+        color: #D4AF37;
+        margin: 10px 0 40px;
+        font-size: 18px;
+    }
+
+    .testimonial-slider {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .t-wrapper {
+        display: flex;
+        transition: .8s ease-in-out;
+    }
+
+    .t-slide {
+        min-width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 25px;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .t-card {
+        flex: 1;
+        background: #fff;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 8px 20px rgba(0,0,0,.15);
+        transition: .4s;
+    }
+
+        .t-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .t-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: .8s;
+        }
+
+        .t-card:hover img {
+            transform: scale(1.8) rotate(7.5deg);
+        }
+
+        .t-card h3 {
+            margin: 15px 0 5px;
+            color: #0F172A;
+        }
+
+        .t-card span {
+            color: #888;
+            font-size: 15px;
+        }
+
+    .star {
+        color: #D4AF37;
+        margin: 15px 0;
+        font-size: 18px;
+    }
+
+    .t-card p {
+        color: #666;
+        line-height: 28px;
+    }
+
+    .tagline {
+        margin-top: 50px;
+        font-style: italic;
+        color: #666;
+        font-size: 18px;
+    }
+
+    .welcome,
+    .why,
+    .rooms {
+        background: rgba(0,0,0,.55);
+        backdrop-filter: blur(0.01px);
+        border-radius: 15px;
+        backface-visibility: hidden;
+        padding: 50px;
+        margin: 60px auto;
+        color: #fff;
+    }
+
+    .text p,
+    .room-text,
+    .box p,
+    .tagline {
+        color: #E5E5E5;
+    }
+
+    h1, h2, h3 {
+        color: #C9A227;
+    }
+
+    .t-card h3 {
+        color: #0F172A;
+    }
+
+    .t-card span {
+        color: #6B7280;
+    }
+
+    .t-card p {
+        color: #374151;
+        line-height: 28px;
+        font-size: 16px;
+    }
+
+    .btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 14px 28px;
+        background: #d4af37;
+        color: #fff !important;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .btn:hover {
+            background: #b8941f;
+            color: #fff !important;
+            transform: translateY(-2px);
+        }
+</style>
+
+<div class="slider">
+    @{
+        var first = true;
+    }
+    @foreach (var s in Model.Sliders)
+    {
+        <div class="slide @(first ? "active" : "")">
+            <img src="~/@s.ImagePath" />
+            <div class="overlay"></div>
+            <div class="caption">
+                <h2>@s.Title</h2>
+                <p>@s.SubTitle</p>
+                @if (!string.IsNullOrWhiteSpace(s.ButtonText))
+                {
+                    <a href="@(s.ButtonUrl ?? "#")" class="btn">@s.ButtonText</a>
+                }
+            </div>
+        </div>
+        first = false;
+    }
+    @if (Model.Sliders.Count == 0)
+    {
+        <div class="slide active">
+            <img src="~/images/backgroud.png" />
+            <div class="overlay"></div>
+            <div class="caption">
+                <h2>Royal Paradise Hotel</h2>
+                <p>Luxury Stay | Comfort | Relaxation</p>
+                <a href="@Url.Action("Index", "Contact")" class="btn">Book Your Stay</a>
+            </div>
+        </div>
+    }
+    <button class="slider-arrow prev-arrow">&#10094;</button>
+    <button class="slider-arrow next-arrow">&#10095;</button>
+</div>
+
+<section class="welcome">
+
+    <h1>
+        @(Model.Welcome?.Heading ?? "Welcome to Royal Paradise Hotel")
+    </h1>
+
+    <p>
+        @(Model.Welcome?.SubHeading ?? "")
+    </p>
+
+    <div class="about">
+
+        <div class="text">
+
+            <h2>About Hotel</h2>
+
+            <p>
+                @(Model.Welcome?.Description ?? "")
+            </p>
+
+            @if (Model.Welcome != null &&
+                 !string.IsNullOrWhiteSpace(Model.Welcome.ButtonText) &&
+                 !string.IsNullOrWhiteSpace(Model.Welcome.ButtonUrl))
+            {
+                <a href="@Model.Welcome.ButtonUrl"
+                   class="btn"
+                   style="display:inline-block;margin-top:15px;">
+                    @Model.Welcome.ButtonText
+                </a>
+            }
+
+        </div>
+
+        <div class="images">
+
+            @if (Model.Welcome != null &&
+                 !string.IsNullOrWhiteSpace(Model.Welcome.Image1Path))
+            {
+                <img src="~/@Model.Welcome.Image1Path"
+                     alt="@Model.Welcome.Heading">
+            }
+
+            @if (Model.Welcome != null &&
+                 !string.IsNullOrWhiteSpace(Model.Welcome.Image2Path))
+            {
+                <img src="~/@Model.Welcome.Image2Path"
+                     alt="@Model.Welcome.Heading">
+            }
+
+            @if (Model.Welcome != null &&
+                 !string.IsNullOrWhiteSpace(Model.Welcome.Image3Path))
+            {
+                <img src="~/@Model.Welcome.Image3Path"
+                     alt="@Model.Welcome.Heading">
+            }
+
+        </div>
+
+    </div>
+
+</section>
+<section class="why">
+    <h1>Why Choose Royal Paradise Hotel</h1>
+    <p>Luxury • Comfort • Hospitality</p>
+    <div class="choose">
+        @foreach (var w in Model.WhyChooseUs)
+        {
+            <div class="box">
+                <h2>
+                    @if (!string.IsNullOrWhiteSpace(w.IconClass) && w.IconClass.Contains("fa-"))
+                    {
+                        <i class="@w.IconClass"></i>
+                    }
+                    else
+                    {
+                        @Html.Raw(w.IconClass)
+                    }
+                </h2>
+                <h3>@w.Title</h3>
+                <p>@w.Description</p>
+            </div>
+        }
+    </div>
+</section>
+<section class="rooms">
+
+    <h1>Our Popular Rooms</h1>
+
+    <p class="sub-heading">
+        Luxury Rooms Crafted for Your Perfect Stay
+    </p>
+
+    <p class="room-text">
+        Experience comfort, elegance, and modern luxury in every room
+        at Royal Paradise Hotel, Noida.
+        Whether you're traveling for business, a family vacation,
+        or a romantic getaway, our thoughtfully designed rooms offer
+        premium amenities, stylish interiors, and a relaxing atmosphere
+        to make every stay unforgettable.
+    </p>
+
+    <div class="room-container">
+
+        @foreach (var r in Model.FeaturedRooms)
+        {
+            <div class="room">
+
+                <img src="~/@r.ImagePath"
+                     alt="@r.Title" />
+
+                <div class="price">
+                    ₹@(r.PricePerNight.ToString("N0")) / Night
+                </div>
+
+                <div class="room-name">
+                    @r.Title
+                </div>
+
+                <div class="info">
+
+                    <h3>
+                        @r.Title
+                    </h3>
+
+                    <p>
+                        @r.Description
+                    </p>
+
+                    <ul>
+
+                        <li>
+                            👤 @r.MaxGuests Guests
+                        </li>
+
+                        @if (!string.IsNullOrWhiteSpace(r.SizeSqft))
+                        {
+                            <li>
+                                📐 @r.SizeSqft
+                            </li>
+                        }
+
+                    </ul>
+
+                    <a asp-controller="Room"
+                       asp-action="Details"
+                       asp-route-id="@r.RoomId">
+                        Book Now
+                    </a>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+    <h3 class="tagline">
+        "Every room at Royal Paradise Hotel is thoughtfully designed to offer the perfect blend of luxury,
+        comfort, and unforgettable hospitality."
+    </h3>
+</section>
+<section class="testimonial">
+    <h1>What Our Guests Say</h1>
+    <p class="sub-title">Trusted by Hundreds of Happy Guests</p>
+
+    <div class="testimonial-slider">
+        <div class="t-wrapper">
+            @{
+                var chunks = Model.Testimonials
+                    .Select((t, i) => new { t, i })
+                    .GroupBy(x => x.i / 3)
+                    .Select(g => g.Select(x => x.t).ToList())
+                    .ToList();
+            }
+            @foreach (var chunk in chunks)
+            {
+                <div class="t-slide">
+                    @foreach (var t in chunk)
+                    {
+                        <div class="t-card">
+                            <img src="~/@(t.ImagePath ?? "images/User/User1.jfif")" />
+                            <h3>@t.Name</h3>
+                            <span>@t.Designation</span>
+                            <div class="star">@(new string('★', t.Rating))@(new string('☆', 5 - t.Rating))</div>
+                            <p>@t.Message</p>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <h3 class="tagline">
+        Every smile shared by our guests is the true measure of Royal Paradise Hotel's commitment to excellence.
+    </h3>
+
+    <div class="feedback-form-wrap" style="max-width:600px;margin:40px auto 0;color:#E5E5E5;">
+        <h2 style="text-align:center;margin-bottom:15px;">Share Your Experience</h2>
+
+        <div id="feedbackAlert"></div>
+
+        <form id="feedbackForm" enctype="multipart/form-data" novalidate>
+
+            <div style="display:flex;gap:15px;flex-wrap:wrap;margin-bottom:10px;">
+
+                <div style="flex:1;min-width:200px;">
+                    <input type="text"
+                           name="Name"
+                           placeholder="Your Name"
+                           style="width:100%;padding:10px;border-radius:6px;border:none;">
+                </div>
+
+                <div style="flex:1;min-width:200px;">
+                    <input type="text"
+                           name="Designation"
+                           placeholder="Designation (optional)"
+                           style="width:100%;padding:10px;border-radius:6px;border:none;">
+                </div>
+
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <select name="Rating"
+                        style="padding:10px;border-radius:6px;border:none;width:100%;">
+                    <option value="">Select Rating</option>
+                    <option value="5">★★★★★ Excellent</option>
+                    <option value="4">★★★★ Very Good</option>
+                    <option value="3">★★★ Good</option>
+                    <option value="2">★★ Fair</option>
+                    <option value="1">★ Poor</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <textarea name="Message"
+                          placeholder="Tell us about your stay..."
+                          rows="4"
+                          style="width:100%;padding:10px;border-radius:6px;border:none;"></textarea>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <input type="file"
+                       name="ImageFile"
+                       accept="image/*"
+                       style="color:#E5E5E5;">
+            </div>
+
+            <button type="submit" class="btn" style="cursor:pointer;">
+                Submit Feedback
+            </button>
+
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/home.js">
+
+    </script>
+}

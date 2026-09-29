@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Contact Messages";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Contact Messages</h2>
+            <p>Messages submitted through the public Contact Us form</p>
+        </div>
+        <div class="header-right">
+            <input type="text" id="txtSearch" placeholder="Search Here..." />
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email / Phone</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Received</th>
+                    <th>Status</th>
+                    <th width="140">Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+        <h3>Message Detail</h3>
+        <span id="closeDrawer">&times;</span>
+    </div>
+    <div class="drawer-body">
+        <input type="hidden" id="Id" value="0" />
+
+        <label>From</label>
+        <div class="view-box" id="viewFrom"></div>
+
+        <label>Subject</label>
+        <div class="view-box" id="viewSubject"></div>
+
+        <label>Message</label>
+        <div class="view-box" id="viewMessage" style="min-height:80px;"></div>
+
+        <label>Received On</label>
+        <div class="view-box" id="viewDate"></div>
+
+        <div id="previousReplyWrap" style="display:none;">
+            <label>Previous Reply</label>
+            <div class="view-box" id="viewReply" style="background:#faf6ea;"></div>
+        </div>
+
+        <label>Your Reply <span class="required-star">*</span></label>
+        <textarea id="AdminReply" placeholder="Type your reply to the guest here..." style="height:110px;"></textarea>
+        <span class="field-error" id="err-AdminReply"></span>
+
+        <div class="drawer-footer">
+            <button type="button" id="btnCancel">Close</button>
+            <button type="button" id="btnSave">Send Reply</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/Admin/js/Common.js"></script>
+<script src="~/Admin/js/ContactMessage.js"></script>
+}

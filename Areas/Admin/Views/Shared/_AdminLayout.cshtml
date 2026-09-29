@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Admin Panel</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="~/lib/sweetalert2/dist/sweetalert2.min.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/Admin/css/AdminLayout.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/Admin/css/Common.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/Admin/css/Dashboard.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/Admin/css/drawer.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/Admin/css/table.css" asp-append-version="true" rel="stylesheet" />
+    <link href="~/Admin/css/form.css" asp-append-version="true" rel="stylesheet" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            @await Html.PartialAsync("_Slidebar")
+        </aside>
+
+        <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+
+        <div class="main">
+
+            <header class="header">
+
+                <div class="header-left">
+
+                    <button id="btnMenu" class="menu-btn">
+                        ☰
+                    </button>
+
+                    <div class="page-title">
+
+                        <h2>@ViewData["Title"]</h2>
+
+                        <span>Hotel Booking CMS</span>
+
+                    </div>
+
+                </div>
+
+                <div class="header-right">
+
+                    <div class="profile">
+
+                        <div class="profile-image">
+                            A
+                        </div>
+
+                        <div>
+                            <strong>@User.Identity?.Name</strong>
+                            <p>Administrator</p>
+                        </div>
+
+                        <a asp-area="" asp-controller="Account" asp-action="Logout" style="margin-left:15px;color:#D4AF37;text-decoration:none;">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <section class="content">
+
+                @RenderBody()
+
+            </section>
+
+        </div>
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/Admin/js/AdminLayout.js"></script>
+
+    @RenderSection("Scripts", false)
+
+</body>
+
+</html>

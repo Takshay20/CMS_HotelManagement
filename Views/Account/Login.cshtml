@@ -1,0 +1,45 @@
+﻿@model CMS_HotelBooking.ViewModels.LoginVM
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
+}
+<link href="~/css/auth.css" rel="stylesheet" />
+
+
+<div class="auth-wrap">
+    <h1>Welcome Back</h1>
+    <p class="sub">Login to manage your bookings at Royal Paradise Hotel</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    <div asp-validation-summary="All" class="alert alert-danger" style="display:@(ViewData.ModelState.IsValid ? "none" : "block")"></div>
+
+    <form asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+        <label>Login As</label>
+        <select asp-for="LoginAs" required>
+            <option value="Customer">User</option>
+            <option value="Admin">Admin</option>
+        </select>
+
+        <label>Email Address</label>
+        <input asp-for="Email" type="email" placeholder="you@example.com" required>
+
+        <label>Password</label>
+        <input asp-for="Password" type="password" placeholder="••••••••" required>
+
+        <label style="font-weight:400;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <span style="display:flex;align-items:center;gap:8px;">
+                <input type="checkbox" asp-for="RememberMe" style="width:auto;margin:0;"> Remember Me
+            </span>
+            <a asp-controller="Account" asp-action="ForgotPassword" style="color:#D4AF37;font-weight:600;text-decoration:none;font-size:13px;">Forgot Password?</a>
+        </label>
+
+        <button type="submit">Login</button>
+    </form>
+    <p class="switch">Don't have an account? <a asp-controller="Account" asp-action="Register">Register here</a></p>
+    <p class="switch" style="font-size:13px;">Admin demo login: admin@royalparadise.com / Admin@123</p>
+</div>

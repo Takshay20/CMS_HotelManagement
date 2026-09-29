@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Amenity";
+}
+
+<link href="~/admin/css/amenity.css" rel="stylesheet" />
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h2>Amenities</h2>
+            <p>Master list of amenities that can be tagged onto rooms (Wi-Fi, AC, TV, etc.)</p>
+        </div>
+        <div class="header-right">
+            <input type="text" id="txtSearch" placeholder="Search Here..." />
+            <button id="btnAdd"><i class="fa fa-plus"></i> Add New</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="tblData">
+            <thead>
+                <tr>
+                    <th>Icon</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th width="150">Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+        <h3>Amenity</h3>
+        <span id="closeDrawer">&times;</span>
+    </div>
+    <div class="drawer-body">
+        <form id="frmData">
+            <input type="hidden" id="Id" value="0" />
+
+            <label>Icon (Font Awesome) <span class="required-star">*</span></label>
+                <select id="IconClass">
+                    <option value=""></option>
+                </select>
+                
+            <span class="field-error" id="err-IconClass"></span>
+            <label>Amenity Name <span class="required-star">*</span></label>
+            <input type="text" id="Name" />
+            <span class="field-error" id="err-Name"></span>
+
+            <label>
+                <input type="checkbox" id="IsActive" checked style="width:auto;" /> Active
+            </label>
+
+            <div class="drawer-footer">
+                <button type="button" id="btnCancel">Cancel</button>
+                <button type="button" id="btnSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="~/Admin/js/Common.js"></script>
+<script src="~/Admin/js/Amenity.js"></script>
+}

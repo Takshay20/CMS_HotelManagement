@@ -1,0 +1,110 @@
+@model CMS_HotelBooking.ViewModels.AboutStoryVM
+
+@{
+    ViewData["Title"] = "About - Story Content";
+}
+
+<style>
+    .img-preview {
+        width: 180px;
+        height: 120px;
+        object-fit: cover;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <h2>Story Content</h2>
+
+    <p class="text-muted">
+        Manage the "Our Story" content block shown on the About page
+    </p>
+
+    <form id="aboutStoryForm"
+          enctype="multipart/form-data">
+
+        <input type="hidden"
+               id="AboutStoryId"
+               name="AboutStory.AboutStoryId"
+               value="@Model.AboutStory.AboutStoryId" />
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Heading <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="Heading"
+                   name="AboutStory.Heading"
+                   class="form-control"
+                   value="@Model.AboutStory.Heading"
+                   placeholder="Our Story" />
+            <span class="field-error" id="err-Heading"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Sub Heading <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   id="SubHeading"
+                   name="AboutStory.SubHeading"
+                   class="form-control"
+                   value="@Model.AboutStory.SubHeading"
+                   placeholder="A Legacy of Hospitality" />
+            <span class="field-error" id="err-SubHeading"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Description <span class="text-danger">*</span>
+            </label>
+
+            <textarea id="Description"
+                      name="AboutStory.Description"
+                      class="form-control"
+                      rows="5"
+                      placeholder="Enter description">@Model.AboutStory.Description</textarea>
+            <span class="field-error" id="err-Description"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Image
+            </label>
+
+            <input type="file"
+                   id="ImageFile"
+                   name="ImageFile"
+                   class="form-control"
+                   accept="image/*" />
+
+            @if (!string.IsNullOrEmpty(Model.AboutStory.ImagePath))
+            {
+                <img src="/@Model.AboutStory.ImagePath" class="img-preview" />
+            }
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary">
+            Update Changes
+        </button>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <script src="~/Admin/js/Common.js"></script>
+    <script src="~/Admin/js/AboutStory.js"></script>
+}

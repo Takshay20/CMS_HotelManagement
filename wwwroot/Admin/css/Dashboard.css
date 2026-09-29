@@ -1,0 +1,325 @@
+﻿.dashboard-page {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashCard {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    min-height: 155px;
+    padding: 28px 25px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #edf0f5;
+    border-left: 5px solid #d4af37;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #222;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(20, 35, 70, 0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+}
+
+    .dashCard::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 130px;
+        height: 130px;
+        background: radial-gradient( circle, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 45%, transparent 72% );
+        transform: translate(40px, -40px) scale(0.7);
+        opacity: 0;
+        transition: transform 0.45s ease, opacity 0.45s ease;
+        pointer-events: none;
+    }
+
+    .dashCard::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient( 90deg, #d4af37, #f2d675, #d4af37 );
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+    }
+
+    .dashCard:hover {
+        transform: translateY(-9px);
+        background: linear-gradient( 145deg, #ffffff 0%, #fffdf7 100% );
+        border-color: #d4af37;
+        box-shadow: 0 18px 35px rgba(20, 35, 70, 0.14), 0 5px 12px rgba(212, 175, 55, 0.10);
+        text-decoration: none;
+    }
+
+        .dashCard:hover::before {
+            opacity: 1;
+            transform: translate(10px, -10px) scale(1.2);
+        }
+
+        .dashCard:hover::after {
+            transform: scaleX(1);
+        }
+
+    .dashCard:active {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(20, 35, 70, 0.12);
+    }
+
+    .dashCard .icon {
+        position: relative;
+        z-index: 2;
+        font-size: 32px;
+        line-height: 1;
+        margin-bottom: 18px;
+        transition: transform 0.35s ease, filter 0.35s ease;
+    }
+
+    .dashCard:hover .icon {
+        transform: translateY(-4px) scale(1.12);
+        filter: drop-shadow( 0 5px 7px rgba(20, 35, 70, 0.18) );
+    }
+
+    .dashCard .value {
+        position: relative;
+        z-index: 2;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: #17233f;
+        margin-bottom: 8px;
+        transition: color 0.35s ease, transform 0.35s ease;
+    }
+
+    .dashCard:hover .value {
+        color: #c49b24;
+        transform: translateX(3px);
+    }
+
+    .dashCard .label {
+        position: relative;
+        z-index: 2;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: #888;
+        transition: color 0.35s ease, transform 0.35s ease;
+    }
+
+    .dashCard:hover .label {
+        color: #555;
+        transform: translateX(3px);
+    }
+
+.card-rooms {
+    border-left-color: #d4af37;
+}
+
+.card-categories {
+    border-left-color: #17233f;
+}
+
+.card-users {
+    border-left-color: #3498b5;
+}
+
+.card-bookings {
+    border-left-color: #8e44ad;
+}
+
+.card-pending {
+    border-left-color: #e67e22;
+}
+
+.card-approved {
+    border-left-color: #27ae60;
+}
+
+.card-messages {
+    border-left-color: #c0392b;
+}
+
+.card-feedback {
+    border-left-color: #16a085;
+}
+
+.card-revenue {
+    border-left-color: #d4af37;
+}
+
+.card-checkin {
+    border-left-color: #27ae60;
+}
+
+.card-checkout {
+    border-left-color: #e74c3c;
+}
+
+.card-rooms .icon {
+    color: #d4af37;
+}
+
+.card-categories .icon {
+    color: #17233f;
+}
+
+.card-users .icon {
+    color: #3498b5;
+}
+
+.card-bookings .icon {
+    color: #8e44ad;
+}
+
+.card-pending .icon {
+    color: #e67e22;
+}
+
+.card-approved .icon {
+    color: #27ae60;
+}
+
+.card-messages .icon {
+    color: #c0392b;
+}
+
+.card-feedback .icon {
+    color: #16a085;
+}
+
+.card-revenue .icon {
+    color: #d4af37;
+}
+
+.card-checkin .icon {
+    color: #27ae60;
+}
+
+.card-checkout .icon {
+    color: #e74c3c;
+}
+
+.dashboard-charts {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-box {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #edf0f5;
+    border-radius: 16px;
+    padding: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    box-shadow: 0 5px 15px rgba(20, 35, 70, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+    .dashboard-box:hover {
+        transform: translateY(-5px);
+        border-color: #d4af37;
+        box-shadow: 0 14px 30px rgba(20, 35, 70, 0.13), 0 5px 12px rgba(212, 175, 55, 0.08);
+    }
+
+    .dashboard-box h3 {
+        margin: 0 0 20px;
+        color: #17233f;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .dashboard-box canvas {
+        cursor: pointer;
+    }
+
+.dashboard-arrivals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+    .dashboard-arrivals .dashboard-box h3 {
+        margin-bottom: 5px;
+    }
+
+.dashboard-subtitle {
+    color: #888;
+    font-size: 13px;
+    margin: 0 0 15px;
+}
+
+.dashboard-loading {
+    color: #aaa;
+    margin: 0;
+}
+
+#metricsChart,
+#bookingChart {
+    max-width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-arrivals {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .dashCard {
+        min-height: 140px;
+        padding: 20px;
+    }
+
+        .dashCard .icon {
+            font-size: 28px;
+        }
+
+        .dashCard .value {
+            font-size: 24px;
+        }
+
+    .dashboard-box {
+        padding: 18px;
+    }
+}
