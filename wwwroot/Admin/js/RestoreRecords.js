@@ -48,423 +48,135 @@
         }
     });
     function loadModule(module) {
-        if (module === "WhyChooseUs") {
-            window.currentRestoreFilter = "All";
-            loadWhyChooseUs("All");
+        currentModule = module;
+        loadRecords();
+    }
+    $("#recordContainer").on("input", "#txtRecordSearch", function () {
+        var value = $(this).val().toLowerCase();
+        $("#tblRestoreRecords tbody tr").each(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) !== -1);
+        });
+    });
+    $("#recordContainer").on("change", "#ddlRecordFilter", function () {
+        window.currentRestoreFilter = $(this).val();
+        loadRecords();
+    });
+    $("#recordContainer").on("click", ".action-edit", function () {
+        var controller = restoreModules[currentModule].controller;
+        window.location.href = "/Admin/" + controller + "/" + controller + "?editId=" + $(this).data("id");
+    });
+    $("#recordContainer").on("click", ".action-delete", function () {
+        confirmAction("Delete Record?", "This record will be moved to deleted records.", "Yes, Delete", "/Admin/" + restoreModules[currentModule].controller + "/Delete", { id: $(this).data("id") });
+    });
+    $("#recordContainer").on("click", ".action-restore", function () {
+        var remaining = Math.ceil(($(this).data("ready") - Date.now()) / 1000);
+        if (remaining > 0) {
+            showRestoreTimer(remaining);
             return;
         }
-        if (module === "CounterBox") {
-            window.currentRestoreFilter = "All";
-            loadCounterBox("All");
-            return;
-        }
-        $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Selected Module: " + module + "</p></div>");
-    }
-    function showRestoreRestrictionTimer(deletedDate) {
-        var deletedTime = new Date(deletedDate).getTime();
-        var restoreTime = deletedTime + (60 * 60 * 1000);
-        var timerInterval;
-        function getRemainingTime() {
-            var remaining = restoreTime - new Date().getTime();
-            if (remaining <= 0) {
-                return "00:00:00";
-            }
-            var totalSeconds = Math.floor(remaining / 1000);
-            var hours = Math.floor(totalSeconds / 3600);
-            var minutes = Math.floor((totalSeconds % 3600) / 60);
-            var seconds = totalSeconds % 60;
-            return String(hours).padStart(2, "0") + ":" + String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
-        }
-        Swal.fire({
-            icon: "error",
-            title: "Cannot Restore",
-            html: "<div style='font-size:16px;'>This record can be restored only after 1 hour.</div><div style='margin-top:18px;font-size:15px;font-weight:600;'>Restore available in</div><div id='restoreTimer' style='margin-top:8px;font-size:30px;font-weight:700;color:#b8860b;'>" + getRemainingTime() + "</div>",
-            confirmButtonText: "OK",
-            allowOutsideClick: false,
-            didOpen: function () {
-                var timerElement = document.getElementById("restoreTimer");
-                timerInterval = setInterval(function () {
-                    var remaining = restoreTime - new Date().getTime();
-                    if (remaining <= 0) {
-                        clearInterval(timerInterval);
-                        timerElement.innerHTML = "<span style='color:green;'>00:00:00</span>";
-                        return;
-                    }
-                    timerElement.textContent = getRemainingTime();
-                }, 1000);
-            },
-            willClose: function () {
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                }
-            }
-        });
-    }
-    // Why Choose Us
-    function loadWhyChooseUs(filter) {
-        window.currentRestoreFilter = filter;
-        $.ajax({
-            url: "/Admin/RestoreRecords/GetWhyChooseUs",
-            type: "GET",
-            cache: false,
-            data: { filter: filter },
-            success: function (response) {
-                if (response.success) {
-                    bindWhyChooseUs(response.data);
-                } else {
-                    $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
-                }
-            },
-            error: function () {
-                $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
-            }
-        });
-    }
-    function bindWhyChooseUs(data) {
-        var html = "";
-        html += "<div class='restore-toolbar'>";
-        html += "<div class='restore-search'><i class='fa-solid fa-magnifying-glass'></i><input type='text' id='txtRecordSearch' placeholder='Search Here...' /></div>";
-        html += "<select id='ddlRecordFilter' class='record-filter'><option value='All'>All</option><option value='Active'>Active</option><option value='Inactive'>Inactive</option><option value='Deleted'>Deleted</option></select>";
-        html += "</div>";
-        html += "<div class='table-container'>";
-        html += "<table id='tblRestoreRecords'><thead><tr><th>Icon</th><th>Title</th><th>Description</th><th>Display Order</th><th>Status</th><th>Deleted</th><th>Action</th></tr></thead>";
-        html += "<tbody>";
-        if (!data || data.length === 0) {
-            html += "<tr><td colspan='7' style='text-align:center;'>No records found.</td></tr>";
-        } else {
-            $.each(data, function (index, item) {
-                var status = "";
-                if (item.isDeleted) {
-                    status = "<span class='status-badge status-deleted'>Deleted</span>";
-                } else if (item.isActive) {
-                    status = "<span class='status-badge status-active'>Active</span>";
-                } else {
-                    status = "<span class='status-badge status-inactive'>Inactive</span>";
-                }
-                html += "<tr>";
-                html += "<td class='tableIcon'><i class='" + (item.iconClass || "") + "'></i></td>";
-                html += "<td>" + (item.title || "") + "</td>";
-                html += "<td>" + (item.description || "") + "</td>";
-                html += "<td>" + item.displayOrder + "</td>";
-                html += "<td>" + status + "</td>";
-                html += "<td>" + (item.isDeleted ? "Yes" : "No") + "</td>";
-                html += "<td>";
-                if (item.isDeleted) {
-                    html += "<button type='button' class='action-btn action-restore' title='Restore' onclick='restoreRecord(" + item.homeWhyChooseUsId + ")'><i class='fa-solid fa-rotate-left'></i></button>";
-                } else if (!item.isActive) {
-                    html += "<button type='button' class='action-btn action-edit' title='Edit' onclick='editRecord(" + item.homeWhyChooseUsId + ")'><i class='fa-solid fa-pen'></i></button> ";
-                    html += "<button type='button' class='action-btn action-delete' title='Delete' onclick='deleteRecord(" + item.homeWhyChooseUsId + ")'><i class='fa-solid fa-trash'></i></button>";
-                } else {
-                    html += "<button type='button' class='action-btn action-disabled' title='Active record' disabled><i class='fa-solid fa-lock'></i></button>";
-                }
-                html += "</td>";
-                html += "</tr>";
-            });
-        }
-        html += "</tbody></table></div>";
-        $("#recordContainer").html(html);
-        $("#ddlRecordFilter").val(window.currentRestoreFilter || "All");
-        $("#ddlRecordFilter").on("change", function () {
-            window.currentRestoreFilter = $(this).val();
-            loadWhyChooseUs(window.currentRestoreFilter);
-        });
-        $("#txtRecordSearch").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#tblRestoreRecords tbody tr").each(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) !== -1);
-            });
-        });
-    }
-    // About Counter
-    function loadCounterBox(filter) {
-        window.currentRestoreFilter = filter;
-        $.ajax({
-            url: "/Admin/RestoreRecords/GetCounterBox",
-            type: "GET",
-            cache: false,
-            data: { filter: filter },
-            success: function (response) {
-                if (response.success) {
-                    bindCounterBox(response.data);
-                } else {
-                    $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
-                }
-            },
-            error: function () {
-                $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
-            }
-        });
-    }
-    function bindCounterBox(data) {
-        var html = "";
-        html += "<div class='restore-toolbar'>";
-        html += "<div class='restore-search'><i class='fa-solid fa-magnifying-glass'></i><input type='text' id='txtRecordSearch' placeholder='Search Here...' /></div>";
-        html += "<select id='ddlRecordFilter' class='record-filter'><option value='All'>All</option><option value='Active'>Active</option><option value='Inactive'>Inactive</option><option value='Deleted'>Deleted</option></select>";
-        html += "</div>";
-        html += "<div class='table-container'>";
-        html += "<table id='tblRestoreRecords'><thead><tr><th>Icon</th><th>Number</th><th>Suffix</th><th>Label</th><th>Display Order</th><th>Status</th><th>Deleted</th><th>Action</th></tr></thead>";
-        html += "<tbody>";
-        if (!data || data.length === 0) {
-            html += "<tr><td colspan='8' style='text-align:center;'>No records found.</td></tr>";
-        } else {
-            $.each(data, function (index, item) {
-                var status = "";
-                if (item.isDeleted) {
-                    status = "<span class='status-badge status-deleted'>Deleted</span>";
-                } else if (item.isActive) {
-                    status = "<span class='status-badge status-active'>Active</span>";
-                } else {
-                    status = "<span class='status-badge status-inactive'>Inactive</span>";
-                }
-                html += "<tr>";
-                html += "<td class='tableIcon'><i class='" + (item.iconClass || "") + "'></i></td>";
-                html += "<td>" + (item.number || "") + "</td>";
-                html += "<td>" + (item.suffix || "") + "</td>";
-                html += "<td>" + (item.label || "") + "</td>";
-                html += "<td>" + item.displayOrder + "</td>";
-                html += "<td>" + status + "</td>";
-                html += "<td>" + (item.isDeleted ? "Yes" : "No") + "</td>";
-                html += "<td>";
-                if (item.isDeleted) {
-                    html += "<button type='button' class='action-btn action-restore' title='Restore' onclick='restoreCounterBox(" + item.aboutCounterId + ")'><i class='fa-solid fa-rotate-left'></i></button>";
-                } else if (!item.isActive) {
-                    html += "<button type='button' class='action-btn action-edit' title='Edit' onclick='editCounterBox(" + item.aboutCounterId + ")'><i class='fa-solid fa-pen'></i></button> ";
-                    html += "<button type='button' class='action-btn action-delete' title='Delete' onclick='deleteCounterBox(" + item.aboutCounterId + ")'><i class='fa-solid fa-trash'></i></button>";
-                } else {
-                    html += "<button type='button' class='action-btn action-disabled' title='Active record' disabled><i class='fa-solid fa-lock'></i></button>";
-                }
-                html += "</td>";
-                html += "</tr>";
-            });
-        }
-        html += "</tbody></table></div>";
-        $("#recordContainer").html(html);
-        $("#ddlRecordFilter").val(window.currentRestoreFilter || "All");
-        $("#ddlRecordFilter").on("change", function () {
-            window.currentRestoreFilter = $(this).val();
-            loadCounterBox(window.currentRestoreFilter);
-        });
-        $("#txtRecordSearch").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#tblRestoreRecords tbody tr").each(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) !== -1);
-            });
-        });
-    }
+        confirmAction("Restore Record?", "This record will be restored.", "Yes, Restore", "/Admin/RestoreRecords/Restore", { module: currentModule, id: $(this).data("id") });
+    });
 });
-function editRecord(id) {
-    window.location.href = "/Admin/HomeWhyChooseUs/HomeWhyChooseUs?editId=" + id;
+// Module list: controller name is used for Edit and Delete, cols = [column, heading, type]
+var currentModule = "";
+var restoreModules = {
+    // Module: Counter Box
+    CounterBox: { controller: "AboutCounter", cols: [["iconClass", "Icon", "icon"], ["number", "Number"], ["suffix", "Suffix"], ["label", "Label"], ["displayOrder", "Display Order"]] },
+    // Module: Rooms
+    Rooms: { controller: "Room", cols: [["roomNumber", "Room No"], ["title", "Title"], ["pricePerNight", "Price"], ["maxGuests", "Guests"]] },
+    // Module: Why Choose Us
+    WhyChooseUs: { controller: "HomeWhyChooseUs", cols: [["iconClass", "Icon", "icon"], ["title", "Title"], ["description", "Description"], ["displayOrder", "Display Order"]] },
+    // Module: Room Category
+    RoomCategory: { controller: "RoomCategory", cols: [["name", "Name"], ["description", "Description"], ["displayOrder", "Display Order"]] },
+    // Module: Amenity
+    Amenity: { controller: "Amenity", cols: [["iconClass", "Icon", "icon"], ["name", "Name"]] },
+    // Module: Gallery
+    Gallery: { controller: "Gallery", cols: [["imagePath", "Image", "img"], ["title", "Title"], ["category", "Category"], ["displayOrder", "Display Order"]] },
+    // Module: Facility
+    Facility: { controller: "Facility", cols: [["imagePath", "Image", "img"], ["title", "Title"], ["description", "Description"], ["displayOrder", "Display Order"]] },
+    // Module: Slider
+    Slider: { controller: "Slider", cols: [["imagePath", "Image", "img"], ["pageKey", "Page"], ["title", "Title"], ["displayOrder", "Display Order"]] },
+    // Module: Navbar
+    Navbar: { controller: "Navbar", cols: [["title", "Title"], ["url", "Url"], ["displayOrder", "Display Order"]] },
+    // Module: Social Media
+    SocialMedia: { controller: "SocialMedia", cols: [["iconClass", "Icon", "icon"], ["platformName", "Platform"], ["url", "Url"], ["displayOrder", "Display Order"]] }
+};
+function esc(value) {
+    return $("<div>").text(value == null ? "" : value).html();
 }
-function deleteRecord(id) {
-    Swal.fire({
-        title: "Delete Record?",
-        text: "This record will be moved to deleted records.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Delete",
-        cancelButtonText: "Cancel"
-    }).then(function (result) {
-        if (!result.isConfirmed) {
+function loadRecords() {
+    $.get("/Admin/RestoreRecords/GetRecords", { module: currentModule, filter: window.currentRestoreFilter }, function (response) {
+        if (!response.success) {
+            $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
             return;
         }
-        $.ajax({
-            url: "/Admin/HomeWhyChooseUs/Delete",
-            type: "POST",
-            cache: false,
-            data: { id: id },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Deleted",
-                        text: response.message
-                    }).then(function () {
-                        loadWhyChooseUs(window.currentRestoreFilter || "All");
-                    });
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Unable to delete record."
-                });
+        var cols = restoreModules[currentModule].cols;
+        var html = "<div class='restore-toolbar'><div class='restore-search'><i class='fa-solid fa-magnifying-glass'></i><input type='text' id='txtRecordSearch' placeholder='Search Here...' /></div>";
+        html += "<select id='ddlRecordFilter' class='record-filter'><option value='All'>All</option><option value='Inactive'>Inactive</option><option value='Deleted'>Deleted</option></select></div>";
+        html += "<div class='table-container'><table id='tblRestoreRecords'><thead><tr>";
+        $.each(cols, function (i, c) { html += "<th>" + c[1] + "</th>"; });
+        html += "<th>Status</th><th>Action</th></tr></thead><tbody>";
+        if (response.data.length === 0) {
+            html += "<tr><td colspan='" + (cols.length + 2) + "' style='text-align:center;'>No records found.</td></tr>";
+        }
+        $.each(response.data, function (i, item) {
+            html += "<tr>";
+            $.each(cols, function (j, c) {
+                var value = item[c[0]];
+                if (c[2] === "icon") html += "<td class='tableIcon'><i class='" + esc(value) + "'></i></td>";
+                else if (c[2] === "img") html += "<td><img src='/" + esc(value) + "' width='60' /></td>";
+                else html += "<td>" + esc(value) + "</td>";
+            });
+            html += item.isDeleted ? "<td><span class='status-badge status-deleted'>Deleted</span></td>" : "<td><span class='status-badge status-inactive'>Inactive</span></td>";
+            html += "<td>";
+            if (item.isDeleted) {
+                var readyAt = Date.now() + Math.max(item.remainingSeconds || 0, 0) * 1000;
+                html += "<button type='button' class='action-btn action-restore' title='Restore' data-id='" + item.id + "' data-ready='" + readyAt + "'><i class='fa-solid fa-rotate-left'></i></button>";
+            } else {
+                html += "<button type='button' class='action-btn action-edit' title='Edit' data-id='" + item.id + "'><i class='fa-solid fa-pen'></i></button>";
+                html += "<button type='button' class='action-btn action-delete' title='Delete' data-id='" + item.id + "'><i class='fa-solid fa-trash'></i></button>";
             }
+            html += "</td></tr>";
+        });
+        $("#recordContainer").html(html + "</tbody></table></div>");
+        $("#ddlRecordFilter").val(window.currentRestoreFilter);
+    }).fail(function () {
+        $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
+    });
+}
+function confirmAction(title, text, buttonText, url, data) {
+    Swal.fire({ title: title, text: text, icon: "question", showCancelButton: true, confirmButtonText: buttonText }).then(function (result) {
+        if (!result.isConfirmed) return;
+        $.post(url, data, function (response) {
+            Swal.fire({ icon: response.success ? "success" : "error", title: response.success ? "Done" : "Error", text: response.message }).then(function () {
+                if (response.success) loadRecords();
+            });
+        }).fail(function () {
+            Swal.fire({ icon: "error", title: "Error", text: "Something went wrong." });
         });
     });
 }
-function restoreRecord(id) {
-    var wrapper = $(".restore-timer-wrapper[data-id='" + id + "']");
-    var deletedDate = wrapper.attr("data-deleted-date");
-    if (!deletedDate) {
-        Swal.fire({
-            icon: "error",
-            title: "Cannot Restore",
-            text: "Deleted date not found."
-        });
-        return;
-    }
-    var deletedTime = new Date(deletedDate).getTime();
-    var restoreTime = deletedTime + (60 * 60 * 1000);
-    var currentTime = new Date().getTime();
-    if (restoreTime > currentTime) {
-        showRestoreRestrictionTimer(deletedDate);
-        return;
+function showRestoreTimer(remaining) {
+    var endTime = Date.now() + remaining * 1000;
+    var timerInterval;
+    function left() {
+        var s = Math.max(Math.ceil((endTime - Date.now()) / 1000), 0);
+        return [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60].map(function (n) { return String(n).padStart(2, "0"); }).join(":");
     }
     Swal.fire({
-        title: "Restore Record?",
-        text: "This record will be restored.",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Restore",
-        cancelButtonText: "Cancel"
-    }).then(function (result) {
-        if (!result.isConfirmed) {
-            return;
-        }
-        $.ajax({
-            url: "/Admin/HomeWhyChooseUs/Restore",
-            type: "POST",
-            cache: false,
-            data: { id: id },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Restored",
-                        text: response.message
-                    }).then(function () {
-                        loadWhyChooseUs(window.currentRestoreFilter || "All");
-                    });
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Cannot Restore",
-                        text: response.message
-                    });
+        icon: "error",
+        title: "Cannot Restore",
+        html: "<div style='font-size:16px;'>This record can be restored only after 1 hour.</div><div style='margin-top:18px;font-size:15px;font-weight:600;'>Restore available in</div><div id='restoreTimer' style='margin-top:8px;font-size:30px;font-weight:700;color:#b8860b;'>" + left() + "</div>",
+        confirmButtonText: "OK",
+        didOpen: function () {
+            timerInterval = setInterval(function () {
+                $("#restoreTimer").text(left());
+                if (Date.now() >= endTime) {
+                    clearInterval(timerInterval);
+                    $("#restoreTimer").css("color", "green");
                 }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Unable to restore record."
-                });
-            }
-        });
-    });
-}
-function editCounterBox(id) {
-    window.location.href = "/Admin/AboutCounter/AboutCounter?editId=" + id;
-}
-function deleteCounterBox(id) {
-    Swal.fire({
-        title: "Delete Record?",
-        text: "This record will be moved to deleted records.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Delete",
-        cancelButtonText: "Cancel"
-    }).then(function (result) {
-        if (!result.isConfirmed) {
-            return;
-        }
-        $.ajax({
-            url: "/Admin/AboutCounter/Delete",
-            type: "POST",
-            cache: false,
-            data: { id: id },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Deleted",
-                        text: response.message
-                    }).then(function () {
-                        loadCounterBox(window.currentRestoreFilter || "All");
-                    });
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Unable to delete record."
-                });
-            }
-        });
-    });
-}
-function restoreCounterBox(id) {
-    var wrapper = $(".restore-timer-wrapper[data-id='" + id + "']");
-    var deletedDate = wrapper.attr("data-deleted-date");
-    if (!deletedDate) {
-        Swal.fire({
-            icon: "error",
-            title: "Cannot Restore",
-            text: "Deleted date not found."
-        });
-        return;
-    }
-    var deletedTime = new Date(deletedDate).getTime();
-    var restoreTime = deletedTime + (60 * 60 * 1000);
-    var currentTime = new Date().getTime();
-    if (restoreTime > currentTime) {
-        showRestoreRestrictionTimer(deletedDate);
-        return;
-    }
-    Swal.fire({
-        title: "Restore Record?",
-        text: "This record will be restored.",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Restore",
-        cancelButtonText: "Cancel"
-    }).then(function (result) {
-        if (!result.isConfirmed) {
-            return;
-        }
-        $.ajax({
-            url: "/Admin/AboutCounter/Restore",
-            type: "POST",
-            cache: false,
-            data: { id: id },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Restored",
-                        text: response.message
-                    }).then(function () {
-                        loadCounterBox(window.currentRestoreFilter || "All");
-                    });
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Cannot Restore",
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Unable to restore record."
-                });
-            }
-        });
+            }, 1000);
+        },
+        willClose: function () { clearInterval(timerInterval); }
     });
 }

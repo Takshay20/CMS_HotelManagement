@@ -1,4 +1,5 @@
-﻿using CMS_HotelBooking.Services.Interfaces;
+using CMS_HotelBooking.Models;
+using CMS_HotelBooking.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,15 +9,11 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class RestoreRecordsController : Controller
     {
-        private readonly IHomeWhyChooseUsService _whyChooseUsService;
-        private readonly IAboutCounterService _aboutCounterService;
+        private readonly IRestoreRecordsService _service;
 
-        public RestoreRecordsController(
-            IHomeWhyChooseUsService whyChooseUsService,
-            IAboutCounterService aboutCounterService)
+        public RestoreRecordsController(IRestoreRecordsService service)
         {
-            _whyChooseUsService = whyChooseUsService;
-            _aboutCounterService = aboutCounterService;
+            _service = service;
         }
 
         [HttpGet]
@@ -26,31 +23,24 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetWhyChooseUs(
-            string filter = "All")
+        public async Task<IActionResult> GetRecords(string module, string filter = "All")
         {
-            var result =
-                await _whyChooseUsService.GetAllRecordsAsync(filter);
+            var result = await _service.GetRecordsAsync(module, filter);
 
-            return Json(new
-            {
-                success = true,
-                data = result
-            });
+            return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetCounterBox(
-            string filter = "All")
+        [HttpPost]
+        public async Task<IActionResult> Restore(string module, int id)
         {
-            var result =
-                await _aboutCounterService.GetAllRecordsAsync(filter);
+            var result = await _service.RestoreAsync(module, id);
 
-            return Json(new
+            if (result > 0)
             {
-                success = true,
-                data = result
-            });
+                return Json(ResponseModel.SuccessResponse("Record restored successfully."));
+            }
+
+            return Json(ResponseModel.ErrorResponse("This record can be restored only after 1 hour."));
         }
     }
 }

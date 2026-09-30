@@ -75,7 +75,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@SliderId", id);
 
-            return await connection.ExecuteAsync(
+            return await connection.QueryFirstOrDefaultAsync<int>(
                 "sp_DeleteSlider",
                 parameter,
                 commandType: CommandType.StoredProcedure

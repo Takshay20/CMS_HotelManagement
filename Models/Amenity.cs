@@ -1,3 +1,5 @@
+using System;
+
 namespace CMS_HotelBooking.Models
 {
     public class Amenity
@@ -6,5 +8,7 @@ namespace CMS_HotelBooking.Models
         public string Name { get; set; } = string.Empty;
         public string? IconClass { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedDate { get; set; }
     }
 }

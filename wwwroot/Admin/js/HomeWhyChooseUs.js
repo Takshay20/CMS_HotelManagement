@@ -95,14 +95,6 @@ $(document).ready(function () {
 
     loadIcons();
     loadData();
-    var urlParams = new URLSearchParams(window.location.search);
-    var editId = urlParams.get("editId");
-
-    if (editId) {
-        setTimeout(function () {
-            edit(editId);
-        }, 300);
-    }
 
     $("#btnAdd").click(function () {
 

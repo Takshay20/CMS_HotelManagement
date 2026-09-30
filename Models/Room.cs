@@ -24,5 +24,7 @@ namespace CMS_HotelBooking.Models
 
         public List<RoomImage> Images { get; set; } = new();
         public List<Amenity> AmenityList { get; set; } = new();
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedDate { get; set; }
     }
 }

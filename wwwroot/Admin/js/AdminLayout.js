@@ -36,3 +36,9 @@ $(document).ready(function () {
         backdrop.removeClass("active");
     });
 });
+
+// Restore Records: open the edit drawer when page is opened with ?editId=
+$(function () {
+    var editId = new URLSearchParams(window.location.search).get("editId");
+    if (editId && typeof edit === "function") setTimeout(function () { edit(editId); }, 400);
+});

@@ -150,3 +150,13 @@ function clearForm() {
     $("#frmData .invalid").removeClass("invalid");
     $("#frmData .field-error").removeClass("show").text("");
 }
+
+// Restore Edit
+$(function () {
+    var editId = new URLSearchParams(window.location.search).get("editId");
+    if (editId) {
+        setTimeout(function () {
+            edit(editId);
+        }, 300);
+    }
+});

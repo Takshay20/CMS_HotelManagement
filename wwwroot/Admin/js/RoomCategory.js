@@ -155,3 +155,13 @@ function clearForm() {
     $("#Description").val("");
     $("#IsActive").prop("checked", true);
 }
+
+// Restore Edit
+$(function () {
+    var editId = new URLSearchParams(window.location.search).get("editId");
+    if (editId) {
+        setTimeout(function () {
+            edit(editId);
+        }, 300);
+    }
+});

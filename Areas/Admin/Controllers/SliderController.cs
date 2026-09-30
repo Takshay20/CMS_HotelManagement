@@ -88,18 +88,12 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 model.Slider.ImagePath =
                     await UploadImage(model.ImageFile);
 
-                if (model.Slider.DisplayOrder <= 0)
-                {
-                    var records =
-                        await _service.GetAllAsync(
-                            model.Slider.PageKey
-                        );
+                var records = await _service.GetAllAsync(model.Slider.PageKey);
 
-                    model.Slider.DisplayOrder =
-                        records.Count > 0
-                            ? records.Max(x => x.DisplayOrder) + 1
-                            : 1;
-                }
+                model.Slider.DisplayOrder =
+                    records.Count > 0
+                        ? records.Max(x => x.DisplayOrder) + 1
+                        : 1;
 
                 var result =
                     await _service.SaveAsync(
@@ -149,10 +143,17 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                     existing.ImagePath;
             }
 
-            model.Slider.DisplayOrder =
-                model.Slider.DisplayOrder > 0
-                    ? model.Slider.DisplayOrder
-                    : existing.DisplayOrder;
+            model.Slider.DisplayOrder = existing.DisplayOrder;
+
+            if (existing.PageKey != model.Slider.PageKey)
+            {
+                var pageRecords = await _service.GetAllAsync(model.Slider.PageKey);
+
+                model.Slider.DisplayOrder =
+                    pageRecords.Count > 0
+                        ? pageRecords.Max(x => x.DisplayOrder) + 1
+                        : 1;
+            }
 
             var updateResult =
                 await _service.SaveAsync(

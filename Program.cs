@@ -43,6 +43,7 @@ builder.Services.AddScoped<IAboutCounterRepository, AboutCounterRepository>();
 builder.Services.AddScoped<IAboutCtaRepository, AboutCtaRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IRestoreRecordsRepository, RestoreRecordsRepository>();
 
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IHomeWelcomeService, HomeWelcomeService>();
@@ -73,6 +74,7 @@ builder.Services.AddScoped<IAboutReceptionService, AboutReceptionService>();
 builder.Services.AddScoped<IAboutCounterService, AboutCounterService>();
 builder.Services.AddScoped<IAboutCtaService, AboutCtaService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IRestoreRecordsService, RestoreRecordsService>();
 builder.Services.AddScoped<RestoreRestrictionFilter>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
