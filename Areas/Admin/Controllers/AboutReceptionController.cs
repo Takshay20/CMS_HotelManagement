@@ -40,15 +40,24 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             if (model.AboutReception == null)
             {
-                return Json(new { success = false, message = "Invalid data." });
+                return Json(new { 
+                    success = false,
+                    message = "Invalid data." 
+                });
             }
             if (string.IsNullOrWhiteSpace(model.AboutReception.Title))
             {
-                return Json(new { success = false, message = "Title is required." });
+                return Json(new {
+                    success = false, 
+                    message = "Title is required." 
+                });
             }
             if (string.IsNullOrWhiteSpace(model.AboutReception.Description))
             {
-                return Json(new { success = false, message = "Description is required." });
+                return Json(new {
+                    success = false,
+                    message = "Description is required." 
+                });
             }
             if (model.ImageFile != null)
             {
@@ -59,9 +68,15 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _service.SaveAsync(model.AboutReception);
             if (result > 0)
             {
-                return Json(new { success = true, message = "Reception Content updated successfully." });
+                return Json(new { 
+                    success = true, 
+                    message = "Reception Content updated successfully."
+                });
             }
-            return Json(new { success = false, message = "Unable to update Reception Content." });
+            return Json(new { 
+                success = false, 
+                message = "Unable to update Reception Content."
+            });
         }
 
         // Upload image and return saved path

@@ -11,9 +11,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
     {
         private readonly IAboutStoryService _service;
         private readonly IWebHostEnvironment _environment;
-        public AboutStoryController(
-            IAboutStoryService service,
-            IWebHostEnvironment environment)
+        public AboutStoryController(IAboutStoryService service,IWebHostEnvironment environment)
         {
             _service = service;
             _environment = environment;
@@ -48,14 +46,11 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             }
             if (model.ImageFile != null)
             {
-                model.AboutStory.ImagePath =
-                    await UploadImage(model.ImageFile);
+                model.AboutStory.ImagePath =await UploadImage(model.ImageFile);
             }
             model.AboutStory.IsActive = true;
             model.AboutStory.DisplayOrder = 1;
-            var result = await _service.SaveAsync(
-                model.AboutStory
-            );
+            var result = await _service.SaveAsync( model.AboutStory);
             if (result > 0)
             {
                 return Json(new
@@ -74,8 +69,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
-            string folderPath = Path.Combine(
-                _environment.WebRootPath,
+            string folderPath = Path.Combine(_environment.WebRootPath,
                 "uploads",
                 "about"
             );
@@ -92,8 +86,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             string filePath =
                 Path.Combine(folderPath, fileName);
 
-            using FileStream stream =
-                new FileStream(
+            using FileStream stream =new FileStream(
                     filePath,
                     FileMode.Create
                 );

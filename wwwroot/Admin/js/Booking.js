@@ -1523,7 +1523,8 @@ function formatDate(value) {
         isNaN(
             date.getTime()
         )
-    ) {
+    )
+    {
 
         return value;
     }

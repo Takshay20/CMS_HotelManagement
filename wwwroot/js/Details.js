@@ -26,7 +26,6 @@
     var MAX_NIGHTS = 60;
     var isRoomAvailable = false;
 
-    // Get today string
     function getTodayString() {
 
         var today = new Date();
@@ -43,7 +42,6 @@
 
     }
 
-    // Format date
     function formatDate(date) {
 
         var year = date.getFullYear();
@@ -58,14 +56,12 @@
 
     }
 
-    // Is valid date string
     function isValidDateString(value) {
 
         return /^\d{4}-\d{2}-\d{2}$/.test(value || "");
 
     }
 
-    // Set submit enabled
     function setSubmitEnabled(enabled) {
 
         $bookingForm
@@ -74,7 +70,6 @@
 
     }
 
-    // Reset availability
     function resetAvailability() {
 
         isRoomAvailable = false;
@@ -138,7 +133,6 @@
         }
     );
 
-    // Check availability
     function checkAvailability(
         checkInVal,
         checkOutVal
@@ -154,7 +148,6 @@
 
         setSubmitEnabled(false);
 
-        // AJAX call: check availability
         $.ajax({
 
             url: checkAvailabilityUrl,
@@ -225,7 +218,6 @@
 
     }
 
-    // Recalc total
     function recalcTotal() {
 
         var checkInVal =
@@ -337,11 +329,11 @@
 
             if (!isRoomAvailable) {
 
-                $("#bookingAlert").html(
-                    '<div class="alert alert-danger">'
-                    + "Please select valid available dates before submitting."
-                    + "</div>"
-                );
+                Swal.fire({
+                    icon: "warning",
+                    title: "Select Dates",
+                    text: "Please select valid available dates before submitting."
+                });
 
                 return;
 
@@ -358,7 +350,6 @@
                 .prop("disabled", true)
                 .text("Submitting...");
 
-            // AJAX call: create booking
             $.ajax({
 
                 url: createBookingUrl,
@@ -369,19 +360,12 @@
 
                 success: function (res) {
 
-                    var alertClass =
-                        res && res.success
-                            ? "alert alert-success"
-                            : "alert alert-danger";
-
-                    $("#bookingAlert").html(
-                        '<div class="'
-                        + alertClass
-                        + '">'
-                        + ((res && res.message)
-                            || "Unable to process booking request.")
-                        + "</div>"
-                    );
+                    Swal.fire({
+                        icon: res && res.success ? "success" : "error",
+                        title: res && res.success ? "Booking Request Submitted" : "Booking Failed",
+                        text: (res && res.message) || "Unable to process booking request.",
+                        confirmButtonText: "OK"
+                    });
 
                     if (res && res.success) {
 
@@ -419,11 +403,11 @@
 
                 error: function () {
 
-                    $("#bookingAlert").html(
-                        '<div class="alert alert-danger">'
-                        + "Something went wrong. Please try again."
-                        + "</div>"
-                    );
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Something went wrong. Please try again."
+                    });
 
                     setSubmitEnabled(
                         isRoomAvailable

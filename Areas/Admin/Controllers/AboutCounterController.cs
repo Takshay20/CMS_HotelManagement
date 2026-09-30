@@ -38,7 +38,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _service.GetByIdAsync(id);
             if (result == null)
                 return Json(ResponseModel.ErrorResponse("Record not found."));
-            return Json(ResponseModel.SuccessResponse("Success", result));
+                return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
         // Save about counter record
@@ -48,7 +48,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             if (model.AboutCounter == null)
                 return Json(ResponseModel.ErrorResponse("Invalid Data"));
 
-                        if (model.AboutCounter.AboutCounterId == 0)
+            if (model.AboutCounter.AboutCounterId == 0)
             {
                 var existingRecords = await _service.GetAllAsync();
                 model.AboutCounter.DisplayOrder = existingRecords.Count > 0 ? existingRecords.Max(x => x.DisplayOrder) + 1 : 1;
@@ -77,7 +77,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _service.DeleteAsync(id);
             if (result > 0)
                 return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
-            return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
+                return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
         // Restore deleted about counter record
@@ -87,7 +87,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _service.RestoreAsync(id);
             if (result > 0)
                 return Json(ResponseModel.SuccessResponse("Record Restored Successfully."));
-            return Json(ResponseModel.ErrorResponse("Unable To Restore Record"));
+                return Json(ResponseModel.ErrorResponse("Unable To Restore Record"));
         }
     }
 }

@@ -12,9 +12,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         private readonly IAboutService _service;
         private readonly IWebHostEnvironment _environment;
 
-        public AboutController(
-            IAboutService service,
-            IWebHostEnvironment environment)
+        public AboutController( IAboutService service,IWebHostEnvironment environment)
         {
             _service = service;
             _environment = environment;
@@ -78,8 +76,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
-            string folderPath = Path.Combine(
-                _environment.WebRootPath,
+            string folderPath = Path.Combine( _environment.WebRootPath,
                 "uploads",
                 "about"
             );
@@ -98,11 +95,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             string filePath =
                 Path.Combine(folderPath, fileName);
 
-            using FileStream stream =
-                new FileStream(
-                    filePath,
-                    FileMode.Create
-                );
+            using FileStream stream =new FileStream(filePath,FileMode.Create);
 
             await file.CopyToAsync(stream);
 

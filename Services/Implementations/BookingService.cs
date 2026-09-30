@@ -2,6 +2,7 @@ using CMS_HotelBooking.Helpers;
 using CMS_HotelBooking.Models;
 using CMS_HotelBooking.Repository.Interfaces;
 using CMS_HotelBooking.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CMS_HotelBooking.Services.Implementations
 {
@@ -11,22 +12,20 @@ namespace CMS_HotelBooking.Services.Implementations
         private readonly IRoomRepository _roomRepository;
         private readonly IEmailService _emailService;
         private readonly IPaymentService _paymentService;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public BookingService(IBookingRepository repository,IRoomRepository roomRepository,IEmailService emailService,IPaymentService paymentService)
+        public BookingService(IBookingRepository repository,IRoomRepository roomRepository,IEmailService emailService,IPaymentService paymentService,IServiceScopeFactory scopeFactory)
         {
             _repository = repository;
             _roomRepository = roomRepository;
             _emailService = emailService;
             _paymentService = paymentService;
+            _scopeFactory = scopeFactory;
         }
-
-        // Get all booking records
         public async Task<List<Booking>> GetAllAsync() => await _repository.GetAllAsync();
 
-        // Get booking record by id
         public async Task<Booking?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
 
-        // Get by user id
         public async Task<List<Booking>> GetByUserIdAsync(int userId) => await _repository.GetByUserIdAsync(userId);
 
         public async Task<(bool Success, string Message)> CreateAsync(Booking model)
@@ -56,10 +55,28 @@ namespace CMS_HotelBooking.Services.Implementations
             model.RoomTitle = room.Title;
             model.RoomNumber = room.RoomNumber;
 
-            var emailStatus = await _emailService.SendBookingReceivedAsync(model);
-            await _repository.UpdateEmailStatusAsync(newId, emailStatus, "BookingReceived");
+            // Send the email in background so the guest does not wait for SMTP
+            _ = Task.Run(() => SendBookingReceivedInBackgroundAsync(model));
 
-            return (true, "Your booking request has been submitted. Our team will confirm it shortly.");
+            return (true, "Your booking request has been submitted. Once our team confirms it, you can pay from the My Bookings page.");
+        }
+
+        private async Task SendBookingReceivedInBackgroundAsync(Booking model)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+
+                var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
+                var repository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
+
+                var emailStatus = await emailService.SendBookingReceivedAsync(model);
+                await repository.UpdateEmailStatusAsync(model.BookingId, emailStatus, "BookingReceived");
+            }
+            catch
+            {
+                // email failure must not affect the booking
+            }
         }
 
         public async Task<(int Result, string EmailNote)> UpdateStatusWithEmailAsync(int id, string status)
@@ -94,14 +111,12 @@ namespace CMS_HotelBooking.Services.Implementations
             return (result, emailNote);
         }
 
-        // Update status
         public async Task<int> UpdateStatusAsync(int id, string status)
         {
             var (result, _) = await UpdateStatusWithEmailAsync(id, status);
             return result;
         }
 
-        // Delete booking record
         public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
 
         public async Task<(bool Available, string Message)> CheckAvailabilityAsync(int roomId, DateTime checkIn, DateTime checkOut, int? excludeBookingId = null)
@@ -116,7 +131,6 @@ namespace CMS_HotelBooking.Services.Implementations
             return (true, "Room is available for the selected dates.");
         }
 
-        // Get alternative rooms
         public async Task<List<Room>> GetAlternativeRoomsAsync(int bookingId)
         {
             var booking = await _repository.GetByIdAsync(bookingId);
@@ -333,6 +347,9 @@ namespace CMS_HotelBooking.Services.Implementations
             if (booking.Status == "Rejected")
                 return (false, "This booking was already rejected and cannot be cancelled.", 0, 0);
 
+            if (booking.CheckInDate.Date <= DateTime.Today)
+                return (false, "Check-in date has arrived, so this booking can no longer be cancelled online. Please contact the hotel.", 0, 0);
+
             var (percentage, amount) = RefundPolicyHelper.Calculate(booking.CheckInDate, booking.TotalPrice);
 
             var result = await _repository.CancelWithRefundAsync(bookingId, percentage, amount, "Guest");
@@ -347,7 +364,6 @@ namespace CMS_HotelBooking.Services.Implementations
             return (true, message, percentage, amount);
         }
 
-        // Note text for email status
         private static string EmailNoteFor(string emailStatus) => emailStatus switch
         {
             "Sent" => " Confirmation email sent to the guest.",

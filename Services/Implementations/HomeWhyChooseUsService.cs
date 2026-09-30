@@ -37,10 +37,5 @@ namespace CMS_HotelBooking.Services.Implementations
             return await _repository.RestoreAsync(id);
         }
 
-        // Check if record can be restored
-        public Task<bool> CanRestoreAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -254,3 +254,125 @@
     };
 
 });
+
+// Booking Form Validation
+function setBookingError(input, error, message) {
+    $(input).addClass("input-error");
+    $(error).text(message).addClass("show");
+}
+
+function clearBookingError(input, error) {
+    $(input).removeClass("input-error");
+    $(error).text("").removeClass("show");
+}
+
+function validateBookingForm() {
+    let valid = true;
+
+    var name = $("#FullName").val().trim();
+    var email = $("#Email").val().trim();
+    var phone = $("#Phone").val().trim();
+    var checkIn = $("#CheckInDate").val();
+    var checkOut = $("#CheckOutDate").val();
+    var guests = $("#Guests").val();
+
+    clearBookingError("#FullName", "#fullNameError");
+    clearBookingError("#Email", "#emailError");
+    clearBookingError("#Phone", "#phoneError");
+    clearBookingError("#CheckInDate", "#checkInError");
+    clearBookingError("#CheckOutDate", "#checkOutError");
+    clearBookingError("#Guests", "#guestsError");
+
+    if (name === "") {
+        setBookingError("#FullName", "#fullNameError", "Full Name is required.");
+        valid = false;
+    }
+
+    if (email === "") {
+        setBookingError("#Email", "#emailError", "Email is required.");
+        valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setBookingError("#Email", "#emailError", "Please enter a valid email address.");
+        valid = false;
+    }
+
+    if (phone === "") {
+        setBookingError("#Phone", "#phoneError", "Phone number is required.");
+        valid = false;
+    } else if (!/^[0-9]+$/.test(phone)) {
+        setBookingError("#Phone", "#phoneError", "Please enter numbers only.");
+        valid = false;
+    }
+
+    if (!checkIn) {
+        setBookingError("#CheckInDate", "#checkInError", "Check-in date is required.");
+        valid = false;
+    }
+
+    if (!checkOut) {
+        setBookingError("#CheckOutDate", "#checkOutError", "Check-out date is required.");
+        valid = false;
+    }
+
+    if (checkIn && checkOut && new Date(checkOut) <= new Date(checkIn)) {
+        setBookingError("#CheckOutDate", "#checkOutError", "Check-out must be after check-in.");
+        valid = false;
+    }
+
+    if (!guests || parseInt(guests) < 1) {
+        setBookingError("#Guests", "#guestsError", "Please enter valid number of guests.");
+        valid = false;
+    }
+
+    return valid;
+}
+
+$("#bookingForm").on("submit", function (e) {
+    e.preventDefault();
+
+    if (!validateBookingForm()) {
+        return;
+    }
+
+    var form = this;
+    var formData = new FormData(form);
+    var $btn = $(form).find("button[type='submit']");
+
+    $btn.prop("disabled", true).text("Submitting...");
+
+    $.ajax({
+        url: "/Booking/Create",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            if (res.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Booking Submitted",
+                    text: "Your booking request has been submitted successfully. After your booking is confirmed, you can make the payment from the Booking page.",
+                    confirmButtonText: "OK"
+                }).then(function () {
+                    window.location.href = "/Booking/MyBookings";
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Booking Failed",
+                    text: res.message || "Unable to submit booking."
+                });
+            }
+        },
+        error: function () {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong. Please try again."
+            });
+        },
+        complete: function () {
+            $btn.prop("disabled", false).text("Submit Booking");
+        }
+    });
+});

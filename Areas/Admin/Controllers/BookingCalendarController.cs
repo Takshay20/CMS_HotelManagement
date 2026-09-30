@@ -13,10 +13,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         private readonly IRoomService _roomService;
         private readonly IRoomCategoryService _roomCategoryService;
 
-        public BookingCalendarController(
-            IBookingService bookingService,
-            IRoomService roomService,
-            IRoomCategoryService roomCategoryService)
+        public BookingCalendarController(IBookingService bookingService,IRoomService roomService,IRoomCategoryService roomCategoryService)
         {
             _bookingService = bookingService;
             _roomService = roomService;

@@ -456,29 +456,35 @@
                                 Pay Now
                             </a>
                         }
-                        <button class="mb-cancel"
-                                onclick="cancelBooking(
-                            @b.BookingId,
-                            '@b.CheckInDate.ToString("yyyy-MM-ddTHH:mm:ss")',
-                            @b.TotalPrice)">
-                            Cancel
-                        </button>
-                        <div class="mb-refund-note">
-                            @GetRefundNote(b.CheckInDate)
-                        </div>
+                        @if (b.CheckInDate.Date > today)
+                        {
+                            <button class="mb-cancel"
+                                    onclick="cancelBooking(
+                                @b.BookingId,
+                                '@b.CheckInDate.ToString("yyyy-MM-ddTHH:mm:ss")',
+                                @b.TotalPrice)">
+                                Cancel
+                            </button>
+                            <div class="mb-refund-note">
+                                @GetRefundNote(b.CheckInDate)
+                            </div>
+                        }
                     }
                     @if (b.Status == "Pending")
                     {
-                        <button class="mb-cancel"
-                                onclick="cancelBooking(
-                            @b.BookingId,
-                            '@b.CheckInDate.ToString("yyyy-MM-ddTHH:mm:ss")',
-                            @b.TotalPrice)">
-                            Cancel
-                        </button>
-                        <div class="mb-refund-note">
-                            @GetRefundNote(b.CheckInDate)
-                        </div>
+                        @if (b.CheckInDate.Date > today)
+                        {
+                            <button class="mb-cancel"
+                                    onclick="cancelBooking(
+                                @b.BookingId,
+                                '@b.CheckInDate.ToString("yyyy-MM-ddTHH:mm:ss")',
+                                @b.TotalPrice)">
+                                Cancel
+                            </button>
+                            <div class="mb-refund-note">
+                                @GetRefundNote(b.CheckInDate)
+                            </div>
+                        }
                     }
                     @if (b.Status == "Cancelled"&& b.RefundPercentage.HasValue)
                     {

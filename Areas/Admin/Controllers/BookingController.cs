@@ -13,9 +13,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         private readonly IBookingService _service;
         private readonly IPaymentService _paymentService;
 
-        public BookingController(
-            IBookingService service,
-            IPaymentService paymentService)
+        public BookingController(IBookingService service,IPaymentService paymentService)
         {
             _service = service;
             _paymentService = paymentService;
@@ -66,12 +64,9 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
         // Update status
         [HttpPost]
-        public async Task<IActionResult> UpdateStatus(
-            int bookingId,
-            string status)
+        public async Task<IActionResult> UpdateStatus(int bookingId,string status)
         {
-            var (result, emailNote) =
-                await _service.UpdateStatusWithEmailAsync(
+            var (result, emailNote) = await _service.UpdateStatusWithEmailAsync(
                     bookingId,
                     status
                 );
@@ -79,7 +74,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             if (result > 0)
             {
                 return Json(
-                    ResponseModel.SuccessResponse(
+                        ResponseModel.SuccessResponse(
                         $"Booking marked as {status}.{emailNote}"
                     )
                 );
@@ -199,10 +194,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 );
             }
 
-            return PartialView(
-                "Details",
-                payment
-            );
+            return PartialView("Details",payment);
         }
 
         // Get payment details

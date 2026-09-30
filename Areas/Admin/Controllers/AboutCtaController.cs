@@ -40,7 +40,6 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
         // Update about cta record
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> Update(AboutCtaVM model)
         {
             if (model.AboutCta == null)

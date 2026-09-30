@@ -1,7 +1,6 @@
 using CMS_HotelBooking.Models;
 using CMS_HotelBooking.Services.Interfaces;
 using CMS_HotelBooking.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS_HotelBooking.Controllers
@@ -21,27 +20,17 @@ namespace CMS_HotelBooking.Controllers
             return View();
         }
 
-
         // Submit contact form
         [HttpPost]
         public async Task<IActionResult> Submit(ContactVM model)
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!User.Identity?.IsAuthenticated == true)
             {
                 return Json(new
                 {
                     success = false,
                     loginRequired = true,
                     message = "Please login to submit the form."
-                });
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return Json(new
-                {
-                    success = false,
-                    message = "Please fill in all required fields correctly."
                 });
             }
 
