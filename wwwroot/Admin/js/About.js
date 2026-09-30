@@ -26,7 +26,6 @@ $(document).ready(function () {
         var existingImage =
             $("input[name='About.Image']").val() || "";
 
-        // Title validation
         if (title === "") {
 
             $("#err-Title").text(
