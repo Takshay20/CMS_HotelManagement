@@ -15,6 +15,7 @@ namespace CMS_HotelBooking.Filters
             _repository = repository;
         }
 
+        // Check restore time before the action runs
         public async Task OnActionExecutionAsync(
             ActionExecutingContext context,
             ActionExecutionDelegate next)

@@ -20,7 +20,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _environment = environment;
         }
 
-        
+
+        // About cta
         [HttpGet]
         public async Task<IActionResult> AboutCta()
         {
@@ -37,6 +38,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return View(model);
         }
 
+        // Update about cta record
         [HttpPost]
         [HttpPost]
         public async Task<IActionResult> Update(AboutCtaVM model)
@@ -72,6 +74,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 message = "Unable to update CTA."
             });
         }
+
+        // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
             string folderPath = Path.Combine(_environment.WebRootPath, "uploads", "about");

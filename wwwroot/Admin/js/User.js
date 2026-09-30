@@ -1,9 +1,14 @@
 var allUserRecords = [];
+
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/User/GetAll
     $.ajax({
         url: "/Admin/User/GetAll",
         type: "GET",
@@ -13,6 +18,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
     allUserRecords = data;
     var html = "";
@@ -33,6 +39,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
     var item = allUserRecords.find(function (x) {
         return x.userId === id;
@@ -47,7 +54,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Toggle active
 function toggleActive(id) {
+
+    // AJAX call to /Admin/User/ToggleActive
     $.ajax({
         url: "/Admin/User/ToggleActive",
         type: "POST",
@@ -66,6 +76,7 @@ function toggleActive(id) {
     });
 }
 
+// Delete record
 function deleteRecord(id) {
     Swal.fire({
         title: "Delete User?",
@@ -75,6 +86,8 @@ function deleteRecord(id) {
         confirmButtonText: "Yes"
     }).then((result) => {
         if (result.isConfirmed) {
+
+            // AJAX call to /Admin/User/Delete
             $.ajax({
                 url: "/Admin/User/Delete",
                 type: "POST",

@@ -27,11 +27,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _environment = environment;
         }
 
+        // Open room page
         public IActionResult Room()
         {
             return View();
         }
 
+        // Get all room records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -39,6 +41,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Get room record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -47,6 +50,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 return Json(ResponseModel.ErrorResponse("Record not found."));
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
+
+        // Get form data
         [HttpGet]
         public async Task<IActionResult> GetFormData()
         {
@@ -55,6 +60,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", new { categories, amenities }));
         }
 
+        // Save room record
         [HttpPost]
         public async Task<IActionResult> Save(RoomVM model)
         {
@@ -82,7 +88,6 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (roomId > 0)
             {
-                
                 if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
                 {
                     int order = 1;
@@ -99,6 +104,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
         }
 
+        // Delete room record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -108,6 +114,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
+        // Delete image
         [HttpPost]
         public async Task<IActionResult> DeleteImage(int roomImageId)
         {
@@ -117,6 +124,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Delete Image"));
         }
 
+        // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
             string folderPath = Path.Combine(_environment.WebRootPath, "uploads", "room");

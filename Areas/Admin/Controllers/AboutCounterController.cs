@@ -17,11 +17,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open about counter page
         public IActionResult AboutCounter()
         {
             return View();
         }
 
+        // Get all about counter records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -29,6 +31,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Get about counter record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -38,6 +41,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Save about counter record
         [HttpPost]
         public async Task<IActionResult> Save(AboutCounterVM model)
         {
@@ -66,6 +70,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
         }
 
+        // Delete about counter record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -75,6 +80,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
+        // Restore deleted about counter record
         [HttpPost]
         public async Task<IActionResult> Restore(int id)
         {

@@ -66,10 +66,7 @@
     border-width: 0 5px 6px 5px !important;
 }
 
-/* Remove Select2 clear cross */
-.select2-container--default
-.select2-selection--single
-.select2-selection__clear {
+.select2-container--default.select2-selection--single.select2-selection__clear {
     display: none !important;
 }
 

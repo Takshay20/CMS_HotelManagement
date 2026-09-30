@@ -1,8 +1,12 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/Footer/Get
     $.ajax({
         url: "/Admin/Footer/Get",
         type: "GET",
@@ -35,6 +39,8 @@ $("#btnSave").click(function () {
         "Footer.Address": $("#Address").val(),
         "Footer.CopyrightText": $("#CopyrightText").val()
     };
+
+    // AJAX call to /Admin/Footer/Save
     $.ajax({
         url: "/Admin/Footer/Save",
         type: "POST",

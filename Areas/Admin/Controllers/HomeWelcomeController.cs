@@ -20,6 +20,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _environment = environment;
         }
 
+        // Home welcome
         [HttpGet]
         public async Task<IActionResult> HomeWelcome()
         {
@@ -35,6 +36,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return View(model);
         }
 
+        // Update home welcome record
         [HttpPost]
         public async Task<IActionResult> Update(HomeWelcomeVM model)
         {
@@ -87,6 +89,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             });
         }
 
+        // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
             string folderPath = Path.Combine(

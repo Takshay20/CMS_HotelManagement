@@ -21,6 +21,7 @@ namespace CMS_HotelBooking.Controllers
             _galleryService = galleryService;
         }
 
+        // Open gallery page
         public async Task<IActionResult> Index()
         {
             var model = new GalleryViewModel

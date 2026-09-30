@@ -15,6 +15,7 @@ var counterIcons = [
     { value: "fa-solid fa-utensils", text: "Restaurants" }
 ];
 
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     loadIconDropdown();
@@ -34,6 +35,7 @@ $(document).ready(function () {
     loadData();
 });
 
+// Load icon dropdown
 function loadIconDropdown() {
 
     var html = "<option value=''>-- Select Icon --</option>";
@@ -50,6 +52,7 @@ function loadIconDropdown() {
     $("#IconClass").html(html);
 }
 
+// Format icon
 function formatIcon(option) {
 
     if (!option.id) {
@@ -62,6 +65,7 @@ function formatIcon(option) {
         "</span>";
 }
 
+// Format icon selection
 function formatIconSelection(option) {
 
     if (!option.id) {
@@ -86,8 +90,10 @@ $("#closeDrawer,#btnCancel").click(function () {
     $("#drawer").removeClass("active");
 });
 
+// Load data
 function loadData() {
 
+    // AJAX call to /Admin/AboutCounter/GetAll
     $.ajax({
         url: "/Admin/AboutCounter/GetAll",
         type: "GET",
@@ -100,6 +106,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
 
     allAboutCounterRecords = data;
@@ -157,6 +164,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
 
     var item = allAboutCounterRecords.find(function (x) {
@@ -194,8 +202,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Edit
 function edit(id) {
 
+    // AJAX call to server
     $.ajax({
         url: "/Admin/AboutCounter/GetById?id=" + id,
         type: "GET",
@@ -281,6 +291,7 @@ $("#btnSave").click(function () {
             $("#IsActive").is(":checked")
     };
 
+    // AJAX call to /Admin/AboutCounter/Save
     $.ajax({
         url: "/Admin/AboutCounter/Save",
         type: "POST",
@@ -313,6 +324,7 @@ $("#btnSave").click(function () {
     });
 });
 
+// Delete record
 function deleteRecord(id) {
 
     Swal.fire({
@@ -326,6 +338,7 @@ function deleteRecord(id) {
 
         if (result.isConfirmed) {
 
+            // AJAX call to /Admin/AboutCounter/Delete
             $.ajax({
                 url: "/Admin/AboutCounter/Delete",
                 type: "POST",
@@ -358,6 +371,7 @@ function deleteRecord(id) {
     });
 }
 
+// Search box typing
 $("#txtSearch").on("keyup", function () {
 
     var value = $(this)
@@ -377,6 +391,7 @@ $("#txtSearch").on("keyup", function () {
     });
 });
 
+// Clear form
 function clearForm() {
 
     $("#Id").val(0);

@@ -4,7 +4,6 @@ namespace CMS_HotelBooking.Repository.Interfaces
 {
     public interface IBookingReminderRepository
     {
-        
         Task<BookingReminder?> GetByBookingAndTypeAsync(
             int bookingId,
             string reminderType);

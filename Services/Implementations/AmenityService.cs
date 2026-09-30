@@ -13,12 +13,16 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get all amenity records
         public async Task<List<Amenity>> GetAllAsync() => await _repository.GetAllAsync();
 
+        // Get amenity record by id
         public async Task<Amenity?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
 
+        // Save amenity record
         public async Task<int> SaveAsync(Amenity model) => await _repository.SaveAsync(model);
 
+        // Delete amenity record
         public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
     }
 }

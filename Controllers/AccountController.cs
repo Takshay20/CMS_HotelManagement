@@ -18,6 +18,7 @@ namespace CMS_HotelBooking.Controllers
             _usersService = usersService;
         }
 
+        // Open register page
         [HttpGet]
         public IActionResult Register()
         {
@@ -27,6 +28,7 @@ namespace CMS_HotelBooking.Controllers
             return View();
         }
 
+        // Submit register form
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM model)
@@ -65,6 +67,7 @@ namespace CMS_HotelBooking.Controllers
             return RedirectToAction("Login");
         }
 
+        // Open login page
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
@@ -73,6 +76,7 @@ namespace CMS_HotelBooking.Controllers
             return View();
         }
 
+        // Submit login form
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
         {
@@ -123,6 +127,7 @@ namespace CMS_HotelBooking.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // Logout user
         [Authorize]
         public async Task<IActionResult> Logout()
         {
@@ -130,18 +135,21 @@ namespace CMS_HotelBooking.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+        // Open access denied page
         [Authorize]
         public IActionResult AccessDenied()
         {
             return View();
         }
 
+        // Open forgot password page
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
+        // Submit forgot password form
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(string email)
@@ -178,6 +186,7 @@ namespace CMS_HotelBooking.Controllers
             );
         }
 
+        // Open verify reset code page
         [HttpGet]
         public IActionResult VerifyResetCode(string email)
         {
@@ -217,7 +226,6 @@ namespace CMS_HotelBooking.Controllers
                 {
                     return View();
                 }
-                
             }
 
             if (newPassword != confirmPassword)

@@ -12,18 +12,17 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
-        public async Task<List<AboutStory>> GetAllAsync()
+        // Get all about story records
+        public async Task<List<AboutStory>> GetAllAsync() 
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<AboutStory>(
-                "sp_GetAboutStory",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<AboutStory>("sp_GetAboutStory", commandType: CommandType.StoredProcedure );
 
             return result.ToList();
         }
 
+        // Get about story record by id
         public async Task<AboutStory?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -38,6 +37,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Save about story record
         public async Task<int> SaveAsync(AboutStory model)
         {
             using var connection = GetConnection();
@@ -63,6 +63,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result;
         }
 
+        // Delete about story record
         public Task<int> DeleteAsync(int id)
         {
             throw new NotSupportedException(

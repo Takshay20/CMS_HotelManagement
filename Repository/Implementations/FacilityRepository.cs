@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public FacilityRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all facility records
         public async Task<List<Facility>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get facility record by id
         public async Task<Facility?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -24,6 +26,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<Facility>("sp_GetFacilityById", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Save facility record
         public async Task<int> SaveAsync(Facility model)
         {
             using var connection = GetConnection();
@@ -37,6 +40,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QuerySingleAsync<int>("sp_SaveFacility", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Delete facility record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

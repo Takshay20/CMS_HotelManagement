@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public DashboardRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get counts
         public async Task<DashboardCounts> GetCountsAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result ?? new DashboardCounts();
         }
 
+        // Get upcoming arrivals departures
         public async Task<ArrivalsDeparturesModel> GetUpcomingArrivalsDeparturesAsync()
         {
             using var connection = GetConnection();

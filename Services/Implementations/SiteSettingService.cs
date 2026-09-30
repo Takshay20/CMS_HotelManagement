@@ -13,8 +13,10 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get site setting record
         public async Task<SiteSetting?> GetAsync() => await _repository.GetAsync();
 
+        // Save site setting record
         public async Task<int> SaveAsync(SiteSetting model) => await _repository.SaveAsync(model);
     }
 }

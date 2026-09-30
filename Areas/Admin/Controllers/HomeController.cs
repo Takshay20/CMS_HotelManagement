@@ -7,6 +7,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
+        // Open home page
         public IActionResult Home()
         {
             return View();

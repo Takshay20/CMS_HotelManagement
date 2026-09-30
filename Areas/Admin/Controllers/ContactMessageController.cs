@@ -16,11 +16,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open contact message page
         public IActionResult ContactMessage()
         {
             return View();
         }
 
+        // Get all contact message records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -28,6 +30,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Get contact message record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -35,6 +38,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Delete contact message record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -44,6 +48,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
+        // Save admin reply
         [HttpPost]
         public async Task<IActionResult> Reply(int id, string adminReply)
         {

@@ -13,8 +13,10 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get counts
         public async Task<DashboardCounts> GetCountsAsync() => await _repository.GetCountsAsync();
 
+        // Get upcoming arrivals departures
         public async Task<ArrivalsDeparturesModel> GetUpcomingArrivalsDeparturesAsync() => await _repository.GetUpcomingArrivalsDeparturesAsync();
     }
 }

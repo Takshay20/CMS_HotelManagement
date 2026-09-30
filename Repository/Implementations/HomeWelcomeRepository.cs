@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get home welcome record
         public async Task<HomeWelcome?> GetAsync()
         {
             using var connection = GetConnection();
@@ -22,6 +23,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Update home welcome record
         public async Task<int> UpdateAsync(HomeWelcome model)
         {
             using var connection = GetConnection();

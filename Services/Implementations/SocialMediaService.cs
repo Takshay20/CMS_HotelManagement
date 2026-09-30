@@ -13,14 +13,19 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get all social media records
         public async Task<List<SocialMedia>> GetAllAsync() => await _repository.GetAllAsync();
 
+        // Get active
         public async Task<List<SocialMedia>> GetActiveAsync() => await _repository.GetActiveAsync();
 
+        // Get social media record by id
         public async Task<SocialMedia?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
 
+        // Save social media record
         public async Task<int> SaveAsync(SocialMedia model) => await _repository.SaveAsync(model);
 
+        // Delete social media record
         public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
     }
 }

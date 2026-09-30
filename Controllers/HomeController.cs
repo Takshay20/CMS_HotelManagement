@@ -44,6 +44,7 @@ namespace CMS_HotelBooking.Controllers
             _environment = environment;
         }
 
+        // Open home page
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -70,12 +71,14 @@ namespace CMS_HotelBooking.Controllers
             return View(model);
         }
 
+        // Open privacy page
         [HttpGet]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        // Submit feedback
         [HttpPost]
         public async Task<IActionResult> SubmitFeedback(FeedbackVM model)
         {
@@ -231,6 +234,7 @@ namespace CMS_HotelBooking.Controllers
             );
         }
 
+        // Open error page
         [HttpGet]
         public IActionResult Error()
         {

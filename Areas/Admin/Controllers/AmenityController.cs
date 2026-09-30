@@ -15,16 +15,22 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             _service = service;
         }
+
+        // Open amenity page
         public IActionResult Amenity()
         {
             return View();
         }
+
+        // Get all amenity records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAllAsync();
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
+
+        // Get amenity record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -33,6 +39,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 return Json(ResponseModel.ErrorResponse("Record not found."));
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
+
+        // Save amenity record
         [HttpPost]
         public async Task<IActionResult> Save(AmenityVM model)
         {
@@ -46,6 +54,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             }
             return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
         }
+
+        // Delete amenity record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

@@ -4,7 +4,6 @@ namespace CMS_HotelBooking.Services.Interfaces
 {
     public interface IPaymentService
     {
-        
         Task<(bool Success, string Message, Payment? Payment)> CreatePaymentAsync(
             int bookingId,
             int userId);

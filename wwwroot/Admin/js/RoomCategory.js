@@ -1,4 +1,6 @@
 var allRoomCategories = [];
+
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
@@ -11,7 +13,10 @@ $("#closeDrawer,#btnCancel").click(function () {
     $("#drawer").removeClass("active");
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/RoomCategory/GetAll
     $.ajax({
         url: "/Admin/RoomCategory/GetAll",
         type: "GET",
@@ -21,6 +26,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
     allRoomCategories = data;
     var html = "";
@@ -36,6 +42,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
     var item = allRoomCategories.find(function (x) {
         return x.roomCategoryId === id;
@@ -49,7 +56,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Edit
 function edit(id) {
+
+    // AJAX call to server
     $.ajax({
         url: "/Admin/RoomCategory/GetById?id=" + id,
         type: "GET",
@@ -81,6 +91,8 @@ $("#btnSave").click(function () {
         "RoomCategory.Description": $("#Description").val(),
         "RoomCategory.IsActive": $("#IsActive").is(":checked")
     };
+
+    // AJAX call to /Admin/RoomCategory/Save
     $.ajax({
         url: "/Admin/RoomCategory/Save",
         type: "POST",
@@ -106,6 +118,7 @@ $("#btnSave").click(function () {
     });
 });
 
+// Delete record
 function deleteRecord(id) {
     Swal.fire({
         title: "Delete Record?",
@@ -116,6 +129,8 @@ function deleteRecord(id) {
     })
         .then((result) => {
             if (result.isConfirmed) {
+
+                // AJAX call to /Admin/RoomCategory/Delete
                 $.ajax({
                     url: "/Admin/RoomCategory/Delete",
                     type: "POST",
@@ -149,6 +164,7 @@ $("#txtSearch").keyup(function () {
     });
 });
 
+// Clear form
 function clearForm() {
     $("#Id").val(0);
     $("#Name").val("");
@@ -156,7 +172,7 @@ function clearForm() {
     $("#IsActive").prop("checked", true);
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

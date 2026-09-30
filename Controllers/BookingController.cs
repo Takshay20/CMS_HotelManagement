@@ -23,6 +23,8 @@ namespace CMS_HotelBooking.Controllers
             _roomService = roomService;
             _paymentService = paymentService;
         }
+
+        // My bookings
         public async Task<IActionResult> MyBookings()
         {
             var userId =
@@ -51,6 +53,7 @@ namespace CMS_HotelBooking.Controllers
             return View(bookings);
         }
 
+        // Create booking record
         public async Task<IActionResult> Create(int roomId)
         {
             var room = await _roomService.GetByIdAsync(roomId);
@@ -58,6 +61,7 @@ namespace CMS_HotelBooking.Controllers
             return View(room);
         }
 
+        // Check availability
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> CheckAvailability(int roomId, DateTime checkIn, DateTime checkOut)
@@ -66,6 +70,7 @@ namespace CMS_HotelBooking.Controllers
             return Json(new { available, message });
         }
 
+        // Submit create form
         [HttpPost]
         public async Task<IActionResult> Create(BookingVM model)
         {
@@ -96,6 +101,7 @@ namespace CMS_HotelBooking.Controllers
                 : Json(ResponseModel.ErrorResponse(message));
         }
 
+        // Cancel booking
         [HttpPost]
         public async Task<IActionResult> Cancel(int id)
         {
@@ -107,6 +113,7 @@ namespace CMS_HotelBooking.Controllers
                 : Json(ResponseModel.ErrorResponse(message));
         }
 
+        // Respond room change
         [HttpPost]
         public async Task<IActionResult> RespondRoomChange(int id, bool accept)
         {

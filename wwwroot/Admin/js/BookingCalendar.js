@@ -18,6 +18,7 @@ var bcMonthNames = [
     "December"
 ];
 
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     var today = new Date();
@@ -73,8 +74,10 @@ $(document).ready(function () {
 });
 
 
+// Load categories
 function loadCategories() {
 
+    // AJAX call to /Admin/BookingCalendar/GetCategories
     $.ajax({
         url: "/Admin/BookingCalendar/GetCategories",
         type: "GET",
@@ -126,6 +129,7 @@ function loadCategories() {
 }
 
 
+// Load month
 function loadMonth() {
 
     $("#bcMonthLabel").text(
@@ -138,6 +142,7 @@ function loadMonth() {
         "<div class='bc-empty-msg'>Loading calendar...</div>"
     );
 
+    // AJAX call to /Admin/BookingCalendar/GetMonthData
     $.ajax({
         url: "/Admin/BookingCalendar/GetMonthData",
         type: "GET",
@@ -196,6 +201,7 @@ function loadMonth() {
 }
 
 
+// Render grid
 function renderGrid() {
 
     var daysInMonth =
@@ -327,6 +333,7 @@ function renderGrid() {
 }
 
 
+// Find booking for room day
 function findBookingForRoomDay(roomId, dateObj) {
 
     var dateStr =
@@ -350,6 +357,7 @@ function findBookingForRoomDay(roomId, dateObj) {
 }
 
 
+// Format date ymd
 function formatDateYMD(d) {
 
     var m =
@@ -372,6 +380,7 @@ function formatDateYMD(d) {
 }
 
 
+// Show booking info
 function showBookingInfo(bookingId) {
 
     var booking = null;

@@ -23,11 +23,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _roomCategoryService = roomCategoryService;
         }
 
+        // Open calendar page
         public IActionResult Calendar()
         {
             return View();
         }
 
+        // Get categories
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
@@ -35,6 +37,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", categories));
         }
 
+        // Get month data
         [HttpGet]
         public async Task<IActionResult> GetMonthData(int year, int month, int categoryId = 0)
         {

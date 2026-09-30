@@ -103,6 +103,7 @@ var iconList = [
     }
 ];
 
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     loadIcons();
@@ -144,6 +145,7 @@ $(document).ready(function () {
             "Amenity.IsActive": $("#IsActive").is(":checked")
         };
 
+        // AJAX call to /Admin/Amenity/Save
         $.ajax({
             url: "/Admin/Amenity/Save",
             type: "POST",
@@ -185,6 +187,7 @@ $(document).ready(function () {
         });
     });
 
+    // Search box typing
     $("#txtSearch").on("keyup", function () {
 
         var value = $(this).val().toLowerCase();
@@ -198,16 +201,19 @@ $(document).ready(function () {
         });
     });
 
+    // Name field typing
     $("#Name").on("input", function () {
         $("#err-Name").text("");
     });
 
+    // Icon class field change
     $("#IconClass").on("change", function () {
         $("#err-IconClass").text("");
     });
 });
 
 
+// Load icons
 function loadIcons() {
 
     var html = "<option value=''></option>";
@@ -276,8 +282,10 @@ function loadIcons() {
 }
 
 
+// Load data
 function loadData() {
 
+    // AJAX call to /Admin/Amenity/GetAll
     $.ajax({
         url: "/Admin/Amenity/GetAll",
         type: "GET",
@@ -301,6 +309,7 @@ function loadData() {
 }
 
 
+// Bind table
 function bindTable(data) {
 
     allAmenityRecords = data || [];
@@ -356,6 +365,7 @@ function bindTable(data) {
 }
 
 
+// View details
 function viewDetails(id) {
 
     var item = allAmenityRecords.find(function (x) {
@@ -390,8 +400,10 @@ function viewDetails(id) {
 }
 
 
+// Edit
 function edit(id) {
 
+    // AJAX call to server
     $.ajax({
 
         url: "/Admin/Amenity/GetById?id=" + id,
@@ -439,6 +451,7 @@ function edit(id) {
 }
 
 
+// Delete record
 function deleteRecord(id) {
 
     Swal.fire({
@@ -461,6 +474,7 @@ function deleteRecord(id) {
             return;
         }
 
+        // AJAX call to /Admin/Amenity/Delete
         $.ajax({
 
             url: "/Admin/Amenity/Delete",
@@ -516,6 +530,7 @@ function deleteRecord(id) {
 }
 
 
+// Clear form
 function clearForm() {
 
     $("#Id").val(0);
@@ -532,7 +547,7 @@ function clearForm() {
     $(".field-error").text("");
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

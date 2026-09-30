@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public MenuMasterRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all menu master records
         public async Task<List<MenuMaster>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get active
         public async Task<List<MenuMaster>> GetActiveAsync()
         {
             using var connection = GetConnection();
@@ -23,6 +25,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get menu master record by id
         public async Task<MenuMaster?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -31,6 +34,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<MenuMaster>("sp_GetMenuMasterById", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Save menu master record
         public async Task<int> SaveAsync(MenuMaster model)
         {
             using var connection = GetConnection();
@@ -43,6 +47,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<int>("sp_SaveMenuMaster", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Delete menu master record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

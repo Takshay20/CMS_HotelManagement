@@ -1,5 +1,6 @@
 var allSliderRecords = [];
 
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     $("#ddlPageFilter").select2({
@@ -17,20 +18,24 @@ $(document).ready(function () {
 
     loadData();
 
+    // Add button click
     $("#btnAdd").on("click", function () {
         clearForm();
         $("#drawer").addClass("active");
     });
 
+    // Close drawer click
     $("#closeDrawer, #btnCancel").on("click", function () {
         clearForm();
         $("#drawer").removeClass("active");
     });
 
+    // Page filter dropdown change
     $("#ddlPageFilter").on("change", function () {
         loadData();
     });
 
+    // Image file field change
     $("#ImageFile").on("change", function () {
 
         var file = this.files && this.files[0];
@@ -85,6 +90,7 @@ $(document).ready(function () {
         reader.readAsDataURL(file);
     });
 
+    // Page key field change
     $("#PageKey").on("change", function () {
 
         var value = $(this).val();
@@ -102,6 +108,7 @@ $(document).ready(function () {
         }
     });
 
+    // Title field typing
     $("#Title").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -114,6 +121,7 @@ $(document).ready(function () {
         }
     });
 
+    // Sub title field typing
     $("#SubTitle").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -126,6 +134,7 @@ $(document).ready(function () {
         }
     });
 
+    // Button text field typing
     $("#ButtonText").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -138,6 +147,7 @@ $(document).ready(function () {
         }
     });
 
+    // Button url field typing
     $("#ButtonUrl").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -150,11 +160,13 @@ $(document).ready(function () {
         }
     });
 
+    // Save button click
     $("#btnSave").on("click", function () {
 
         saveSlider();
     });
 
+    // Search box typing
     $("#txtSearch").on("keyup", function () {
 
         var value =
@@ -178,11 +190,13 @@ $(document).ready(function () {
 });
 
 
+// Load data
 function loadData() {
 
     var pageKey =
         $("#ddlPageFilter").val() || "";
 
+    // AJAX call to /Admin/Slider/GetAll
     $.ajax({
         url: "/Admin/Slider/GetAll",
         type: "GET",
@@ -215,6 +229,7 @@ function loadData() {
 }
 
 
+// Bind table
 function bindTable(data) {
 
     allSliderRecords = data || [];
@@ -314,6 +329,7 @@ function bindTable(data) {
 }
 
 
+// View details
 function viewDetails(id) {
 
     var item =
@@ -369,8 +385,10 @@ function viewDetails(id) {
 }
 
 
+// Edit
 function edit(id) {
 
+    // AJAX call to server
     $.ajax({
 
         url:
@@ -463,6 +481,7 @@ function edit(id) {
 }
 
 
+// Save slider
 function saveSlider() {
 
     var id =
@@ -546,6 +565,7 @@ function saveSlider() {
                 : "Updating..."
         );
 
+    // AJAX call to /Admin/Slider/Save
     $.ajax({
 
         url: "/Admin/Slider/Save",
@@ -624,6 +644,7 @@ function saveSlider() {
 }
 
 
+// Validate slider form
 function validateSliderForm(isNew) {
 
     var valid = true;
@@ -705,6 +726,7 @@ function validateSliderForm(isNew) {
 }
 
 
+// Show field error
 function showFieldError(
     id,
     message
@@ -731,6 +753,7 @@ function showFieldError(
 }
 
 
+// Clear validation
 function clearValidation() {
 
     $("#frmData .invalid")
@@ -747,6 +770,7 @@ function clearValidation() {
 }
 
 
+// Delete record
 function deleteRecord(id) {
 
     Swal.fire({
@@ -770,6 +794,7 @@ function deleteRecord(id) {
             return;
         }
 
+        // AJAX call to /Admin/Slider/Delete
         $.ajax({
 
             url: "/Admin/Slider/Delete",
@@ -820,6 +845,7 @@ function deleteRecord(id) {
 }
 
 
+// Clear form
 function clearForm() {
 
     $("#Id")
@@ -864,7 +890,7 @@ function clearForm() {
         .hide();
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

@@ -11,8 +11,10 @@
 
 });
 
+// Load records
 function loadRecords(filter) {
 
+    // AJAX call to /Admin/HomeWhyChooseUs/GetAllRecords
     $.ajax({
 
         url: "/Admin/HomeWhyChooseUs/GetAllRecords",
@@ -56,6 +58,7 @@ function loadRecords(filter) {
     });
 }
 
+// Bind records
 function bindRecords(data) {
 
     var html = "";
@@ -219,6 +222,8 @@ $("#btnBack").click(function () {
     window.location.href =
         "/Admin/HomeWhyChooseUs/HomeWhyChooseUs";
 });
+
+// Restore record
 function restoreRecord(id) {
 
     Swal.fire({
@@ -234,6 +239,7 @@ function restoreRecord(id) {
             return;
         }
 
+        // AJAX call to /Admin/HomeWhyChooseUs/Restore
         $.ajax({
 
             url: "/Admin/HomeWhyChooseUs/Restore",
@@ -288,10 +294,14 @@ function restoreRecord(id) {
         });
     });
 }
+
+// Edit record
 function editRecord(id) {
     window.location.href =
         "/Admin/HomeWhyChooseUs/HomeWhyChooseUs?editId=" + id;
 }
+
+// Delete record
 function deleteRecord(id) {
     if (!id || id <= 0) {
         Swal.fire({
@@ -312,6 +322,8 @@ function deleteRecord(id) {
         if (!result.isConfirmed) {
             return;
         }
+
+        // AJAX call to /Admin/HomeWhyChooseUs/Delete
         $.ajax({
             url: "/Admin/HomeWhyChooseUs/Delete",
             type: "POST",

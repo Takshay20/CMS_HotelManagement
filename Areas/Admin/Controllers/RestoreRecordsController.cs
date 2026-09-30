@@ -16,12 +16,14 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open restore records page
         [HttpGet]
         public IActionResult RestoreRecords()
         {
             return View();
         }
 
+        // Get records
         [HttpGet]
         public async Task<IActionResult> GetRecords(string module, string filter = "All")
         {
@@ -30,6 +32,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Restore deleted restore record
         [HttpPost]
         public async Task<IActionResult> Restore(string module, int id)
         {

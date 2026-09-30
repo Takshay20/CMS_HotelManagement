@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public BookingRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all booking records
         public async Task<List<Booking>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get booking record by id
         public async Task<Booking?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -24,6 +26,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<Booking>("sp_GetBookingById", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Get by user id
         public async Task<List<Booking>> GetByUserIdAsync(int userId)
         {
             using var connection = GetConnection();
@@ -33,6 +36,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Create booking record
         public async Task<int> CreateAsync(Booking model)
         {
             using var connection = GetConnection();
@@ -110,6 +114,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return Convert.ToInt32(bookingId);
         }
 
+        // Update status
         public async Task<int> UpdateStatusAsync(int id, string status)
         {
             using var connection = GetConnection();
@@ -119,6 +124,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QuerySingleAsync<int>("sp_UpdateBookingStatus", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Delete booking record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();
@@ -127,6 +133,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QuerySingleAsync<int>("sp_DeleteBooking", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Get conflict count
         public async Task<int> GetConflictCountAsync(int roomId, DateTime checkIn, DateTime checkOut, int? excludeBookingId = null)
         {
             using var connection = GetConnection();
@@ -138,6 +145,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<int>("sp_CheckRoomAvailability", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Get rooms by category
         public async Task<List<Room>> GetRoomsByCategoryAsync(int roomCategoryId, int? excludeRoomId = null)
         {
             using var connection = GetConnection();
@@ -148,6 +156,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Propose room change
         public async Task<int> ProposeRoomChangeAsync(int bookingId, int proposedRoomId, string? note)
         {
             using var connection = GetConnection();
@@ -158,6 +167,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.ExecuteScalarAsync<int>("sp_ProposeRoomChange", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Respond room change
         public async Task<int> RespondRoomChangeAsync(int bookingId, bool accept)
         {
             using var connection = GetConnection();
@@ -167,6 +177,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.ExecuteScalarAsync<int>("sp_RespondRoomChange", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Update email status
         public async Task<int> UpdateEmailStatusAsync(int bookingId, string emailStatus, string emailType)
         {
             using var connection = GetConnection();
@@ -177,6 +188,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.ExecuteScalarAsync<int>("sp_UpdateBookingEmailStatus", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Cancel with refund
         public async Task<int> CancelWithRefundAsync(int bookingId, int refundPercentage, decimal refundAmount, string cancelledBy)
         {
             using var connection = GetConnection();

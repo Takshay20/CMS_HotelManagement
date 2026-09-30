@@ -16,11 +16,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open user page
         public IActionResult User()
         {
             return View();
         }
 
+        // Get all user records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -28,6 +30,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Toggle active
         [HttpPost]
         public async Task<IActionResult> ToggleActive(int id)
         {
@@ -37,6 +40,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Update Status"));
         }
 
+        // Delete user record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

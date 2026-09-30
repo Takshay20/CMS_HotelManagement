@@ -2,6 +2,8 @@
     bindMetricsChart(data);
     bindBookingChart(data);
 }
+
+// Bind metrics chart
 function bindMetricsChart(data) {
     var metricsCanvas = document.getElementById("metricsChart");
     if (!metricsCanvas) {
@@ -89,6 +91,8 @@ function bindMetricsChart(data) {
         }
     });
 }
+
+// Bind booking chart
 function bindBookingChart(data) {
     var bookingCanvas = document.getElementById("bookingChart");
     if (!bookingCanvas) {

@@ -14,6 +14,7 @@ namespace CMS_HotelBooking.Services
             _configuration = configuration;
         }
 
+        // Send email
         private async Task<string> SendEmailAsync(
             string toEmail,
             string toName,
@@ -115,6 +116,7 @@ namespace CMS_HotelBooking.Services
             }
         }
 
+        // Send booking received
         public async Task<string> SendBookingReceivedAsync(
             Booking booking)
         {
@@ -167,6 +169,7 @@ namespace CMS_HotelBooking.Services
             );
         }
 
+        // Send booking status update
         public async Task<string> SendBookingStatusUpdateAsync(
             Booking booking)
         {
@@ -311,6 +314,7 @@ namespace CMS_HotelBooking.Services
             );
         }
 
+        // Send payment completed
         public async Task<string> SendPaymentCompletedAsync(
             Booking booking,
             Payment payment)
@@ -432,6 +436,7 @@ namespace CMS_HotelBooking.Services
             );
         }
 
+        // Send room change request
         public async Task<string> SendRoomChangeRequestAsync(
             Booking booking)
         {
@@ -527,6 +532,7 @@ namespace CMS_HotelBooking.Services
             );
         }
 
+        // Send booking cancelled
         public async Task<string> SendBookingCancelledAsync(
             Booking booking)
         {
@@ -574,6 +580,7 @@ namespace CMS_HotelBooking.Services
             );
         }
 
+        // Send password reset code
         public async Task<string> SendPasswordResetCodeAsync(
             string toEmail,
             string fullName,
@@ -630,6 +637,7 @@ namespace CMS_HotelBooking.Services
             );
         }
 
+        // Send booking reminder
         public async Task<string> SendBookingReminderAsync(
             Booking booking,
             string reminderType)
@@ -734,6 +742,7 @@ namespace CMS_HotelBooking.Services
             );
         }
 
+        // Get room name
         private string GetRoomName(
             string? title,
             string? number)
@@ -749,6 +758,7 @@ namespace CMS_HotelBooking.Services
             return room;
         }
 
+        // Build booking details
         private string BuildBookingDetails(
             Booking booking,
             string room)
@@ -826,6 +836,7 @@ namespace CMS_HotelBooking.Services
             ";
         }
 
+        // Build booking dates
         private string BuildBookingDates(
             Booking booking)
         {
@@ -847,6 +858,7 @@ namespace CMS_HotelBooking.Services
             ";
         }
 
+        // Build common email layout
         private string BuildEmailLayout(
             string title,
             string color,

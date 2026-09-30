@@ -14,21 +14,25 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get all gallery records
         public async Task<List<Gallery>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }
 
+        // Get gallery record by id
         public async Task<Gallery?> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
         }
 
+        // Save gallery record
         public async Task<int> SaveAsync(Gallery model)
         {
             return await _repository.SaveAsync(model);
         }
 
+        // Delete gallery record
         public async Task<int> DeleteAsync(int id)
         {
             return await _repository.DeleteAsync(id);

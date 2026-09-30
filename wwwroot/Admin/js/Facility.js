@@ -1,4 +1,6 @@
 var allFacilityRecords = [];
+
+// Page load: setup and event handlers
 $(document).ready(function () { loadData(); });
 $("#btnAdd").click(function () { clearForm(); $("#drawer").addClass("active"); });
 $("#closeDrawer,#btnCancel").click(function () { $("#drawer").removeClass("active"); });
@@ -10,7 +12,10 @@ $("#ImageFile").change(function () {
     }
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/Facility/GetAll
     $.ajax({
         url: "/Admin/Facility/GetAll",
         type: "GET",
@@ -21,6 +26,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
     allFacilityRecords = data;
     var html = "";
@@ -37,6 +43,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
     var item = allFacilityRecords.find(function (x) {
         return x.facilityId === id;
@@ -51,7 +58,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Edit
 function edit(id) {
+
+    // AJAX call to server
     $.ajax({
         url: "/Admin/Facility/GetById?id=" + id,
         type: "GET",
@@ -76,6 +86,8 @@ $("#btnSave").click(function () {
         { id: "ImageFile", label: "Image", required: true, type: "file", onlyForNew: true, isNew: isNew }
     ]);
     if (!ok) return;
+
+    // Prepare form data for upload
     var formData = new FormData();
     formData.append("Facility.FacilityId", $("#Id").val());
     formData.append("Facility.Title", $("#Title").val());
@@ -84,6 +96,7 @@ $("#btnSave").click(function () {
     var image = $("#ImageFile")[0].files[0];
     if (image) formData.append("ImageFile", image);
 
+    // AJAX call to /Admin/Facility/Save
     $.ajax({
         url: "/Admin/Facility/Save",
         type: "POST",
@@ -112,6 +125,7 @@ $("#btnSave").click(function () {
     });
 });
 
+// Delete record
 function deleteRecord(id) {
     Swal.fire({
         title: "Delete Record?",
@@ -120,6 +134,8 @@ function deleteRecord(id) {
         confirmButtonText: "Yes"
     }).then((result) => {
         if (result.isConfirmed) {
+
+            // AJAX call to /Admin/Facility/Delete
             $.ajax({
                 url: "/Admin/Facility/Delete",
                 type: "POST",
@@ -147,6 +163,7 @@ $("#txtSearch").keyup(function () {
     });
 });
 
+// Clear form
 function clearForm() {
     $("#Id").val(0);
     $("#Title").val("");
@@ -155,7 +172,7 @@ function clearForm() {
     $("#ImageFile").val(""); $("#imgPreview").hide();
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

@@ -13,8 +13,10 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get records
         public async Task<IEnumerable<RestoreRecord>> GetRecordsAsync(string module, string filter) => await _repository.GetRecordsAsync(module, filter);
 
+        // Restore deleted restore record
         public async Task<int> RestoreAsync(string module, int id) => await _repository.RestoreAsync(module, id);
     }
 }

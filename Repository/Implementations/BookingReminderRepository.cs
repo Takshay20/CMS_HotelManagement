@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get by booking and type
         public async Task<BookingReminder?> GetByBookingAndTypeAsync(
             int bookingId,
             string reminderType)
@@ -30,6 +31,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Create booking reminder record
         public async Task<int> CreateAsync(
             BookingReminder reminder)
         {
@@ -64,6 +66,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Get bookings for reminder
         public async Task<List<Booking>> GetBookingsForReminderAsync()
         {
             using var connection = GetConnection();

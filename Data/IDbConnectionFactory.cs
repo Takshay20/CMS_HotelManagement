@@ -3,7 +3,6 @@ using System.Data;
 
 namespace CMS_HotelBooking.Data
 {
-    
     public interface IDbConnectionFactory
     {
         IDbConnection CreateConnection();
@@ -19,6 +18,7 @@ namespace CMS_HotelBooking.Data
                 ?? throw new InvalidOperationException("DefaultConnection connection string is missing in appsettings.json");
         }
 
+        // Create connection
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
     }
 }

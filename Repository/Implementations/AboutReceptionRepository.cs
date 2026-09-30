@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public AboutReceptionRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all about reception records
         public async Task<List<AboutReception>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -18,6 +19,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get about reception record by id
         public async Task<AboutReception?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -27,6 +29,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.FirstOrDefault(x => x.AboutReceptionId == id);
         }
 
+        // Save about reception record
         public async Task<int> SaveAsync(AboutReception model)
         {
             using var connection = GetConnection();
@@ -42,6 +45,7 @@ namespace CMS_HotelBooking.Repository.Implementations
                 commandType: CommandType.StoredProcedure);
         }
 
+        // Delete about reception record
         public Task<int> DeleteAsync(int id)
         {
             throw new NotSupportedException(

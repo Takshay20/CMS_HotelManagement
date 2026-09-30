@@ -1,9 +1,11 @@
 ﻿$(document).ready(function () {
 
+    // Feedback form form submit
     $("#feedbackForm").on("submit", function (e) {
 
         e.preventDefault();
 
+        // Prepare form data for upload
         var formData = new FormData(this);
 
         var $btn = $(this).find("button[type=submit]");
@@ -12,6 +14,7 @@
             .prop("disabled", true)
             .text("Submitting...");
 
+        // AJAX call to /Home/SubmitFeedback
         $.ajax({
 
             url: "/Home/SubmitFeedback",
@@ -104,6 +107,7 @@
                 }
             });
 
+            // AJAX call to /Booking/RespondRoomChange
             $.ajax({
 
                 url: "/Booking/RespondRoomChange",
@@ -192,6 +196,7 @@
                 }
             });
 
+            // AJAX call to /Booking/Cancel
             $.ajax({
 
                 url: "/Booking/Cancel",

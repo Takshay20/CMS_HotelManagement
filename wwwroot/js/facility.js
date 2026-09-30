@@ -25,6 +25,7 @@
         String(total).padStart(2, "0")
     );
 
+    // Show slide
     function showSlide(index) {
 
         if (index >= total) {
@@ -61,6 +62,7 @@
 
     }
 
+    // Stop slider
     function stopSlider() {
 
         if (timer !== null) {
@@ -73,6 +75,7 @@
 
     }
 
+    // Start slider
     function startSlider() {
 
         stopSlider();
@@ -89,6 +92,7 @@
 
     }
 
+    // Restart slider
     function restartSlider() {
 
         stopSlider();

@@ -1,8 +1,4 @@
-﻿/* ================================
-   RESTORE RECORDS PAGE
-================================ */
-
-.record-filter {
+﻿.record-filter {
     width: 180px;
     height: 42px;
     padding: 0 12px;
@@ -21,10 +17,6 @@
         box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
     }
 
-
-/* ================================
-   MODULE SELECT
-================================ */
 
 .module-select {
     position: relative;
@@ -74,10 +66,6 @@
     transform: rotate(180deg);
 }
 
-
-/* ================================
-   MODULE DROPDOWN
-================================ */
 
 .module-dropdown {
     position: absolute;
@@ -166,10 +154,6 @@
         }
 
 
-/* ================================
-   BACKGROUND AREA
-================================ */
-
 .restore-empty {
     width: 100%;
     min-height: calc(100vh - 190px);
@@ -181,10 +165,6 @@
     box-sizing: border-box;
 }
 
-
-/* ================================
-   EMPTY CONTENT
-================================ */
 
 .restore-empty-content {
     min-height: 420px;
@@ -213,10 +193,6 @@
         font-size: 14px;
     }
 
-
-/* ================================
-   TOOLBAR
-================================ */
 
 .restore-toolbar {
     width: 100%;
@@ -263,10 +239,6 @@
         }
 
 
-/* ================================
-   TABLE CARD
-================================ */
-
 .restore-table-wrapper {
     width: 100%;
     background: #fff;
@@ -285,10 +257,6 @@
     }
 
 
-    /* ================================
-   TABLE HEADER
-================================ */
-
     .restore-table-wrapper th {
         height: 48px;
         padding: 12px 14px;
@@ -302,10 +270,6 @@
         border-bottom: 1px solid #e5e8ed;
     }
 
-
-    /* ================================
-   TABLE BODY
-================================ */
 
     .restore-table-wrapper td {
         padding: 14px;
@@ -328,10 +292,6 @@
     }
 
 
-    /* ================================
-   ICON COLUMN
-================================ */
-
     .restore-table-wrapper .table-icon {
         width: 55px;
         text-align: center;
@@ -342,10 +302,6 @@
             color: #26324a;
         }
 
-
-/* ================================
-   STATUS BADGE
-================================ */
 
 .status-badge {
     display: inline-flex;
@@ -375,10 +331,6 @@
     color: #dc3545;
 }
 
-
-/* ================================
-   ACTION BUTTONS
-================================ */
 
 .action-btn {
     width: 36px;
@@ -429,10 +381,6 @@
 }
 
 
-/* ================================
-   DELETED COLUMN
-================================ */
-
 .deleted-yes {
     color: #dc3545;
     font-weight: 600;
@@ -443,10 +391,6 @@
     font-weight: 600;
 }
 
-
-/* ================================
-   RESPONSIVE
-================================ */
 
 @media (max-width: 1100px) {
 

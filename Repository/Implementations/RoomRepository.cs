@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get all room records
         public async Task<List<Room>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -24,6 +25,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get room record by id
         public async Task<Room?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -58,6 +60,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return room;
         }
 
+        // Get featured
         public async Task<List<Room>> GetFeaturedAsync(
             int top = 6)
         {
@@ -82,6 +85,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Save room record
         public async Task<int> SaveAsync(Room model)
         {
             using var connection = GetConnection();
@@ -174,6 +178,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Delete room record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();
@@ -194,6 +199,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Add image
         public async Task<int> AddImageAsync(
             int roomId,
             string imagePath,
@@ -229,6 +235,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Delete image
         public async Task<int> DeleteImageAsync(
             int roomImageId)
         {

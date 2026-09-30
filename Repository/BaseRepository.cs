@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository
             _configuration = configuration;
         }
 
+        // Get connection
         protected IDbConnection GetConnection()
         {
             return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));

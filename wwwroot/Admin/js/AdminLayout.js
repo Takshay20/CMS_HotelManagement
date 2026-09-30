@@ -1,7 +1,10 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
     $("#btnMenu").click(function () {
         $(".sidebar").toggleClass("collapse");
     });
+
+    // Sidebar submenu toggle click
     $(".has-sub > a.sub-toggle").on("click", function (e) {
         e.preventDefault();
         var $parent = $(this).closest(".has-sub");
@@ -18,6 +21,8 @@ $(document).ready(function () {
         }
     });
     var backdrop = $("#drawerBackdrop");
+
+    // Sync backdrop
     function syncBackdrop() {
         if ($(".drawer.active").length > 0) {
             backdrop.addClass("active");
@@ -37,7 +42,7 @@ $(document).ready(function () {
     });
 });
 
-// Restore Records: open the edit drawer when page is opened with ?editId=
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId && typeof edit === "function") setTimeout(function () { edit(editId); }, 400);

@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get about record
         public async Task<About?> GetAsync()
         {
             using var connection = GetConnection();
@@ -22,6 +23,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Save about record
         public async Task<int> SaveAsync(About model)
         {
             using var connection = GetConnection();

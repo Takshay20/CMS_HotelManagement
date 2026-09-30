@@ -19,11 +19,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _environment = environment;
         }
 
+        // Open site setting page
         public IActionResult SiteSetting()
         {
             return View();
         }
 
+        // Get site setting record
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -31,6 +33,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Save site setting record
         [HttpPost]
         public async Task<IActionResult> Save(SiteSettingVM model)
         {
@@ -47,6 +50,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
         }
 
+        // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
             string folderPath = Path.Combine(_environment.WebRootPath, "uploads", "settings");

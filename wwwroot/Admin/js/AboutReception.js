@@ -1,4 +1,7 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
+
+    // About reception form form submit
     $("#aboutReceptionForm").on("submit", function (e) {
         e.preventDefault();
 
@@ -9,10 +12,13 @@ $(document).ready(function () {
         if (!ok) return;
 
         var form = this;
+
+        // Prepare form data for upload
         var formData = new FormData(form);
         var $btn = $(form).find("button[type='submit']");
         $btn.prop("disabled", true).text("Updating...");
 
+        // AJAX call to /Admin/AboutReception/Update
         $.ajax({
             url: "/Admin/AboutReception/Update",
             type: "POST",

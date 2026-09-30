@@ -2,7 +2,6 @@ namespace CMS_HotelBooking.Helpers
 {
     public static class RefundPolicyHelper
     {
-        
         public static (int Percentage, decimal Amount) Calculate(DateTime checkInDate, decimal totalPrice)
         {
             var hoursUntilCheckIn = (checkInDate - DateTime.Now).TotalHours;
@@ -19,6 +18,7 @@ namespace CMS_HotelBooking.Helpers
             return (percentage, amount);
         }
 
+        // Refund policy message for a percentage
         public static string PolicyText(int percentage) => percentage switch
         {
             100 => "You are eligible for a full refund since you're cancelling 48+ hours before check-in.",

@@ -91,6 +91,7 @@ var iconList = [
     }
 ];
 
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     loadIcons();
@@ -139,6 +140,7 @@ $(document).ready(function () {
             $btn.text("Updating...");
         }
 
+        // AJAX call to /Admin/HomeWhyChooseUs/Save
         $.ajax({
             url: "/Admin/HomeWhyChooseUs/Save",
             type: "POST",
@@ -196,6 +198,7 @@ $(document).ready(function () {
         });
     });
 
+    // Search box typing
     $("#txtSearch").on("keyup", function () {
 
         var value = $(this).val().toLowerCase();
@@ -211,6 +214,7 @@ $(document).ready(function () {
         });
     });
 
+    // Icon class field change
     $("#IconClass").on("change", function () {
 
         if ($(this).val()) {
@@ -218,6 +222,7 @@ $(document).ready(function () {
         }
     });
 
+    // Title field typing
     $("#Title").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -226,6 +231,7 @@ $(document).ready(function () {
     });
 });
 
+// Validate why choose us form
 function validateWhyChooseUsForm() {
 
     var isValid = true;
@@ -256,6 +262,7 @@ function validateWhyChooseUsForm() {
     return isValid;
 }
 
+// Load icons
 function loadIcons() {
 
     var html = "<option value=''></option>";
@@ -326,8 +333,10 @@ function loadIcons() {
         );
 }
 
+// Load data
 function loadData() {
 
+    // AJAX call to /Admin/HomeWhyChooseUs/GetAll
     $.ajax({
 
         url: "/Admin/HomeWhyChooseUs/GetAll",
@@ -352,6 +361,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
 
     allHomeWhyChooseUsRecords = data || [];
@@ -428,6 +438,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
 
     var item = allHomeWhyChooseUsRecords.find(
@@ -469,8 +480,10 @@ function viewDetails(id) {
     );
 }
 
+// Edit
 function edit(id) {
 
+    // AJAX call to server
     $.ajax({
 
         url:
@@ -539,6 +552,7 @@ function edit(id) {
     });
 }
 
+// Delete record
 function deleteRecord(id) {
 
     if (!id || id <= 0) {
@@ -573,6 +587,7 @@ function deleteRecord(id) {
             return;
         }
 
+        // AJAX call to /Admin/HomeWhyChooseUs/Delete
         $.ajax({
 
             url: "/Admin/HomeWhyChooseUs/Delete",
@@ -621,6 +636,7 @@ function deleteRecord(id) {
     });
 }
 
+// Clear form
 function clearForm() {
 
     $("#Id").val(0);

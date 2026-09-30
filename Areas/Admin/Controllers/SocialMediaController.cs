@@ -17,11 +17,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open social media page
         public IActionResult SocialMedia()
         {
             return View();
         }
 
+        // Get all social media records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -29,6 +31,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Get social media record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -38,6 +41,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Save social media record
         [HttpPost]
         public async Task<IActionResult> Save(SocialMediaVM model)
         {
@@ -66,6 +70,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
         }
 
+        // Delete social media record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

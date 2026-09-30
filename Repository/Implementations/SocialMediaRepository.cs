@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public SocialMediaRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all social media records
         public async Task<List<SocialMedia>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get active
         public async Task<List<SocialMedia>> GetActiveAsync()
         {
             using var connection = GetConnection();
@@ -23,6 +25,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get social media record by id
         public async Task<SocialMedia?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -31,6 +34,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<SocialMedia>("sp_GetSocialMediaById", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Save social media record
         public async Task<int> SaveAsync(SocialMedia model)
         {
             using var connection = GetConnection();
@@ -44,6 +48,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<int>("sp_SaveSocialMedia", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Delete social media record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

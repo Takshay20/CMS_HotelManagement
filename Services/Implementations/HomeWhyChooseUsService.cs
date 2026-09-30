@@ -13,22 +13,31 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get all home why choose us records
         public async Task<List<HomeWhyChooseUs>> GetAllAsync() => await _repository.GetAllAsync();
+
+        // Get all records
         public async Task<IEnumerable<HomeWhyChooseUs>> GetAllRecordsAsync(string filter)
         {
             return await _repository.GetAllRecordsAsync(filter);
         }
 
+        // Get home why choose us record by id
         public async Task<HomeWhyChooseUs?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
 
+        // Save home why choose us record
         public async Task<int> SaveAsync(HomeWhyChooseUs model) => await _repository.SaveAsync(model);
 
+        // Delete home why choose us record
         public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
+
+        // Restore deleted home why choose us record
         public async Task<int> RestoreAsync(int id)
         {
             return await _repository.RestoreAsync(id);
         }
 
+        // Check if record can be restored
         public Task<bool> CanRestoreAsync(int id)
         {
             throw new NotImplementedException();

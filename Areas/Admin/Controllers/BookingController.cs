@@ -21,11 +21,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _paymentService = paymentService;
         }
 
+        // Open booking page
         public IActionResult Booking()
         {
             return View();
         }
 
+        // Get all booking records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -39,6 +41,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Get booking record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -61,6 +64,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Update status
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(
             int bookingId,
@@ -88,6 +92,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Delete booking record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -109,6 +114,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Get alternative rooms
         [HttpGet]
         public async Task<IActionResult> GetAlternativeRooms(
             int bookingId)
@@ -126,6 +132,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Propose room change
         [HttpPost]
         public async Task<IActionResult> ProposeRoomChange(
             int bookingId,
@@ -152,6 +159,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 );
         }
 
+        // Send room change email
         [HttpPost]
         public async Task<IActionResult> SendRoomChangeEmail(
             int bookingId)
@@ -174,6 +182,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 );
         }
 
+        // Show booking details
         [HttpGet]
         public async Task<IActionResult> Details(
             int bookingId)
@@ -196,6 +205,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Get payment details
         [HttpGet]
         public async Task<IActionResult> GetPaymentDetails(
             int bookingId)

@@ -1,5 +1,7 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
 
+    // Home welcome form form submit
     $("#homeWelcomeForm").on("submit", function (e) {
         e.preventDefault();
 
@@ -26,43 +28,36 @@ $(document).ready(function () {
         var existingImage2 = $("input[name='HomeWelcome.Image2Path']").val() || "";
         var existingImage3 = $("input[name='HomeWelcome.Image3Path']").val() || "";
 
-        // Heading validation
         if (heading === "") {
             $("#err-Heading").text("Heading is required.");
             isValid = false;
         }
 
-        // Sub Heading validation
         if (subHeading === "") {
             $("#err-SubHeading").text("Sub Heading is required.");
             isValid = false;
         }
 
-        // Description validation
         if (description === "") {
             $("#err-Description").text("Description is required.");
             isValid = false;
         }
 
-        // Button Text validation
         if (buttonText === "") {
             $("#err-ButtonText").text("Button Text is required.");
             isValid = false;
         }
 
-        // Button URL validation
         if (buttonUrl === "") {
             $("#err-ButtonUrl").text("Button URL is required.");
             isValid = false;
         }
 
-        // Experience Years validation
         if (experienceYears === "") {
             $("#err-ExperienceYears").text("Experience Years is required.");
             isValid = false;
         }
 
-        // Image 1 validation
         if (!image1Selected && existingImage1 === "") {
             $("#err-Image1File").text("Image 1 is required.");
             isValid = false;
@@ -72,7 +67,6 @@ $(document).ready(function () {
             }
         }
 
-        // Image 2 validation
         if (!image2Selected && existingImage2 === "") {
             $("#err-Image2File").text("Image 2 is required.");
             isValid = false;
@@ -82,7 +76,6 @@ $(document).ready(function () {
             }
         }
 
-        // Image 3 validation
         if (!image3Selected && existingImage3 === "") {
             $("#err-Image3File").text("Image 3 is required.");
             isValid = false;
@@ -92,12 +85,13 @@ $(document).ready(function () {
             }
         }
 
-        // Stop form submission if validation fails
         if (!isValid) {
             return;
         }
 
         var form = this;
+
+        // Prepare form data for upload
         var formData = new FormData(form);
 
         var $btn = $(form).find("button[type='submit']");
@@ -105,7 +99,7 @@ $(document).ready(function () {
         $btn.prop("disabled", true);
         $btn.text("Updating...");
 
-        // AJAX request
+        // AJAX call to /Admin/HomeWelcome/Update
         $.ajax({
             url: "/Admin/HomeWelcome/Update",
             type: "POST",
@@ -156,7 +150,7 @@ $(document).ready(function () {
         });
     });
 
-    // Image format validation
+    // Validate image
     function validateImage(input, errorSelector) {
 
         if (!input.files || input.files.length === 0) {
@@ -208,7 +202,7 @@ $(document).ready(function () {
         return true;
     }
 
-    // Heading input validation
+    // Heading field typing
     $("#Heading").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -216,7 +210,7 @@ $(document).ready(function () {
         }
     });
 
-    // Sub Heading input validation
+    // Sub heading field typing
     $("#SubHeading").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -224,7 +218,7 @@ $(document).ready(function () {
         }
     });
 
-    // Description input validation
+    // Description field typing
     $("#Description").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -232,7 +226,7 @@ $(document).ready(function () {
         }
     });
 
-    // Button Text input validation
+    // Button text field typing
     $("#ButtonText").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -240,7 +234,7 @@ $(document).ready(function () {
         }
     });
 
-    // Button URL input validation
+    // Button url field typing
     $("#ButtonUrl").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -248,7 +242,7 @@ $(document).ready(function () {
         }
     });
 
-    // Experience Years input validation
+    // Experience years field typing
     $("#ExperienceYears").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -256,7 +250,7 @@ $(document).ready(function () {
         }
     });
 
-    // Image 1 change validation
+    // Image1 file field change
     $("#Image1File").on("change", function () {
 
         if (this.files.length === 0) {
@@ -266,7 +260,7 @@ $(document).ready(function () {
         validateImage(this, "#err-Image1File");
     });
 
-    // Image 2 change validation
+    // Image2 file field change
     $("#Image2File").on("change", function () {
 
         if (this.files.length === 0) {
@@ -276,7 +270,7 @@ $(document).ready(function () {
         validateImage(this, "#err-Image2File");
     });
 
-    // Image 3 change validation
+    // Image3 file field change
     $("#Image3File").on("change", function () {
 
         if (this.files.length === 0) {

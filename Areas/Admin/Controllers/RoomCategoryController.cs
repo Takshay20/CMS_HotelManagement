@@ -17,11 +17,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open room category page
         public IActionResult RoomCategory()
         {
             return View();
         }
 
+        // Get all room category records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -29,6 +31,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Get room category record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -38,6 +41,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Save room category record
         [HttpPost]
         public async Task<IActionResult> Save(RoomCategoryVM model)
         {
@@ -91,6 +95,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         }
 
 
+        // Delete room category record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

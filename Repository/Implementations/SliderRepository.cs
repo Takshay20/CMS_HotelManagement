@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get all slider records
         public async Task<List<Slider>> GetAllAsync(string? pageKey = null)
         {
             using var connection = GetConnection();
@@ -29,6 +30,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get slider record by id
         public async Task<Slider?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -44,6 +46,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Save slider record
         public async Task<int> SaveAsync(Slider model)
         {
             using var connection = GetConnection();
@@ -67,6 +70,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Delete slider record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

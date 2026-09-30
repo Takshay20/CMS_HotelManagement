@@ -1,25 +1,31 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     loadData();
 
+    // Status filter dropdown change
     $("#ddlStatusFilter, #txtSearch").on("change keyup", function () {
         render();
     });
 
+    // Close payment modal button click
     $("#btnClosePaymentModal").on("click", function () {
         closePaymentModal();
     });
 
+    // Payment modal click
     $("#paymentModal").on("click", function (e) {
         if (e.target === this) {
             closePaymentModal();
         }
     });
 
+    // Close drawer click
     $("#closeDrawer, #btnCancel").on("click", function () {
         $("#drawer").removeClass("active");
     });
 
+    // Save button click
     $("#btnSave").on("click", function () {
 
         var bookingId = $("#crBookingId").val();
@@ -43,6 +49,7 @@ $(document).ready(function () {
         $btn.prop("disabled", true)
             .text("Sending...");
 
+        // AJAX call to /Admin/Booking/ProposeRoomChange
         $.ajax({
             url: "/Admin/Booking/ProposeRoomChange",
             type: "POST",
@@ -98,8 +105,10 @@ $(document).ready(function () {
 var bookingData = [];
 
 
+// Load data
 function loadData() {
 
+    // AJAX call to /Admin/Booking/GetAll
     $.ajax({
         url: "/Admin/Booking/GetAll",
         type: "GET",
@@ -129,6 +138,7 @@ function loadData() {
 }
 
 
+// Render
 function render() {
 
     var statusFilter =
@@ -269,6 +279,7 @@ function render() {
 }
 
 
+// Status badge
 function statusBadge(
     status,
     roomChange,
@@ -356,6 +367,7 @@ function statusBadge(
 }
 
 
+// Payment status badge
 function paymentStatusBadge(
     paymentStatus,
     bookingStatus
@@ -443,6 +455,7 @@ function paymentStatusBadge(
 }
 
 
+// Action buttons
 function actionButtons(
     item,
     status,
@@ -596,6 +609,7 @@ function actionButtons(
 }
 
 
+// Room change button
 function roomChangeButton(item) {
 
     var room =
@@ -620,6 +634,7 @@ function roomChangeButton(item) {
 }
 
 
+// View booking
 function viewBooking(bookingId) {
 
     var booking = null;
@@ -922,6 +937,7 @@ function viewBooking(bookingId) {
 }
 
 
+// View payment
 function viewPayment(bookingId) {
 
     $("#paymentDetailsContent").html(`
@@ -935,6 +951,7 @@ function viewPayment(bookingId) {
 
     $("#paymentModal").addClass("active");
 
+    // AJAX call to /Admin/Booking/GetPaymentDetails
     $.ajax({
 
         url: "/Admin/Booking/GetPaymentDetails",
@@ -1218,6 +1235,8 @@ function viewPayment(bookingId) {
         }
     });
 }
+
+// Update status
 function updateStatus(bookingId, status) {
 
     var title =
@@ -1257,6 +1276,7 @@ function updateStatus(bookingId, status) {
             return;
         }
 
+        // AJAX call to /Admin/Booking/UpdateStatus
         $.ajax({
 
             url: "/Admin/Booking/UpdateStatus",
@@ -1360,6 +1380,7 @@ function updateStatus(bookingId, status) {
 }
 
 
+// Close payment modal
 function closePaymentModal() {
 
     $("#paymentModal")
@@ -1370,6 +1391,7 @@ function closePaymentModal() {
 }
 
 
+// Open change room
 function openChangeRoom(
     id,
     currentRoom
@@ -1400,6 +1422,7 @@ function openChangeRoom(
         .addClass("active");
 
 
+    // AJAX call to /Admin/Booking/GetAlternativeRooms
     $.ajax({
 
         url:
@@ -1484,6 +1507,7 @@ function openChangeRoom(
 }
 
 
+// Format date
 function formatDate(value) {
 
     if (!value) {
@@ -1511,6 +1535,7 @@ function formatDate(value) {
 }
 
 
+// Escape html
 function escapeHtml(value) {
 
     return $("<div>")
@@ -1519,6 +1544,7 @@ function escapeHtml(value) {
 }
 
 
+// Escape attribute
 function escapeAttribute(value) {
 
     return String(

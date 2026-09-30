@@ -24,6 +24,7 @@ namespace CMS_HotelBooking.ViewComponents
             _socialMediaService = socialMediaService;
         }
 
+        // Load footer data for the view
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = new FooterViewModel

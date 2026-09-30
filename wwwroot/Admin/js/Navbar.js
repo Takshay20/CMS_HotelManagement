@@ -1,12 +1,18 @@
 var allNavbarRecords = [];
+
+// Page load: setup and event handlers
 $(document).ready(function () { loadData(); });
 $("#btnAdd").click(function () { clearForm(); $("#drawer").addClass("active"); });
 $("#closeDrawer,#btnCancel").click(function () { $("#drawer").removeClass("active"); });
 
+// Load data
 function loadData() {
+
+    // AJAX call to server
     $.ajax({ url: "/Admin/Navbar/GetAll", type: "GET", success: function (r) { if (r.success) bindTable(r.data); } });
 }
 
+// Bind table
 function bindTable(data) {
     allNavbarRecords = data;
     var html = "";
@@ -22,6 +28,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
     var item = allNavbarRecords.find(function (x) {
         return x.menuMasterId === id;
@@ -35,7 +42,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Edit
 function edit(id) {
+
+    // AJAX call to server
     $.ajax({
         url: "/Admin/Navbar/GetById?id=" + id,
         type: "GET",
@@ -65,6 +75,8 @@ $("#btnSave").click(function () {
         "MenuMaster.Url": $("#Url").val(),
         "MenuMaster.IsActive": $("#IsActive").is(":checked")
     };
+
+    // AJAX call to /Admin/Navbar/Save
     $.ajax({
         url: "/Admin/Navbar/Save",
         type: "POST",
@@ -91,6 +103,7 @@ $("#btnSave").click(function () {
     });
 });
 
+// Delete record
 function deleteRecord(id) {
     Swal.fire({
         title: "Delete Menu Item?",
@@ -99,6 +112,8 @@ function deleteRecord(id) {
         confirmButtonText: "Yes"
     }).then((result) => {
         if (result.isConfirmed) {
+
+            // AJAX call to /Admin/Navbar/Delete
             $.ajax({
                 url: "/Admin/Navbar/Delete",
                 type: "POST",
@@ -126,6 +141,7 @@ $("#txtSearch").keyup(function () {
     });
 });
 
+// Clear form
 function clearForm() {
     $("#Id").val(0);
     $("#Title").val("");
@@ -135,7 +151,7 @@ function clearForm() {
     $("#frmData .field-error").removeClass("show").text("");
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

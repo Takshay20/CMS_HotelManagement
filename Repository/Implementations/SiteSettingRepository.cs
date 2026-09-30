@@ -9,12 +9,14 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public SiteSettingRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get site setting record
         public async Task<SiteSetting?> GetAsync()
         {
             using var connection = GetConnection();
             return await connection.QueryFirstOrDefaultAsync<SiteSetting>("sp_GetSiteSetting", commandType: CommandType.StoredProcedure);
         }
 
+        // Save site setting record
         public async Task<int> SaveAsync(SiteSetting model)
         {
             using var connection = GetConnection();

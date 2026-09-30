@@ -51,6 +51,7 @@ namespace CMS_HotelBooking.Controllers
             _aboutCtaService = aboutCtaService;
         }
 
+        // Open about page
         public async Task<IActionResult> Index()
         {
             var model = new AboutViewModel

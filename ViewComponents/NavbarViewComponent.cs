@@ -21,6 +21,7 @@ namespace CMS_HotelBooking.ViewComponents
             _menuMasterService = menuMasterService;
         }
 
+        // Load navbar data for the view
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = new NavbarViewModel

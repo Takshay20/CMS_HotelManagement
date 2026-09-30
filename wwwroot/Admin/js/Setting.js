@@ -1,3 +1,4 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
@@ -12,7 +13,10 @@ $("#LogoFile").change(function () {
     }
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/SiteSetting/Get
     $.ajax({
         url: "/Admin/SiteSetting/Get",
         type: "GET",
@@ -39,6 +43,7 @@ $("#btnSave").click(function () {
     ]);
     if (!ok) return;
 
+    // Prepare form data for upload
     var formData = new FormData();
     formData.append("SiteSetting.SiteSettingId", $("#Id").val() || 0);
     formData.append("SiteSetting.SiteName", $("#SiteName").val());
@@ -49,6 +54,7 @@ $("#btnSave").click(function () {
     var logo = $("#LogoFile")[0].files[0];
     if (logo) formData.append("LogoFile", logo);
 
+    // AJAX call to /Admin/SiteSetting/Save
     $.ajax({
         url: "/Admin/SiteSetting/Save",
         type: "POST",

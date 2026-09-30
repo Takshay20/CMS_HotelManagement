@@ -13,11 +13,13 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get home welcome record
         public async Task<HomeWelcome?> GetAsync()
         {
             return await _repository.GetAsync();
         }
 
+        // Update home welcome record
         public async Task<int> UpdateAsync(HomeWelcome model)
         {
             return await _repository.UpdateAsync(model);

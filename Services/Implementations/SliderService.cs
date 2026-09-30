@@ -13,21 +13,25 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get all slider records
         public async Task<List<Slider>> GetAllAsync(string? pageKey = null)
         {
             return await _repository.GetAllAsync(pageKey);
         }
 
+        // Get slider record by id
         public async Task<Slider?> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
         }
 
+        // Save slider record
         public async Task<int> SaveAsync(Slider model)
         {
             return await _repository.SaveAsync(model);
         }
 
+        // Delete slider record
         public async Task<int> DeleteAsync(int id)
         {
             return await _repository.DeleteAsync(id);

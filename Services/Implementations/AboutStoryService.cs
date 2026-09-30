@@ -13,12 +13,16 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get all about story records
         public async Task<List<AboutStory>> GetAllAsync() => await _repository.GetAllAsync();
 
+        // Get about story record by id
         public async Task<AboutStory?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
 
+        // Save about story record
         public async Task<int> SaveAsync(AboutStory model) => await _repository.SaveAsync(model);
 
+        // Delete about story record
         public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
     }
 }

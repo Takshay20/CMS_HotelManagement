@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get by email
         public async Task<Users?> GetByEmailAsync(string email)
         {
             using var connection = GetConnection();
@@ -27,6 +28,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Get user record by id
         public async Task<Users?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -42,6 +44,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Get all user records
         public async Task<List<Users>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -54,6 +57,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Register new user
         public async Task<int> RegisterAsync(
     Users model,
     string role)
@@ -99,6 +103,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Save reset code
         public async Task<int> SaveResetCodeAsync(
     int userId,
     string resetCode,
@@ -119,6 +124,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Verify reset code
         public async Task<bool> VerifyResetCodeAsync(
             int userId,
             string resetCode)
@@ -147,6 +153,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result == 1;
         }
 
+        // Clear reset code
         public async Task<int> ClearResetCodeAsync(
             int userId)
         {
@@ -166,6 +173,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Update password
         public async Task<int> UpdatePasswordAsync(
             int userId,
             string passwordHash)
@@ -191,6 +199,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Toggle active
         public async Task<int> ToggleActiveAsync(int id)
         {
             using var connection = GetConnection();
@@ -205,6 +214,8 @@ namespace CMS_HotelBooking.Repository.Implementations
                 commandType: CommandType.StoredProcedure
             );
         }
+
+        // Delete user record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

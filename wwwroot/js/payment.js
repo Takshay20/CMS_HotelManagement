@@ -55,6 +55,7 @@
                     response
                 );
 
+                // AJAX call to /Payment/VerifyPayment
                 $.ajax({
 
                     url: "/Payment/VerifyPayment",

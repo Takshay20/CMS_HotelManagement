@@ -21,12 +21,14 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _environment = environment;
         }
 
+        // Open slider page
         [HttpGet]
         public IActionResult Slider()
         {
             return View();
         }
 
+        // Get all slider records
         [HttpGet]
         public async Task<IActionResult> GetAll(string? pageKey = null)
         {
@@ -40,6 +42,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Get slider record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -62,6 +65,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Save slider record
         [HttpPost]
         public async Task<IActionResult> Save(SliderVM model)
         {
@@ -175,6 +179,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 )
             );
         }
+
+        // Delete slider record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -197,6 +203,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Upload image and return saved path
         private async Task<string> UploadImage(
             IFormFile file)
         {

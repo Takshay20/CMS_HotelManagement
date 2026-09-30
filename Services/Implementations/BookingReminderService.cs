@@ -17,6 +17,7 @@ namespace CMS_HotelBooking.Services.Implementations
             _emailService = emailService;
         }
 
+        // Process reminders
         public async Task ProcessRemindersAsync()
         {
             var bookings =
@@ -31,7 +32,6 @@ namespace CMS_HotelBooking.Services.Implementations
             {
                 try
                 {
-                    
                     var checkInDateTime =
                         booking.CheckInDate.Date.AddHours(11);
 
@@ -65,13 +65,13 @@ namespace CMS_HotelBooking.Services.Implementations
             }
         }
 
+        // Process reminder
         private async Task ProcessReminderAsync(
             Booking booking,
             DateTime reminderTime,
             string reminderType,
             DateTime now)
         {
-            
             if (now < reminderTime)
                 return;
 

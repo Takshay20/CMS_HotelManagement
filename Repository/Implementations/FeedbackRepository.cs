@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public FeedbackRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all feedback records
         public async Task<List<Feedback>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get approved
         public async Task<List<Feedback>> GetApprovedAsync(int top = 12)
         {
             using var connection = GetConnection();
@@ -25,6 +27,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get feedback record by id
         public async Task<Feedback?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -33,6 +36,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<Feedback>("sp_GetFeedbackById", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Submit feedback form
         public async Task<int> SubmitAsync(Feedback model)
         {
             using var connection = GetConnection();
@@ -46,6 +50,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<int>("sp_SubmitFeedback", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Toggle approval
         public async Task<int> ToggleApprovalAsync(int id)
         {
             using var connection = GetConnection();
@@ -54,6 +59,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<int>("sp_ToggleFeedbackApproval", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Delete feedback record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

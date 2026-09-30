@@ -12,12 +12,15 @@ using Dapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Data;
 
+// Create the web application builder
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+// Register database connection factory
 builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
 
+// Register repositories
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IHomeWelcomeRepository, HomeWelcomeRepository>();
 builder.Services.AddScoped<IHomeWhyChooseUsRepository, HomeWhyChooseUsRepository>();
@@ -45,6 +48,7 @@ builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IRestoreRecordsRepository, RestoreRecordsRepository>();
 
+// Register services, email and payment settings
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IHomeWelcomeService, HomeWelcomeService>();
 builder.Services.AddScoped<IHomeWhyChooseUsService, HomeWhyChooseUsService>();
@@ -61,6 +65,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IBookingReminderService, BookingReminderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
+// Register background worker for booking reminders
 builder.Services.AddHostedService<BookingReminderWorker>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<IContactMessageService, ContactMessageService>();
@@ -75,8 +80,11 @@ builder.Services.AddScoped<IAboutCounterService, AboutCounterService>();
 builder.Services.AddScoped<IAboutCtaService, AboutCtaService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IRestoreRecordsService, RestoreRecordsService>();
+
+// Register restore restriction filter
 builder.Services.AddScoped<RestoreRestrictionFilter>();
 
+// Cookie login and authorization setup
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -90,8 +98,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 
+// Build the app
 var app = builder.Build();
 
+// Create default admin user if none exists
 using (var scope = app.Services.CreateScope())
 {
     try
@@ -116,17 +126,18 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        
         Console.WriteLine("Admin seed check skipped: " + ex.Message);
     }
 }
 
+// Error handling for production
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
+// Middleware pipeline
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -135,6 +146,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Routes: Admin area first, then default route
 app.MapControllerRoute(
     name: "Admin",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Dashboard}/{id?}");
@@ -143,4 +155,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Start the application
 app.Run();

@@ -1,4 +1,6 @@
 var allSocialMediaRecords = [];
+
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
@@ -10,7 +12,10 @@ $("#closeDrawer,#btnCancel").click(function () {
     $("#drawer").removeClass("active");
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/SocialMedia/GetAll
     $.ajax({
         url: "/Admin/SocialMedia/GetAll",
         type: "GET",
@@ -20,6 +25,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
     allSocialMediaRecords = data;
     var html = "";
@@ -36,6 +42,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
     var item = allSocialMediaRecords.find(function (x) { return x.socialMediaId === id; });
     if (!item) return;
@@ -48,7 +55,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Edit
 function edit(id) {
+
+    // AJAX call to server
     $.ajax({
         url: "/Admin/SocialMedia/GetById?id=" + id,
         type: "GET",
@@ -80,6 +90,8 @@ $("#btnSave").click(function () {
         "SocialMedia.Url": $("#Url").val(),
         "SocialMedia.IsActive": $("#IsActive").is(":checked")
     };
+
+    // AJAX call to /Admin/SocialMedia/Save
     $.ajax({
         url: "/Admin/SocialMedia/Save",
         type: "POST",
@@ -106,6 +118,7 @@ $("#btnSave").click(function () {
     });
 });
 
+// Delete record
 function deleteRecord(id) {
     Swal.fire({
         title: "Delete Record?",
@@ -114,6 +127,8 @@ function deleteRecord(id) {
         confirmButtonText: "Yes"
     }).then((result) => {
         if (result.isConfirmed) {
+
+            // AJAX call to /Admin/SocialMedia/Delete
             $.ajax({
                 url: "/Admin/SocialMedia/Delete",
                 type: "POST",
@@ -141,6 +156,7 @@ $("#txtSearch").keyup(function () {
     });
 });
 
+// Clear form
 function clearForm() {
     $("#Id").val(0);
     $("#PlatformName").val("");
@@ -151,7 +167,7 @@ function clearForm() {
     $("#frmData .field-error").removeClass("show").text("");
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

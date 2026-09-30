@@ -1,6 +1,7 @@
 var allAmenities = [];
 var allCategories = [];
 
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     loadFormData();
@@ -75,6 +76,7 @@ $(document).ready(function () {
             checkedAmenities.push($(this).val());
         });
 
+        // Prepare form data for upload
         var formData = new FormData();
 
         formData.append("Room.RoomId", $("#Id").val());
@@ -101,6 +103,7 @@ $(document).ready(function () {
             formData.append("GalleryFiles", galleryFiles[i]);
         }
 
+        // AJAX call to /Admin/Room/Save
         $.ajax({
             url: "/Admin/Room/Save",
             type: "POST",
@@ -151,8 +154,8 @@ $(document).ready(function () {
 });
 
 
+// Load form data
 function loadFormData() {
-
     $.ajax({
         url: "/Admin/Room/GetFormData",
         type: "GET",
@@ -207,8 +210,10 @@ function loadFormData() {
 }
 
 
+// Load data
 function loadData() {
 
+    // AJAX call to /Admin/Room/GetAll
     $.ajax({
         url: "/Admin/Room/GetAll",
         type: "GET",
@@ -223,6 +228,7 @@ function loadData() {
 }
 
 
+// Bind table
 function bindTable(data) {
 
     var html = "";
@@ -293,8 +299,10 @@ function bindTable(data) {
 }
 
 
+// View details
 function viewDetails(id) {
 
+    // AJAX call to server
     $.ajax({
         url: "/Admin/Room/GetById?id=" + id,
         type: "GET",
@@ -398,8 +406,10 @@ function viewDetails(id) {
 }
 
 
+// Edit
 function edit(id) {
 
+    // AJAX call to server
     $.ajax({
         url: "/Admin/Room/GetById?id=" + id,
         type: "GET",
@@ -470,6 +480,7 @@ function edit(id) {
 }
 
 
+// Delete record
 function deleteRecord(id) {
 
     Swal.fire({
@@ -490,6 +501,7 @@ function deleteRecord(id) {
             return;
         }
 
+        // AJAX call to /Admin/Room/Delete
         $.ajax({
 
             url: "/Admin/Room/Delete",
@@ -524,6 +536,7 @@ function deleteRecord(id) {
 }
 
 
+// Clear form
 function clearForm() {
 
     $("#Id").val(0);
@@ -563,7 +576,7 @@ function clearForm() {
         .prop("checked", false);
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

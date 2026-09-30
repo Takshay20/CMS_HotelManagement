@@ -18,6 +18,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
             _environment = environment;
         }
+
+        // About story
         [HttpGet]
         public async Task<IActionResult> AboutStory()
         {
@@ -31,6 +33,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             }
             return View(model);
         }
+
+        // Update about story record
         [HttpPost]
         public async Task<IActionResult> Update(AboutStoryVM model)
         {
@@ -66,6 +70,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 message = "Unable to update Story Content."
             });
         }
+
+        // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
             string folderPath = Path.Combine(

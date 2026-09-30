@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public GalleryRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all gallery records
         public async Task<List<Gallery>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get gallery record by id
         public async Task<Gallery?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -24,6 +26,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<Gallery>("sp_GetGalleryById", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Save gallery record
         public async Task<int> SaveAsync(Gallery model)
         {
             using var connection = GetConnection();
@@ -44,6 +47,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Delete gallery record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

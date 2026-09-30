@@ -19,10 +19,14 @@ namespace CMS_HotelBooking.Services.Implementations
             _emailService = emailService;
             _paymentService = paymentService;
         }
+
+        // Get all booking records
         public async Task<List<Booking>> GetAllAsync() => await _repository.GetAllAsync();
 
+        // Get booking record by id
         public async Task<Booking?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
 
+        // Get by user id
         public async Task<List<Booking>> GetByUserIdAsync(int userId) => await _repository.GetByUserIdAsync(userId);
 
         public async Task<(bool Success, string Message)> CreateAsync(Booking model)
@@ -90,12 +94,14 @@ namespace CMS_HotelBooking.Services.Implementations
             return (result, emailNote);
         }
 
+        // Update status
         public async Task<int> UpdateStatusAsync(int id, string status)
         {
             var (result, _) = await UpdateStatusWithEmailAsync(id, status);
             return result;
         }
 
+        // Delete booking record
         public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
 
         public async Task<(bool Available, string Message)> CheckAvailabilityAsync(int roomId, DateTime checkIn, DateTime checkOut, int? excludeBookingId = null)
@@ -110,6 +116,7 @@ namespace CMS_HotelBooking.Services.Implementations
             return (true, "Room is available for the selected dates.");
         }
 
+        // Get alternative rooms
         public async Task<List<Room>> GetAlternativeRoomsAsync(int bookingId)
         {
             var booking = await _repository.GetByIdAsync(bookingId);
@@ -340,6 +347,7 @@ namespace CMS_HotelBooking.Services.Implementations
             return (true, message, percentage, amount);
         }
 
+        // Note text for email status
         private static string EmailNoteFor(string emailStatus) => emailStatus switch
         {
             "Sent" => " Confirmation email sent to the guest.",

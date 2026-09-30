@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get all home why choose us records
         public async Task<List<HomeWhyChooseUs>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -24,6 +25,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get home why choose us record by id
         public async Task<HomeWhyChooseUs?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -39,6 +41,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Save home why choose us record
         public async Task<int> SaveAsync(HomeWhyChooseUs model)
         {
             using var connection = GetConnection();
@@ -59,6 +62,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Delete home why choose us record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();
@@ -74,6 +78,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Get all records
         public async Task<IEnumerable<HomeWhyChooseUs>> GetAllRecordsAsync(
     string filter)
         {
@@ -94,6 +99,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Restore deleted home why choose us record
         public async Task<int> RestoreAsync(int id)
         {
             using var connection = GetConnection();
@@ -112,6 +118,8 @@ namespace CMS_HotelBooking.Repository.Implementations
                 commandType: CommandType.StoredProcedure
             );
         }
+
+        // Get deleted date
         public async Task<DateTime?> GetDeletedDateAsync(int id)
         {
             using var connection = GetConnection();

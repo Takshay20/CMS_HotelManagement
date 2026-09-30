@@ -1,4 +1,6 @@
 var allGalleryRecords = [];
+
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
@@ -19,7 +21,10 @@ $("#ImageFile").change(function () {
     }
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/Gallery/GetAll
     $.ajax({
         url: "/Admin/Gallery/GetAll",
         type: "GET",
@@ -30,6 +35,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
     allGalleryRecords = data;
     var html = "";
@@ -46,6 +52,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
     var item = allGalleryRecords.find(function (x) {
         return x.galleryId === id;
@@ -60,7 +67,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Edit
 function edit(id) {
+
+    // AJAX call to server
     $.ajax({
         url: "/Admin/Gallery/GetById?id=" + id,
         type: "GET",
@@ -111,6 +121,7 @@ $("#btnSave").click(function () {
         }
     }
 
+    // Prepare form data for upload
     var formData = new FormData();
     formData.append("Gallery.GalleryId", $("#Id").val());
     formData.append("Gallery.Title", $("#Title").val());
@@ -119,6 +130,7 @@ $("#btnSave").click(function () {
     var image = $("#ImageFile")[0].files[0];
     if (image) formData.append("ImageFile", image);
 
+    // AJAX call to /Admin/Gallery/Save
     $.ajax({
         url: "/Admin/Gallery/Save",
         type: "POST",
@@ -147,6 +159,7 @@ $("#btnSave").click(function () {
     });
 });
 
+// Delete record
 function deleteRecord(id) {
 
     Swal.fire({
@@ -162,6 +175,7 @@ function deleteRecord(id) {
             return;
         }
 
+        // AJAX call to /Admin/Gallery/Delete
         $.ajax({
             url: "/Admin/Gallery/Delete",
             type: "POST",
@@ -210,6 +224,7 @@ $("#txtSearch").keyup(function () {
     });
 });
 
+// Clear form
 function clearForm() {
     $("#Id").val(0); $("#Title").val("");
     $("#Category").val("");
@@ -218,7 +233,7 @@ function clearForm() {
     $("#imgPreview").hide();
 }
 
-// Restore Edit
+// Page load: setup and event handlers
 $(function () {
     var editId = new URLSearchParams(window.location.search).get("editId");
     if (editId) {

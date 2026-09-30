@@ -15,11 +15,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open dashboard page
         public IActionResult Dashboard()
         {
             return View();
         }
 
+        // Get counts
         [HttpGet]
         public async Task<IActionResult> GetCounts()
         {
@@ -27,6 +29,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(Models.ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Get reminders
         [HttpGet]
         public async Task<IActionResult> GetReminders()
         {

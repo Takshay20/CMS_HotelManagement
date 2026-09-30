@@ -26,6 +26,7 @@
     var MAX_NIGHTS = 60;
     var isRoomAvailable = false;
 
+    // Get today string
     function getTodayString() {
 
         var today = new Date();
@@ -42,6 +43,7 @@
 
     }
 
+    // Format date
     function formatDate(date) {
 
         var year = date.getFullYear();
@@ -56,12 +58,14 @@
 
     }
 
+    // Is valid date string
     function isValidDateString(value) {
 
         return /^\d{4}-\d{2}-\d{2}$/.test(value || "");
 
     }
 
+    // Set submit enabled
     function setSubmitEnabled(enabled) {
 
         $bookingForm
@@ -70,6 +74,7 @@
 
     }
 
+    // Reset availability
     function resetAvailability() {
 
         isRoomAvailable = false;
@@ -133,6 +138,7 @@
         }
     );
 
+    // Check availability
     function checkAvailability(
         checkInVal,
         checkOutVal
@@ -148,6 +154,7 @@
 
         setSubmitEnabled(false);
 
+        // AJAX call: check availability
         $.ajax({
 
             url: checkAvailabilityUrl,
@@ -218,6 +225,7 @@
 
     }
 
+    // Recalc total
     function recalcTotal() {
 
         var checkInVal =
@@ -350,6 +358,7 @@
                 .prop("disabled", true)
                 .text("Submitting...");
 
+            // AJAX call: create booking
             $.ajax({
 
                 url: createBookingUrl,

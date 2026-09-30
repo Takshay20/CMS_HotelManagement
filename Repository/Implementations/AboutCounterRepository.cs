@@ -11,6 +11,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get all about counter records
         public async Task<List<AboutCounter>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -22,6 +23,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get all records
         public async Task<List<AboutCounter>> GetAllRecordsAsync(string filter)
         {
             using var connection = GetConnection();
@@ -37,6 +39,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get about counter record by id
         public async Task<AboutCounter?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -50,6 +53,7 @@ namespace CMS_HotelBooking.Repository.Implementations
                 commandType: CommandType.StoredProcedure);
         }
 
+        // Save about counter record
         public async Task<int> SaveAsync(AboutCounter model)
         {
             using var connection = GetConnection();
@@ -70,6 +74,7 @@ namespace CMS_HotelBooking.Repository.Implementations
                 commandType: CommandType.StoredProcedure);
         }
 
+        // Delete about counter record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();
@@ -83,6 +88,7 @@ namespace CMS_HotelBooking.Repository.Implementations
                 commandType: CommandType.StoredProcedure);
         }
 
+        // Restore deleted about counter record
         public async Task<int> RestoreAsync(int id)
         {
             using var connection = GetConnection();
@@ -96,6 +102,7 @@ namespace CMS_HotelBooking.Repository.Implementations
                 commandType: CommandType.StoredProcedure);
         }
 
+        // Get deleted date
         public Task<DateTime?> GetDeletedDateAsync(int id)
         {
             throw new NotImplementedException();

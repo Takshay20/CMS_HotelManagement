@@ -18,6 +18,7 @@ namespace CMS_HotelBooking.Controllers
             _emailService = emailService;
         }
 
+        // Send test reminder email
         [HttpGet]
         public async Task<IActionResult> Send(int id = 4)
         {

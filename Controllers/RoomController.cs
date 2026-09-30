@@ -34,6 +34,7 @@ namespace CMS_HotelBooking.Controllers
             _usersService = usersService;
         }
 
+        // Open room page
         public async Task<IActionResult> Index()
         {
             var model = new RoomListViewModel
@@ -45,6 +46,7 @@ namespace CMS_HotelBooking.Controllers
             return View(model);
         }
 
+        // Show room details
         public async Task<IActionResult> Details(int id)
         {
             var room = await _roomService.GetByIdAsync(id);

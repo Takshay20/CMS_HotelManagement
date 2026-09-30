@@ -1,9 +1,14 @@
 var allFeedbackRecords = [];
+
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/Feedback/GetAll
     $.ajax({
         url: "/Admin/Feedback/GetAll",
         type: "GET", success:
@@ -14,6 +19,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
     allFeedbackRecords = data;
     var html = "";
@@ -35,6 +41,7 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View details
 function viewDetails(id) {
     var item = allFeedbackRecords.find(function (x) { return x.feedbackId === id; });
     if (!item) return;
@@ -49,7 +56,10 @@ function viewDetails(id) {
     ]);
 }
 
+// Toggle approval
 function toggleApproval(id) {
+
+    // AJAX call to /Admin/Feedback/ToggleApproval
     $.ajax({
         url: "/Admin/Feedback/ToggleApproval",
         type: "POST", data: { id: id },
@@ -67,6 +77,7 @@ function toggleApproval(id) {
     });
 }
 
+// Delete record
 function deleteRecord(id) {
     Swal.fire({
         title: "Delete Feedback?",
@@ -75,6 +86,8 @@ function deleteRecord(id) {
         confirmButtonText: "Yes"
     }).then((result) => {
         if (result.isConfirmed) {
+
+            // AJAX call to /Admin/Feedback/Delete
             $.ajax({
                 url: "/Admin/Feedback/Delete",
                 type: "POST",

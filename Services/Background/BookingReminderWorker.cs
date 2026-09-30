@@ -15,6 +15,7 @@ namespace CMS_HotelBooking.Services.Background
             _logger = logger;
         }
 
+        // Run reminder check every hour
         protected override async Task ExecuteAsync(
             CancellationToken stoppingToken)
         {
@@ -36,6 +37,7 @@ namespace CMS_HotelBooking.Services.Background
             }
         }
 
+        // Process reminders
         private async Task ProcessRemindersAsync(
             CancellationToken cancellationToken)
         {
@@ -57,7 +59,6 @@ namespace CMS_HotelBooking.Services.Background
             }
             catch (OperationCanceledException)
             {
-                
             }
             catch (Exception ex)
             {

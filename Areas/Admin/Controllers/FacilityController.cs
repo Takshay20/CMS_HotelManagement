@@ -21,12 +21,14 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _environment = environment;
         }
 
+        // Open facility page
         [HttpGet]
         public IActionResult Facility()
         {
             return View();
         }
 
+        // Get all facility records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -40,6 +42,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Get facility record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -62,6 +65,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Save facility record
         [HttpPost]
         public async Task<IActionResult> Save(FacilityVM model)
         {
@@ -170,6 +174,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Delete facility record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -192,6 +197,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Upload image and return saved path
         private async Task<string> UploadImage(
             IFormFile file)
         {

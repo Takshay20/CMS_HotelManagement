@@ -21,12 +21,14 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _environment = environment;
         }
 
+        // Open gallery page
         [HttpGet]
         public IActionResult Gallery()
         {
             return View();
         }
 
+        // Get all gallery records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -40,6 +42,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Get gallery record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -56,6 +59,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             return Json(ResponseModel.SuccessResponse( "Success", result));
         }
+
+        // Save gallery record
         [HttpPost]
         public async Task<IActionResult> Save(GalleryVM model)
         {
@@ -160,6 +165,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Delete gallery record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -182,6 +188,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Upload image and return saved path
         private async Task<string> UploadImage(
             IFormFile file)
         {

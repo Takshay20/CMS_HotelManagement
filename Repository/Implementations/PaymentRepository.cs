@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get by booking id
         public async Task<Payment?> GetByBookingIdAsync(int bookingId)
         {
             using var connection = GetConnection();
@@ -31,6 +32,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Get by order id
         public async Task<Payment?> GetByOrderIdAsync(string orderId)
         {
             using var connection = GetConnection();
@@ -50,6 +52,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Create payment record
         public async Task<int> CreateAsync(Payment payment)
         {
             using var connection = GetConnection();
@@ -113,6 +116,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Update payment order
         public async Task<int> UpdatePaymentOrderAsync(
             int paymentId,
             decimal amount,
@@ -156,6 +160,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Update status
         public async Task<int> UpdateStatusAsync(
             int paymentId,
             string paymentStatus,
@@ -204,6 +209,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Get by payment id
         public async Task<Payment?> GetByPaymentIdAsync(int paymentId)
         {
             using var connection = GetConnection();
@@ -223,6 +229,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Update payment amount
         public async Task<int> UpdatePaymentAmountAsync(
     int paymentId,
     decimal amount)

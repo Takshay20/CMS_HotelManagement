@@ -22,6 +22,7 @@
 
     );
 
+    // Show slide
     function showSlide(index) {
 
         if (total === 0) {
@@ -112,6 +113,7 @@
 
     });
 
+    // Start slider
     function startSlider() {
 
         timer =
@@ -134,6 +136,7 @@
 
     }
 
+    // Restart slider
     function restartSlider() {
 
         clearInterval(timer);

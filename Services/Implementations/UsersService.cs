@@ -16,6 +16,7 @@ namespace CMS_HotelBooking.Services.Implementations
             _emailService = emailService;
         }
 
+        // Get by email
         public async Task<Users?> GetByEmailAsync(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -24,11 +25,13 @@ namespace CMS_HotelBooking.Services.Implementations
             return await _repository.GetByEmailAsync(email.Trim());
         }
 
+        // Get user record by id
         public async Task<Users?> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
         }
 
+        // Get all user records
         public async Task<List<Users>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
@@ -143,16 +146,19 @@ namespace CMS_HotelBooking.Services.Implementations
             );
         }
 
+        // Toggle active
         public async Task<int> ToggleActiveAsync(int id)
         {
             return await _repository.ToggleActiveAsync(id);
         }
 
+        // Delete user record
         public async Task<int> DeleteAsync(int id)
         {
             return await _repository.DeleteAsync(id);
         }
 
+        // Update password
         public async Task<int> UpdatePasswordAsync(
             int userId,
             string passwordHash)

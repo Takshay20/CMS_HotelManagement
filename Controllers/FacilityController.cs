@@ -21,6 +21,7 @@ namespace CMS_HotelBooking.Controllers
             _facilityService = facilityService;
         }
 
+        // Open facility page
         public async Task<IActionResult> Index()
         {
             var model = new FacilityViewModel

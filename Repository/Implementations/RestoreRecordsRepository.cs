@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get records
         public async Task<IEnumerable<RestoreRecord>> GetRecordsAsync(string module, string filter)
         {
             using var connection = GetConnection();
@@ -23,6 +24,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Restore deleted restore record
         public async Task<int> RestoreAsync(string module, int id)
         {
             using var connection = GetConnection();

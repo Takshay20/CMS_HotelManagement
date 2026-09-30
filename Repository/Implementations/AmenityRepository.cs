@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get all amenity records
         public async Task<List<Amenity>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -24,6 +25,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get amenity record by id
         public async Task<Amenity?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -43,6 +45,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Save amenity record
         public async Task<int> SaveAsync(Amenity model)
         {
             using var connection = GetConnection();
@@ -80,6 +83,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Delete amenity record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

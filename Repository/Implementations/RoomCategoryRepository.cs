@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get all room category records
         public async Task<List<RoomCategory>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -24,6 +25,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get room category record by id
         public async Task<RoomCategory?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -43,6 +45,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Save room category record
         public async Task<int> SaveAsync(RoomCategory model)
         {
             using var connection = GetConnection();
@@ -86,6 +89,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             );
         }
 
+        // Delete room category record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();

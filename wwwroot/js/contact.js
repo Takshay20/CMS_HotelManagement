@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+
+    // Phone number field typing
     $("#phoneNumber").on("input", function () {
         this.value = this.value.replace(/[^0-9]/g, "");
         $("#phoneError").text("");
@@ -7,6 +9,8 @@
             "input-error input-valid"
         );
     });
+
+    // Country code field change
     $("#countryCode").on("change", function () {
         var length = parseInt(
             $(this)
@@ -23,24 +27,32 @@
                 "input-error input-valid"
             );
     });
+
+    // Name field typing
     $("#name").on("input", function () {
         $("#nameError").text("");
         $(this).removeClass(
             "input-error input-valid"
         );
     });
+
+    // Email field typing
     $("#email").on("input", function () {
         $("#emailError").text("");
         $(this).removeClass(
             "input-error input-valid"
         );
     });
+
+    // Subject field change
     $("#subject").on("change", function () {
         $("#subjectError").text("");
         $(this).removeClass(
             "input-error input-valid"
         );
     });
+
+    // Contact form form submit
     $("#contactForm").on("submit", function (e) {
         e.preventDefault();
         var isValid = true;
@@ -170,6 +182,8 @@
         $btn
             .prop("disabled", true)
             .text("Sending...");
+
+        // AJAX call to /Contact/Submit
         $.ajax({
             url: "/Contact/Submit",
             type: "POST",

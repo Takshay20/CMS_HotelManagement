@@ -1,4 +1,7 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
+
+    // About cta form form submit
     $("#aboutCtaForm").on("submit", function (e) {
         e.preventDefault();
 
@@ -11,10 +14,13 @@ $(document).ready(function () {
         if (!ok) return;
 
         var form = this;
+
+        // Prepare form data for upload
         var formData = new FormData(form);
         var $btn = $(form).find("button[type='submit']");
         $btn.prop("disabled", true).text("Updating...");
 
+        // AJAX call to /Admin/AboutCta/Update
         $.ajax({
             url: "/Admin/AboutCta/Update",
             type: "POST",

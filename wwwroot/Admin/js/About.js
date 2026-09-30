@@ -1,5 +1,5 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
-
     $("#aboutForm").on("submit", function (e) {
 
         e.preventDefault();
@@ -45,7 +45,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Short Description validation
         if (shortDescription === "") {
 
             $("#err-ShortDescription").text(
@@ -55,7 +54,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Full Description validation
         if (fullDescription === "") {
 
             $("#err-FullDescription").text(
@@ -65,7 +63,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Years of Experience validation
         if (yearsOfExperience === "") {
 
             $("#err-YearsOfExperience").text(
@@ -83,7 +80,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Total Rooms validation
         if (totalRooms === "") {
 
             $("#err-TotalRooms").text(
@@ -101,7 +97,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Happy Guests validation
         if (happyGuests === "") {
 
             $("#err-HappyGuests").text(
@@ -119,7 +114,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Existing image and new image validation
         if (!imageSelected && existingImage.trim() === "") {
 
             $("#err-Image1File").text(
@@ -129,7 +123,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // New image format validation
         if (imageSelected) {
 
             if (!validateImage(imageInput)) {
@@ -137,13 +130,13 @@ $(document).ready(function () {
             }
         }
 
-        // Stop submit if validation fails
         if (!isValid) {
             return;
         }
 
         var form = this;
 
+        // Prepare form data for upload
         var formData = new FormData(form);
 
         var $btn =
@@ -153,7 +146,7 @@ $(document).ready(function () {
             .prop("disabled", true)
             .text("Updating...");
 
-        // AJAX request
+        // AJAX call to /Admin/About/Update
         $.ajax({
 
             url: "/Admin/About/Update",
@@ -226,7 +219,7 @@ $(document).ready(function () {
         });
     });
 
-    // Image format validation
+    // Validate image
     function validateImage(input) {
 
         if (!input.files ||
@@ -262,7 +255,6 @@ $(document).ready(function () {
             "image/jfif"
         ];
 
-        // Extension validation
         if ($.inArray(
             extension,
             allowedExtensions
@@ -277,7 +269,6 @@ $(document).ready(function () {
             return false;
         }
 
-        // MIME type validation
         if (
             file.type !== "" &&
             $.inArray(
@@ -300,7 +291,7 @@ $(document).ready(function () {
         return true;
     }
 
-    // Title input validation
+    // Title field typing
     $("#Title").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -309,7 +300,7 @@ $(document).ready(function () {
         }
     });
 
-    // Sub Title input validation
+    // Sub title field typing
     $("#SubTitle").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -318,7 +309,7 @@ $(document).ready(function () {
         }
     });
 
-    // Short Description input validation
+    // Short description field typing
     $("#ShortDescription").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -327,7 +318,7 @@ $(document).ready(function () {
         }
     });
 
-    // Full Description input validation
+    // Full description field typing
     $("#FullDescription").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -336,7 +327,7 @@ $(document).ready(function () {
         }
     });
 
-    // Years of Experience input validation
+    // Years of experience field typing
     $("#YearsOfExperience").on("input", function () {
 
         var value = $(this).val().trim();
@@ -362,7 +353,7 @@ $(document).ready(function () {
         $("#err-YearsOfExperience").text("");
     });
 
-    // Total Rooms input validation
+    // Total rooms field typing
     $("#TotalRooms").on("input", function () {
 
         var value = $(this).val().trim();
@@ -388,7 +379,7 @@ $(document).ready(function () {
         $("#err-TotalRooms").text("");
     });
 
-    // Happy Guests input validation
+    // Happy guests field typing
     $("#HappyGuests").on("input", function () {
 
         var value = $(this).val().trim();
@@ -414,7 +405,7 @@ $(document).ready(function () {
         $("#err-HappyGuests").text("");
     });
 
-    // Image change validation and preview
+    // Image1 file field change
     $("#Image1File").on("change", function () {
 
         var input = this;

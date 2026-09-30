@@ -5,18 +5,27 @@
     var $moduleDropdown = $("#moduleDropdown");
     var $search = $("#txtModuleSearch");
     window.currentRestoreFilter = "All";
+
     $btnModuleSelect.on("click", function (e) {
         e.stopPropagation();
+
         $moduleDropdown.toggleClass("show");
-        $btnModuleSelect.toggleClass("active", $moduleDropdown.hasClass("show"));
+        $btnModuleSelect.toggleClass(
+            "active",
+            $moduleDropdown.hasClass("show")
+        );
+
         if ($moduleDropdown.hasClass("show")) {
             $search.val("");
             $(".module-option").show();
+
             setTimeout(function () {
                 $search.focus();
             }, 100);
         }
     });
+
+    // Module option click
     $(".module-option").on("click", function (e) {
         e.stopPropagation();
         var value = $(this).data("value");
@@ -41,71 +50,162 @@
             }
         });
     });
+
+    // Close module dropdown on outside click
     $(document).on("click", function (e) {
         if (!$(e.target).closest("#moduleSelect").length) {
             $moduleDropdown.removeClass("show");
             $btnModuleSelect.removeClass("active");
         }
     });
+
+    // Load module
     function loadModule(module) {
         currentModule = module;
         loadRecords();
     }
+
+    // Record search box typing
     $("#recordContainer").on("input", "#txtRecordSearch", function () {
         var value = $(this).val().toLowerCase();
         $("#tblRestoreRecords tbody tr").each(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) !== -1);
         });
     });
+
+    // Record filter dropdown change
     $("#recordContainer").on("change", "#ddlRecordFilter", function () {
         window.currentRestoreFilter = $(this).val();
         loadRecords();
     });
+
+    // Action edit click
     $("#recordContainer").on("click", ".action-edit", function () {
         var controller = restoreModules[currentModule].controller;
         window.location.href = "/Admin/" + controller + "/" + controller + "?editId=" + $(this).data("id");
     });
+
+    // Action delete click
     $("#recordContainer").on("click", ".action-delete", function () {
         confirmAction("Delete Record?", "This record will be moved to deleted records.", "Yes, Delete", "/Admin/" + restoreModules[currentModule].controller + "/Delete", { id: $(this).data("id") });
     });
+
+    // Action restore click
     $("#recordContainer").on("click", ".action-restore", function () {
         var remaining = Math.ceil(($(this).data("ready") - Date.now()) / 1000);
         if (remaining > 0) {
             showRestoreTimer(remaining);
             return;
         }
-        confirmAction("Restore Record?", "This record will be restored.", "Yes, Restore", "/Admin/RestoreRecords/Restore", { module: currentModule, id: $(this).data("id") });
+        confirmAction("Restore Record?", "This record will be restored.", "Yes, Restore", "/Admin/RestoreRecords/Restore", {
+            module: currentModule, id: $(this).data("id")
+        });
     });
 });
-// Module list: controller name is used for Edit and Delete, cols = [column, heading, type]
 var currentModule = "";
 var restoreModules = {
-    // Module: Counter Box
-    CounterBox: { controller: "AboutCounter", cols: [["iconClass", "Icon", "icon"], ["number", "Number"], ["suffix", "Suffix"], ["label", "Label"], ["displayOrder", "Display Order"]] },
-    // Module: Rooms
-    Rooms: { controller: "Room", cols: [["roomNumber", "Room No"], ["title", "Title"], ["pricePerNight", "Price"], ["maxGuests", "Guests"]] },
-    // Module: Why Choose Us
-    WhyChooseUs: { controller: "HomeWhyChooseUs", cols: [["iconClass", "Icon", "icon"], ["title", "Title"], ["description", "Description"], ["displayOrder", "Display Order"]] },
-    // Module: Room Category
-    RoomCategory: { controller: "RoomCategory", cols: [["name", "Name"], ["description", "Description"], ["displayOrder", "Display Order"]] },
-    // Module: Amenity
-    Amenity: { controller: "Amenity", cols: [["iconClass", "Icon", "icon"], ["name", "Name"]] },
-    // Module: Gallery
-    Gallery: { controller: "Gallery", cols: [["imagePath", "Image", "img"], ["title", "Title"], ["category", "Category"], ["displayOrder", "Display Order"]] },
-    // Module: Facility
-    Facility: { controller: "Facility", cols: [["imagePath", "Image", "img"], ["title", "Title"], ["description", "Description"], ["displayOrder", "Display Order"]] },
-    // Module: Slider
-    Slider: { controller: "Slider", cols: [["imagePath", "Image", "img"], ["pageKey", "Page"], ["title", "Title"], ["displayOrder", "Display Order"]] },
-    // Module: Navbar
-    Navbar: { controller: "Navbar", cols: [["title", "Title"], ["url", "Url"], ["displayOrder", "Display Order"]] },
-    // Module: Social Media
-    SocialMedia: { controller: "SocialMedia", cols: [["iconClass", "Icon", "icon"], ["platformName", "Platform"], ["url", "Url"], ["displayOrder", "Display Order"]] }
+    CounterBox: {
+        controller: "AboutCounter", 
+        cols: [
+            ["iconClass", "Icon", "icon"],
+            ["number", "Number"],
+            ["suffix", "Suffix"],
+            ["label", "Label"],
+            ["displayOrder", "Display Order"]
+        ]
+    },
+    Rooms: {
+        controller: "Room",
+        cols: [
+            ["roomNumber", "Room No"],
+            ["title", "Title"],
+            ["pricePerNight", "Price"],
+            ["maxGuests", "Guests"]
+        ]
+    },
+    WhyChooseUs: {
+        controller: "HomeWhyChooseUs",
+        cols: [
+            ["iconClass", "Icon", "icon"],
+            ["title", "Title"],
+            ["description", "Description"],
+            ["displayOrder", "Display Order"]
+        ]
+    },
+    RoomCategory: {
+        controller: "RoomCategory",
+        cols: [
+            ["name", "Name"],
+            ["description", "Description"],
+            ["displayOrder", "Display Order"]
+        ]
+    },
+    Amenity: {
+        controller: "Amenity",
+        cols: [
+            ["iconClass", "Icon", "icon"],
+            ["name", "Name"]
+        ]
+    },
+    Gallery: {
+        controller: "Gallery",
+        cols: [
+            ["imagePath", "Image", "img"],
+            ["title", "Title"],
+            ["category", "Category"],
+            ["displayOrder", "Display Order"]
+        ]
+    },
+    Facility: {
+        controller: "Facility",
+        cols: [
+            ["imagePath", "Image", "img"],
+            ["title", "Title"],
+            ["description", "Description"],
+            ["displayOrder", "Display Order"]
+        ]
+    },
+    Slider: {
+        controller: "Slider",
+        cols: [
+            ["imagePath", "Image", "img"],
+            ["pageKey", "Page"],
+            ["title", "Title"],
+            ["displayOrder", "Display Order"]
+        ]
+    },
+    Navbar: {
+        controller: "Navbar",
+        cols: [
+            ["title", "Title"],
+            ["url", "Url"],
+            ["displayOrder", "Display Order"]
+        ]
+    },
+    SocialMedia: {
+        controller: "SocialMedia",
+        cols: [
+            ["iconClass", "Icon", "icon"],
+            ["platformName", "Platform"],
+            ["url", "Url"],
+            ["displayOrder", "Display Order"]
+        ]
+    }
 };
+
+// Esc
 function esc(value) {
     return $("<div>").text(value == null ? "" : value).html();
 }
+
+// Load records
 function loadRecords() {
-    $.get("/Admin/RestoreRecords/GetRecords", { module: currentModule, filter: window.currentRestoreFilter }, function (response) {
+    $.get("/Admin/RestoreRecords/GetRecords",
+        {
+            module: currentModule,
+            filter: window.currentRestoreFilter
+        },
+        function (response) {
         if (!response.success) {
             $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
             return;
@@ -144,24 +244,46 @@ function loadRecords() {
         $("#recordContainer").html("<div class='table-container'><p style='padding:20px;'>Unable to load records.</p></div>");
     });
 }
+
+// Confirm action
 function confirmAction(title, text, buttonText, url, data) {
-    Swal.fire({ title: title, text: text, icon: "question", showCancelButton: true, confirmButtonText: buttonText }).then(function (result) {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: buttonText
+    }).then(function (result) {
         if (!result.isConfirmed) return;
         $.post(url, data, function (response) {
-            Swal.fire({ icon: response.success ? "success" : "error", title: response.success ? "Done" : "Error", text: response.message }).then(function () {
+            Swal.fire({
+                icon: response.success ? "success" : "error",
+                title: response.success ? "Done" : "Error",
+                text: response.message
+            }).then(function () {
                 if (response.success) loadRecords();
             });
         }).fail(function () {
-            Swal.fire({ icon: "error", title: "Error", text: "Something went wrong." });
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong."
+            });
         });
     });
 }
+
+// Show restore timer
 function showRestoreTimer(remaining) {
     var endTime = Date.now() + remaining * 1000;
     var timerInterval;
+
+    // Left
     function left() {
         var s = Math.max(Math.ceil((endTime - Date.now()) / 1000), 0);
-        return [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60].map(function (n) { return String(n).padStart(2, "0"); }).join(":");
+        return [Math.floor(s / 3600), Math.floor(s % 3600 / 60), s % 60].map(function (n) {
+            return String(n).padStart(2, "0");
+        }).join(":");
     }
     Swal.fire({
         icon: "error",

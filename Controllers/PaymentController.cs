@@ -22,6 +22,7 @@ namespace CMS_HotelBooking.Controllers
             _razorpaySettings = razorpayOptions.Value;
         }
 
+        // Open payment page
         [HttpGet]
         public async Task<IActionResult> Pay(int id)
         {
@@ -88,6 +89,7 @@ namespace CMS_HotelBooking.Controllers
             return View(result.Payment);
         }
 
+        // Show payment details
         [HttpGet]
         public async Task<IActionResult> Details(
             int bookingId)
@@ -108,6 +110,8 @@ namespace CMS_HotelBooking.Controllers
 
             return View(payment);
         }
+
+        // Verify payment
         [HttpPost]
         public async Task<IActionResult> VerifyPayment(
     string razorpay_payment_id,

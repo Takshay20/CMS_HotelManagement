@@ -1,3 +1,4 @@
+// Page load: setup and event handlers
 $(function () {
     if ($(".drawer-backdrop").length === 0) {
         $("body").append('<div class="drawer-backdrop"></div>');
@@ -22,6 +23,7 @@ $(function () {
         $drawer.removeClass("active");
     });
 
+    // Keydown event handler
     $(document).on("keydown", function (e) {
         if (e.key === "Escape" && $drawer.hasClass("active")) {
             $drawer.removeClass("active");
@@ -29,6 +31,7 @@ $(function () {
     });
 });
 
+// Validate form
 function validateForm(fields) {
     var firstInvalid = null;
     var anyInvalid = false;
@@ -89,11 +92,13 @@ function validateForm(fields) {
     return true;
 }
 
+// Input field typing
 $(document).on("input change", "#frmData input, #frmData select, #frmData textarea", function () {
     $(this).removeClass("invalid");
     $("#err-" + this.id).removeClass("show").text("");
 });
 
+// Show details
 function showDetails(title, rows) {
     var html = "<div class='text-left'>";
     rows.forEach(function (r) {

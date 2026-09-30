@@ -15,12 +15,14 @@ namespace CMS_HotelBooking.Controllers
             _contactMessageService = contactMessageService;
         }
 
+        // Open index page
         public IActionResult Index()
         {
             return View();
         }
 
-    
+
+        // Submit contact form
         [HttpPost]
         public async Task<IActionResult> Submit(ContactVM model)
         {
@@ -70,11 +72,13 @@ namespace CMS_HotelBooking.Controllers
             });
         }
 
+        // Open track message page
         public IActionResult TrackMessage()
         {
             return View(new List<ContactMessage>());
         }
 
+        // Submit track message form
         [HttpPost]
         public async Task<IActionResult> TrackMessage(string email)
         {

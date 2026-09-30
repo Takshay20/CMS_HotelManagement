@@ -1,5 +1,7 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
 
+    // About story form form submit
     $("#aboutStoryForm").on("submit", function (e) {
 
         e.preventDefault();
@@ -24,7 +26,6 @@ $(document).ready(function () {
         var existingImage =
             $("input[name='AboutStory.ImagePath']").val() || "";
 
-        // Heading validation
         if (heading === "") {
 
             $("#err-Heading").text(
@@ -34,7 +35,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Sub Heading validation
         if (subHeading === "") {
 
             $("#err-SubHeading").text(
@@ -44,7 +44,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Description validation
         if (description === "") {
 
             $("#err-Description").text(
@@ -54,7 +53,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Image validation
         if (!imageSelected &&
             existingImage.trim() === "") {
 
@@ -65,7 +63,6 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // New image validation
         if (imageSelected) {
 
             if (!validateImage(imageInput)) {
@@ -73,13 +70,13 @@ $(document).ready(function () {
             }
         }
 
-        // Stop submission if validation fails
         if (!isValid) {
             return;
         }
 
         var form = this;
 
+        // Prepare form data for upload
         var formData = new FormData(form);
 
         var $btn =
@@ -89,7 +86,7 @@ $(document).ready(function () {
             .prop("disabled", true)
             .text("Updating...");
 
-        // AJAX request
+        // AJAX call to /Admin/AboutStory/Update
         $.ajax({
 
             url: "/Admin/AboutStory/Update",
@@ -162,7 +159,7 @@ $(document).ready(function () {
         });
     });
 
-    // Image validation
+    // Validate image
     function validateImage(input) {
 
         if (!input.files ||
@@ -198,7 +195,6 @@ $(document).ready(function () {
             "image/jfif"
         ];
 
-        // Extension validation
         if ($.inArray(
             extension,
             allowedExtensions
@@ -213,7 +209,6 @@ $(document).ready(function () {
             return false;
         }
 
-        // MIME type validation
         if (
             file.type !== "" &&
             $.inArray(
@@ -236,7 +231,7 @@ $(document).ready(function () {
         return true;
     }
 
-    // Heading validation while typing
+    // Heading field typing
     $("#Heading").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -245,7 +240,7 @@ $(document).ready(function () {
         }
     });
 
-    // Sub Heading validation while typing
+    // Sub heading field typing
     $("#SubHeading").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -254,7 +249,7 @@ $(document).ready(function () {
         }
     });
 
-    // Description validation while typing
+    // Description field typing
     $("#Description").on("input", function () {
 
         if ($(this).val().trim() !== "") {
@@ -263,7 +258,7 @@ $(document).ready(function () {
         }
     });
 
-    // Image change validation and preview
+    // Image file field change
     $("#ImageFile").on("change", function () {
 
         var input = this;

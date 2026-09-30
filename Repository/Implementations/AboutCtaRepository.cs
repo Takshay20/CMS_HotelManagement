@@ -12,6 +12,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
         }
 
+        // Get all about cta records
         public async Task<List<AboutCta>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -24,6 +25,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get about cta record by id
         public async Task<AboutCta?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -36,6 +38,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.FirstOrDefault(x => x.AboutCtaId == id);
         }
 
+        // Save about cta record
         public async Task<int> SaveAsync(AboutCta model)
         {
             using var connection = GetConnection();
@@ -58,6 +61,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result;
         }
 
+        // Delete about cta record
         public async Task<int> DeleteAsync(int id)
         {
             return 0;

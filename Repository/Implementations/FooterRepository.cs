@@ -9,12 +9,14 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public FooterRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get footer record
         public async Task<Footer?> GetAsync()
         {
             using var connection = GetConnection();
             return await connection.QueryFirstOrDefaultAsync<Footer>("sp_GetFooter", commandType: CommandType.StoredProcedure);
         }
 
+        // Save footer record
         public async Task<int> SaveAsync(Footer model)
         {
             using var connection = GetConnection();

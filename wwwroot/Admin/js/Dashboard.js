@@ -1,8 +1,13 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadCounts();
     loadReminders();
 });
+
+// Load counts
 function loadCounts() {
+
+    // AJAX call to /Admin/Dashboard/GetCounts
     $.ajax({
         url: "/Admin/Dashboard/GetCounts",
         type: "GET",
@@ -14,6 +19,8 @@ function loadCounts() {
         }
     });
 }
+
+// Card
 function card(icon, label, value, cls, url) {
     return "<a href='" + url + "' class='dashCard " + cls + "'>" +
         "<div class='icon'>" + icon + "</div>" +
@@ -21,6 +28,8 @@ function card(icon, label, value, cls, url) {
         "<div class='label'>" + label + "</div>" +
         "</a>";
 }
+
+// Bind cards
 function bindCards(data) {
     var html = "";
     html += card("🛏", "Total Rooms", data.totalRooms, "card-rooms", "/Admin/Room/Room");
@@ -36,7 +45,11 @@ function bindCards(data) {
     html += card("🧳", "Check-outs Today", data.todayCheckOuts, "card-checkout", "/Admin/Booking/Booking?status=Approved");
     $("#dashGrid").html(html);
 }
+
+// Load reminders
 function loadReminders() {
+
+    // AJAX call to /Admin/Dashboard/GetReminders
     $.ajax({
         url: "/Admin/Dashboard/GetReminders",
         type: "GET",
@@ -48,6 +61,8 @@ function loadReminders() {
         }
     });
 }
+
+// Bind reminder list
 function bindReminderList(containerId, list, dateField, label) {
     if (!list || list.length === 0) {
         $(containerId).html(

@@ -1,3 +1,4 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
 
     var slides = $(".rp-cinema-slide");
@@ -44,6 +45,7 @@ $(document).ready(function () {
         $("#rpThumbnails").append(thumb);
     });
 
+    // Show slide
     function showSlide(index) {
 
         if (index >= totalSlides) {
@@ -79,6 +81,7 @@ $(document).ready(function () {
         currentSlide = index;
     }
 
+    // Stop slider
     function stopSlider() {
 
         if (sliderTimer !== null) {
@@ -88,6 +91,7 @@ $(document).ready(function () {
         }
     }
 
+    // Start slider
     function startSlider() {
 
         stopSlider();
@@ -105,12 +109,14 @@ $(document).ready(function () {
         }, 5000);
     }
 
+    // Restart slider
     function restartSlider() {
 
         stopSlider();
         startSlider();
     }
 
+    // Slider next button click
     $("#rpNext").on("click", function () {
 
         showSlide(
@@ -120,6 +126,7 @@ $(document).ready(function () {
         restartSlider();
     });
 
+    // Slider previous button click
     $("#rpPrev").on("click", function () {
 
         showSlide(
@@ -206,6 +213,7 @@ $(document).ready(function () {
     var galleryItems = $(".rp-gallery-item");
     var lightboxIndex = 0;
 
+    // Open lightbox
     function openLightbox(index) {
 
         if (galleryItems.length === 0) {
@@ -251,6 +259,7 @@ $(document).ready(function () {
         lightboxIndex = index;
     }
 
+    // Close lightbox
     function closeLightbox() {
 
         $("#rpLightbox").removeClass(

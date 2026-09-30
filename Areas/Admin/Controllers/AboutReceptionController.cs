@@ -18,6 +18,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
             _environment = environment;
         }
+
+        // About reception
         [HttpGet]
         public async Task<IActionResult> AboutReception()
         {
@@ -31,6 +33,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             }
             return View(model);
         }
+
+        // Update about reception record
         [HttpPost]
         public async Task<IActionResult> Update(AboutReceptionVM model)
         {
@@ -59,6 +63,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             }
             return Json(new { success = false, message = "Unable to update Reception Content." });
         }
+
+        // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
             string folderPath = Path.Combine(_environment.WebRootPath, "uploads", "about");

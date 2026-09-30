@@ -13,14 +13,19 @@ namespace CMS_HotelBooking.Services.Implementations
             _repository = repository;
         }
 
+        // Get all menu master records
         public async Task<List<MenuMaster>> GetAllAsync() => await _repository.GetAllAsync();
 
+        // Get active
         public async Task<List<MenuMaster>> GetActiveAsync() => await _repository.GetActiveAsync();
 
+        // Get menu master record by id
         public async Task<MenuMaster?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
 
+        // Save menu master record
         public async Task<int> SaveAsync(MenuMaster model) => await _repository.SaveAsync(model);
 
+        // Delete menu master record
         public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
     }
 }

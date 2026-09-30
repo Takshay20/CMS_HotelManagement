@@ -253,6 +253,7 @@ namespace CMS_HotelBooking.Services.Implementations
             }
         }
 
+        // Get by booking id
         public async Task<Payment?> GetByBookingIdAsync(
             int bookingId)
         {
@@ -426,6 +427,7 @@ namespace CMS_HotelBooking.Services.Implementations
             }
         }
 
+        // Get payment by id
         private async Task<Payment?> GetPaymentByIdAsync(
             int paymentId)
         {

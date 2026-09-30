@@ -18,17 +18,20 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open home why choose us page
         public IActionResult HomeWhyChooseUs()
         {
             return View();
         }
 
+        // Open all records page
         [HttpGet]
         public IActionResult AllRecords()
         {
             return View();
         }
 
+        // Get all home why choose us records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -39,6 +42,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Get home why choose us record by id
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
@@ -56,6 +60,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Save home why choose us record
         [HttpPost]
         public async Task<IActionResult> Save(HomeWhyChooseUsVM model)
         {
@@ -109,6 +114,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             );
         }
 
+        // Delete home why choose us record
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -129,6 +135,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 )
             );
         }
+
+        // Get all records
         [HttpGet]
         public async Task<IActionResult> GetAllRecords(string filter = "All")
         {
@@ -141,6 +149,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                 )
             );
         }
+
+        // Restore deleted home why choose us record
         [ServiceFilter(typeof(RestoreRestrictionFilter))]
         [HttpPost]
         public async Task<IActionResult> Restore(int id)

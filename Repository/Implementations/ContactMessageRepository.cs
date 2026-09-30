@@ -9,6 +9,7 @@ namespace CMS_HotelBooking.Repository.Implementations
     {
         public ContactMessageRepository(IConfiguration configuration) : base(configuration) { }
 
+        // Get all contact message records
         public async Task<List<ContactMessage>> GetAllAsync()
         {
             using var connection = GetConnection();
@@ -16,6 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return result.ToList();
         }
 
+        // Get contact message record by id
         public async Task<ContactMessage?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
@@ -24,6 +26,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.QueryFirstOrDefaultAsync<ContactMessage>("sp_GetContactMessageById", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Submit contact message form
         public async Task<int> SubmitAsync(ContactMessage model)
         {
             using var connection = GetConnection();
@@ -45,6 +48,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return Convert.ToInt32(result);
         }
 
+        // Delete contact message record
         public async Task<int> DeleteAsync(int id)
         {
             using var connection = GetConnection();
@@ -53,6 +57,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.ExecuteAsync("sp_DeleteContactMessage", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Save admin reply
         public async Task<int> ReplyAsync(int id, string adminReply)
         {
             using var connection = GetConnection();
@@ -62,6 +67,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             return await connection.ExecuteAsync("sp_ReplyToContactMessage", parameter, commandType: CommandType.StoredProcedure);
         }
 
+        // Get by email
         public async Task<List<ContactMessage>> GetByEmailAsync(string email)
         {
             using var connection = GetConnection();

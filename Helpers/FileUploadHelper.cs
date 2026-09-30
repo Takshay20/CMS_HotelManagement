@@ -7,6 +7,7 @@ namespace CMS_HotelBooking.Helpers
 {
     public static class FileUploadHelper
     {
+        // Save uploaded file and return path
         public static async Task<string> SaveAsync(IFormFile file, IWebHostEnvironment environment, string subFolder)
         {
             string folderPath = Path.Combine(environment.WebRootPath, "uploads", subFolder);

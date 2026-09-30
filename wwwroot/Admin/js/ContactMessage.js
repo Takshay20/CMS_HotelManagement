@@ -1,3 +1,4 @@
+// Page load: setup and event handlers
 $(document).ready(function () {
     loadData();
 });
@@ -5,7 +6,10 @@ $("#closeDrawer,#btnCancel").click(function () {
     $("#drawer").removeClass("active");
 });
 
+// Load data
 function loadData() {
+
+    // AJAX call to /Admin/ContactMessage/GetAll
     $.ajax({
         url: "/Admin/ContactMessage/GetAll",
         type: "GET", success: function (r) {
@@ -14,6 +18,7 @@ function loadData() {
     });
 }
 
+// Bind table
 function bindTable(data) {
     var html = "";
     $.each(data, function (i, item) {
@@ -33,7 +38,10 @@ function bindTable(data) {
     $("#tblData tbody").html(html);
 }
 
+// View message
 function viewMessage(id) {
+
+    // AJAX call to server
     $.ajax({
         url: "/Admin/ContactMessage/GetById?id=" + id,
         type: "GET",
@@ -72,6 +80,7 @@ $("#btnSave").click(function () {
     ]);
     if (!ok) return;
 
+    // AJAX call to /Admin/ContactMessage/Reply
     $.ajax({
         url: "/Admin/ContactMessage/Reply",
         type: "POST",
@@ -99,9 +108,12 @@ $("#btnSave").click(function () {
     });
 });
 
+// Delete record
 function deleteRecord(id) {
     Swal.fire({ title: "Delete Message?", icon: "warning", showCancelButton: true, confirmButtonText: "Yes" }).then((result) => {
         if (result.isConfirmed) {
+
+            // AJAX call to server
             $.ajax({ url: "/Admin/ContactMessage/Delete", type: "POST", data: { id: id }, success: function (r) { if (r.success) { Swal.fire({ icon: 'success', title: r.message, timer: 1500, showConfirmButton: false }); loadData(); } } });
         }
     });

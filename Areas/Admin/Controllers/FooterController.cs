@@ -17,11 +17,13 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             _service = service;
         }
 
+        // Open footer page
         public IActionResult Footer()
         {
             return View();
         }
 
+        // Get footer record
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -29,6 +31,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
+        // Save footer record
         [HttpPost]
         public async Task<IActionResult> Save(FooterVM model)
         {

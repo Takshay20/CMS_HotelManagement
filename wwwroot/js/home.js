@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
 
+    // Feedback form form submit
     $("#feedbackForm").on("submit", function (e) {
         e.preventDefault();
 
@@ -64,11 +65,13 @@
             return;
         }
 
+        // Prepare form data for upload
         var formData = new FormData(this);
         var $btn = $form.find("button[type='submit']");
 
         $btn.prop("disabled", true).text("Submitting...");
 
+        // AJAX call to server
         $.ajax({
             url: '@Url.Action("SubmitFeedback", "Home")',
             type: "POST",
