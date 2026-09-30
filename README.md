@@ -1,25 +1,35 @@
 # Royal Paradise Hotel — Dynamic Hotel Booking CMS
 
-A fully dynamic **ASP.NET Core MVC (.NET 8)** hotel booking website with a custom **Admin CMS Panel**,
-built with **Dapper + SQL Server**, **jQuery/AJAX**, and **Repository + Service** architecture.
+A dynamic **ASP.NET Core MVC (.NET 8)** hotel booking website with a custom **Admin CMS Panel**, built with
+**Dapper + SQL Server**, **jQuery/AJAX** and a **Controller → Service → Repository → Stored Procedure** architecture.
 
-Converted from a static HTML/CSS site into a complete content-managed system: every section of every
-public page (sliders, About content, "Why Choose Us", Rooms, Gallery, Facilities, Navbar, Footer, Social
-links, Site settings) is editable from the Admin Panel — no code changes needed to update content.
+Every section of the public site (sliders, About content, Why Choose Us, Rooms, Gallery, Facilities, Navbar, Footer,
+Social links, Site settings) is editable from the Admin Panel. Guests can register, book a room, pay online with
+Razorpay, cancel with an automatic refund calculation and receive email notifications and reminders.
+
+**Contents:** [Tech stack](#1-tech-stack) · [Structure](#2-project-structure) · [Setup](#3-database-setup) ·
+[Run](#4-running-the-project) · [Architecture flow](#5-architecture-and-request-flow) ·
+[Auth flow](#6-authentication-flow) · [Booking flow](#7-booking-flow) · [Payment flow](#8-payment-flow) ·
+[Cancel & refund](#9-cancellation-and-refund-flow) · [Room change](#10-room-change-flow) ·
+[Reminders](#11-reminder-flow) · [Admin modules](#12-admin-modules) · [Slider order](#13-slider-display-order-flow) ·
+[Restore Records](#14-restore-records-flow) · [Notes](#15-notes-and-known-simplifications)
 
 ---
 
 ## 1. Tech Stack
 
-| Layer            | Technology                                   |
-|-------------------|-----------------------------------------------|
-| Framework          | ASP.NET Core MVC (.NET 8)                     |
-| Data Access        | Dapper (micro-ORM) + Stored Procedures        |
-| Database            | Microsoft SQL Server                          |
-| Frontend            | Razor Views, jQuery, AJAX, Bootstrap (admin)  |
-| Auth                 | Cookie Authentication (Role claim: Admin / Customer) |
-| Alerts (Admin)       | SweetAlert2                                   |
-| Password Hashing     | PBKDF2 (Rfc2898DeriveBytes) — no external package needed |
+| Layer          | Technology                                               |
+|----------------|----------------------------------------------------------|
+| Framework      | ASP.NET Core MVC (.NET 8)                                |
+| Data access    | Dapper + Stored Procedures (`Microsoft.Data.SqlClient`)  |
+| Database       | Microsoft SQL Server                                     |
+| Frontend       | Razor Views, jQuery, AJAX                                |
+| Auth           | Cookie authentication (Role claim: `Admin` / `Customer`) |
+| Payments       | Razorpay (order + signature verification)                |
+| Email          | SMTP (`EmailSettings`)                                   |
+| Background job | `BookingReminderWorker` (hosted service)                 |
+| Alerts (Admin) | SweetAlert2                                              |
+| Passwords      | PBKDF2 (`Rfc2898DeriveBytes`)                            |
 
 ---
 
@@ -27,67 +37,50 @@ links, Site settings) is editable from the Admin Panel — no code changes neede
 
 ```
 CMS_HotelBooking/
-│
-├── Areas/Admin/                  # Admin CMS panel (Area)
-│   ├── Controllers/              # 18 controllers - one per module (AJAX JSON endpoints)
-│   ├── Views/                    # Drawer + Table UI per module
-│   │   └── Shared/               # _AdminLayout, _Slidebar, _Header, _Footer
-│   └── Views/_ViewStart.cshtml   # Sets default Admin layout
-│
-├── Controllers/                  # Public site controllers (Home, About, Room, Gallery,
-│                                  #   Contact, Booking, Account)
-├── Data/                         # IDbConnectionFactory (SqlConnection factory)
-├── Helpers/                      # PasswordHelper (PBKDF2), FileUploadHelper
-├── Models/                       # POCOs mapped 1:1 with SQL tables
-├── ViewModels/                   # Form-binding + upload wrapper models
-├── Repository/
-│   ├── BaseRepository.cs         # Shared SqlConnection creation
-│   ├── Interfaces/                # One interface per module
-│   └── Implementations/           # Dapper + stored-procedure calls
-├── Services/
-│   ├── Interfaces/
-│   └── Implementations/           # Thin business layer over Repositories
-├── ViewComponents/                # NavbarViewComponent, FooterViewComponent
-│                                   #  (render dynamic navbar/footer on every page)
-├── Views/                         # Public site Razor views
-│   ├── Home, About, Room, Gallery, Contact, Account, Booking
-│   └── Shared/_Layout.cshtml, Shared/Components/{Navbar,Footer}/Default.cshtml
+├── Areas/Admin/
+│   ├── Controllers/        # One controller per admin module (JSON endpoints)
+│   └── Views/              # Table + drawer UI per module, Shared/ layout and sidebar
+├── Controllers/            # Public site: Home, About, Room, Gallery, Contact, Booking, Account, Payment
+├── Data/                   # IDbConnectionFactory
+├── Filters/                # RestoreRestrictionFilter (not used by Restore Records any more)
+├── Helpers/                # PasswordHelper, FileUploadHelper, EmailSettings, RefundPolicyHelper
+├── Models/                 # POCOs mapped to SQL tables (+ RestoreRecord, ResponseModel)
+├── ViewModels/
+├── Repository/             # BaseRepository + Interfaces/ + Implementations/  (Dapper + SPs)
+├── Services/               # Interfaces/ + Implementations/ + Background/BookingReminderWorker
+├── ViewComponents/         # Navbar and Footer components
+├── Views/                  # Public Razor views (Home, About, Room, Gallery, Contact, Account, Booking, Payment)
 ├── wwwroot/
-│   ├── css/site.css, js/site.js   # ORIGINAL static-site CSS/JS - untouched
-│   ├── images/                    # Original site images (used as seed-data paths)
-│   ├── uploads/                   # Admin-uploaded images land here (rooms, gallery, slider...)
-│   └── Admin/css/, Admin/js/      # Admin panel styling + one JS file per module
-├── SQL/
-│   ├── 01_Schema.sql
-│   ├── 02_StoredProcedures.sql
-│   ├── 03_StoredProcedures_Room.sql
-│   ├── 04_StoredProcedures_Content.sql
-│   ├── 05_StoredProcedures_SiteConfig.sql
-│   └── 06_SeedData.sql
-├── Program.cs                     # DI registration, auth, admin auto-seed, routing
-└── appsettings.json                # Connection string lives here
+│   ├── css, js, images     # Original static-site assets
+│   ├── uploads/            # Admin-uploaded images
+│   └── Admin/css, Admin/js # Admin styling + one JS file per module
+├── Program.cs              # DI registration, auth, admin auto-seed, background worker
+└── appsettings.json        # Connection string, EmailSettings, Razorpay
 ```
 
 ---
 
 ## 3. Database Setup
 
-1. Open **SQL Server Management Studio** (or Azure Data Studio) connected to your local SQL Server.
-2. Run the scripts **in this exact order** from the `SQL/` folder:
-   1. `01_Schema.sql` - creates the `RoyalParadiseHotelDb` database and all 18 tables
-   2. `02_StoredProcedures.sql`
-   3. `03_StoredProcedures_Room.sql`
-   4. `04_StoredProcedures_Content.sql`
-   5. `05_StoredProcedures_SiteConfig.sql`
-   6. `06_SeedData.sql` - inserts starter content (rooms, categories, sliders, facilities, gallery, etc.) using the images already bundled in `wwwroot/images`
-
-3. Open `appsettings.json` and update the connection string if your SQL Server instance name / credentials are different:
+1. In SQL Server Management Studio run **`script.sql`** (tables and stored procedures).
+2. Run **`RestoreRecords_AllInOne.sql`** on the same database. It is safe to run more than once and does five things:
+   1. adds `DeletedDate` to Room, RoomCategory, Amenity, Gallery, Facility, Slider, MenuMaster and SocialMedia,
+   2. re-numbers Slider `DisplayOrder` as 1, 2, 3 inside every page,
+   3. re-creates the 8 `sp_Delete*` procedures (soft delete + delete time, with `TRY/CATCH` and transaction),
+   4. creates `sp_GetRestoreRecords`,
+   5. creates `sp_RestoreRecord`.
+3. Update `appsettings.json`:
 
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=.;Database=RoyalParadiseHotelDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
-}
+  "DefaultConnection": "Server=.;Database=<YourDb>;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
+},
+"EmailSettings": { "SmtpHost": "", "SmtpPort": 587, "EnableSsl": true, "SenderEmail": "", "SenderPassword": "", "SenderName": "", "IsEnabled": false },
+"Razorpay": { "KeyId": "", "KeySecret": "", "Currency": "INR" }
 ```
+
+> Never commit real SMTP passwords or Razorpay secrets. Use User Secrets or environment variables.
+> With `EmailSettings.IsEnabled = false` no mail is sent.
 
 ---
 
@@ -99,68 +92,244 @@ dotnet restore
 dotnet run
 ```
 
-The first time the app starts, it automatically creates a default **Admin** login (if no Admin user
-exists yet) - no manual SQL insert needed for this:
+On first start the app creates a default Admin user if none exists.
 
+| Role     | Email                          | Password  |
+|----------|--------------------------------|-----------|
+| Admin    | admin@royalparadise.com        | Admin@123 |
+| Customer | register at `/Account/Register` | —        |
+
+Admin panel: `/Admin/Dashboard/Dashboard`. Change the default password before production.
+Registration always creates a Customer; there is no public way to create an Admin.
+
+---
+
+## 5. Architecture and Request Flow
+
+Every feature uses the same layers. A controller never talks to the database directly.
+
+```mermaid
+flowchart LR
+    B[Browser / jQuery AJAX] --> C[Controller]
+    C --> S[Service]
+    S --> R[Repository - Dapper]
+    R --> P[(Stored Procedure - SQL Server)]
+    P --> R --> S --> C -->|ResponseModel JSON| B
 ```
-Admin Panel URL : /Admin/Dashboard/Dashboard  (or click "Admin Panel" after logging in)
-Email           : admin@royalparadise.com
-Password        : Admin@123
+
+Typical admin module (e.g. Amenity):
+
+1. Page `/Admin/Amenity/Amenity` loads the Razor view; `Amenity.js` calls `GetAll` with `$.ajax`.
+2. **Add / Edit** opens the slide-out drawer. `Save` posts the form (with image upload through `FileUploadHelper`).
+3. The controller validates, calls the service, the service calls the repository, the repository runs the stored procedure.
+4. The controller returns `ResponseModel { success, message, data }` and SweetAlert2 shows the result.
+5. **Delete** is a *soft delete* (`IsDeleted = 1`); nothing is removed from the table.
+
+**Dynamic navbar and footer:** `NavbarViewComponent` and `FooterViewComponent` read the Navbar, Footer, Social Media and
+Site Setting tables and render on every public page, so admin changes show up everywhere without touching views.
+
+---
+
+## 6. Authentication Flow
+
+```mermaid
+flowchart TD
+    A[Register /Account/Register] -->|Customer role, PBKDF2 hash| B[Login /Account/Login]
+    B -->|valid| C{Role?}
+    C -->|Admin| D[/Admin/Dashboard/Dashboard/]
+    C -->|Customer| E[Home page]
+    B -->|invalid| B
+    F[Forgot password] -->|email| G[6-digit code mailed, valid 10 min]
+    G --> H[Verify code and set new password]
 ```
 
-> Change this password from the database (or add an admin "change password" screen) before using this
-> in production.
-
-Customer registration is available at `/Account/Register` - registration always creates a **Customer**
-role account; there is no public way to self-register as Admin (per the requirement).
+- A cookie is issued with `NameIdentifier`, `Email` and `Role` claims. Admin controllers use `[Authorize(Roles = "Admin")]`.
+- Booking and Payment controllers use `[Authorize]`; a guest is redirected to `/Account/Login`.
+- Wrong role -> `/Account/AccessDenied`.
 
 ---
 
-## 5. How the CMS Works
+## 7. Booking Flow
 
-- **One cookie scheme, two roles.** `Users` table has a `Role` column (`Admin` / `Customer`). After
-  login, Admins are redirected to `/Admin/Dashboard/Dashboard`; Customers go to the homepage.
-- **Every Admin module** (Sliders, Rooms, Gallery, Facilities, Why-Choose-Us, Navbar, Footer, Social
-  Media, Site Settings, About page, Feedback approval, Contact messages, Bookings, Users) follows the
-  same pattern:
-  - A Razor view with a table + a slide-out "drawer" form (`Areas/Admin/Views/{Module}/{Module}.cshtml`)
-  - A matching `wwwroot/Admin/js/{Module}.js` file doing all CRUD via **jQuery `$.ajax`**
-  - A controller action group: `GetAll`, `GetById`, `Save`, `Delete` returning JSON (`ResponseModel`)
-- **Sliders** are page-scoped via a `PageKey` column (`Home`, `Room`, `About`, `Gallery`, `Contact`) -
-  the admin can add/remove slides per page independently, exactly as requested.
-- **Rooms** support a cover image, multiple gallery images (room-detail-page slider), and a checklist of
-  Amenities (master list managed in its own "Amenity" module) - all without touching Room's original CSS.
-- **Bookings** are created by logged-in customers from a room's detail page and start in `Pending`
-  status; only the Admin's Booking screen can mark them `Approved`/`Rejected`, per the requirement that
-  all bookings need admin approval.
-- **Guest Feedback** submitted from the Home page starts as unapproved and only shows in the
-  testimonials section once an Admin approves it.
-- **Navbar and Footer** are rendered through `NavbarViewComponent` / `FooterViewComponent` so the same
-  dynamic markup renders on every page without duplicating queries in every controller - fully editable
-  from Admin -> Navbar / Footer / Social Media / Site Setting, with the original CSS/JS completely
-  untouched.
+Statuses: **Pending -> Approved / Rejected -> Cancelled**.
 
----
+```mermaid
+flowchart TD
+    A[Guest opens room detail] --> B[Select dates]
+    B --> C[CheckAvailability]
+    C -->|conflict| B
+    C -->|free| D[Create booking - status Pending]
+    D --> E[Email: booking received]
+    D --> F[Admin Booking screen]
+    F -->|Approve| G[Approved - email to guest]
+    F -->|Reject| H[Rejected - email to guest]
+    G --> I[Guest pays online - see Payment flow]
+```
 
-## 6. Known Simplifications (documented intentionally)
+Rules in `BookingService.CreateAsync`:
+- check-out must be after check-in, maximum **60 nights**;
+- the room must exist and be `IsAvailable`;
+- the room must have no overlapping booking for those dates;
+- `TotalPrice = nights x PricePerNight`;
+- a confirmation email is sent and its status is stored on the booking.
 
-Given the size of the original static site, a couple of pragmatic simplifications were made so the CMS
-stays maintainable:
-
-- The About page's many static sub-sections (Story / Luxury / Reception / CTA blocks) keep their
-  original static copy; only the sections that map to real content types (hero slider, welcome text,
-  facilities, why-choose-us, counters) are wired to the database. These can be turned into their own
-  CMS modules later using the exact same Repository/Service/Controller/View/JS pattern used everywhere
-  else in this project.
-- Room `Amenities` are stored as a comma-separated list of `AmenityId`s on the `Room` row (rather than a
-  many-to-many join table) to keep the admin form simple - this is easy to normalize into a join table
-  later if needed.
+Only an Admin can approve or reject. Admin can also see payment details and use the **Booking Calendar** view.
 
 ---
 
-## 7. Credentials Recap
+## 8. Payment Flow
 
-| Role      | Email                        | Password   |
-|-----------|-------------------------------|------------|
-| Admin     | admin@royalparadise.com        | Admin@123  |
-| Customer  | *(register your own at `/Account/Register`)* | -- |
+Only an **Approved** booking of the logged-in guest can be paid.
+
+```mermaid
+sequenceDiagram
+    participant G as Guest
+    participant S as Server
+    participant R as Razorpay
+    G->>S: GET /Payment/Pay/{bookingId}
+    S->>S: check status = Approved, owner = guest, not already Paid
+    S->>R: create order
+    S-->>G: Pay page with order id and key
+    G->>R: pay in Razorpay checkout
+    R-->>G: payment id, order id, signature
+    G->>S: POST /Payment/VerifyPayment
+    S->>S: verify signature
+    S->>S: Payment = Paid, Booking.PaymentStatus = Paid
+    S-->>G: redirect to My Bookings
+```
+
+Payment statuses: `Pending`, `Paid`, `Failed`, `Refunded`. An already paid booking cannot be paid again.
+
+---
+
+## 9. Cancellation and Refund Flow
+
+A guest can cancel from **My Bookings** unless the booking is already `Cancelled` or `Rejected`.
+
+| Time before check-in | Refund |
+|----------------------|--------|
+| 48 hours or more     | 100%   |
+| 24 to 48 hours       | 50%    |
+| under 24 hours       | 0%     |
+
+```mermaid
+flowchart LR
+    A[Guest clicks Cancel] --> B[RefundPolicyHelper.Calculate]
+    B --> C[CancelWithRefund - status Cancelled, refund % and amount saved]
+    C --> D[Email: booking cancelled]
+    D --> E[Message shows refund policy text]
+```
+
+Admin can also set a booking to `Cancelled`, which sends the same cancellation email.
+
+---
+
+## 10. Room Change Flow
+
+Used when the booked room cannot be given to the guest.
+
+```mermaid
+flowchart TD
+    A[Admin opens booking] --> B[Load alternative rooms - same category, free on the same dates]
+    B --> C[Propose room change with note]
+    C --> D[Send room change email]
+    D --> E{Guest responds on My Bookings}
+    E -->|Accept| F[Booking moves to new room, payment amount updated to new price]
+    E -->|Decline| G[Booking cancelled, cancellation email]
+```
+
+The proposed room must be in the **same category**, and must have **no conflict** for the booking dates.
+Only a `Pending` room-change request can be answered.
+
+---
+
+## 11. Reminder Flow
+
+`BookingReminderWorker` starts with the app, runs once immediately and then **every hour**.
+`BookingReminderService` sends a reminder email at **24 hours, 12 hours and 6 hours** before check-in
+(check-in time is taken as 11:00 on the check-in date). Each reminder type is stored in `BookingReminder`
+and is sent only once; a failed email is logged and tried again at the next hourly run inside the same hour window.
+
+---
+
+## 12. Admin Modules
+
+Dashboard, Home (Welcome, Why Choose Us), About (Page, Story, Reception, CTA, Counter Box), Room, Room Category,
+Amenity, Gallery, Facility, Slider, Booking, Booking Calendar, Feedback, Contact Messages, Navbar, Footer,
+Social Media, Site Setting, Users, Restore Records.
+
+Most modules follow one pattern: a Razor view (table + drawer form), `wwwroot/Admin/js/{Module}.js` doing CRUD with
+`$.ajax`, and a controller with `GetAll`, `GetById`, `Save`, `Delete` returning `ResponseModel` JSON.
+
+- **Rooms:** cover image, gallery images, and amenities kept as a comma-separated `AmenityIds` list.
+- **Guest feedback:** saved as unapproved; it appears in the site testimonials only after an Admin approves it.
+- **Contact messages:** submitted from the Contact page and read in the Admin panel.
+
+---
+
+## 13. Slider Display Order Flow
+
+Sliders belong to a page (`PageKey`: Home, Room, About, Gallery, Contact). `DisplayOrder` runs **1, 2, 3 ...
+separately inside each page**.
+
+- **Add:** the new slider gets `max(order of that page) + 1`. The form does not send an order.
+- **Edit:** the order stays the same. If the slider is moved to another page it gets the next number of that page.
+- **Delete:** `sp_DeleteSlider` re-numbers the remaining sliders of that page, so there is no gap.
+- **Restore:** `sp_RestoreRecord` re-numbers again, so the restored slider is placed in sequence.
+
+---
+
+## 14. Restore Records Flow
+
+Admin -> **Restore Records** lists only **Inactive** and **Deleted** records (filter: All / Inactive / Deleted) for
+10 modules: Counter Box, Rooms, Why Choose Us, Room Category, Amenity, Gallery, Facility, Slider, Navbar, Social Media.
+
+| Record state | Actions (icon buttons)                              |
+|--------------|-----------------------------------------------------|
+| Inactive     | **Edit** (opens that module's edit drawer), **Delete** |
+| Deleted      | **Restore** only                                    |
+
+```mermaid
+flowchart TD
+    A[Pick a module in the dropdown] --> B[GET GetRecords?module=&filter=]
+    B --> C[RestoreRecordsService -> Repository -> sp_GetRestoreRecords]
+    C --> D[Table: Inactive rows and Deleted rows]
+    D -->|Inactive: Edit| E[Open module page with ?editId= and its edit drawer opens]
+    D -->|Inactive: Delete| F[Module Delete action - soft delete, DeletedDate saved]
+    F --> D
+    D -->|Deleted: Restore| G{Deleted more than 1 hour ago?}
+    G -->|No| H[Pop-up with live countdown HH:MM:SS]
+    G -->|Yes| I[POST Restore -> sp_RestoreRecord]
+    I --> J[IsDeleted = 0, DeletedDate = NULL, table reloads]
+```
+
+**1-hour lock**
+- `sp_GetRestoreRecords` returns `RemainingSeconds` for every deleted row (calculated on the SQL Server clock).
+- The Restore button shows the countdown pop-up while `RemainingSeconds > 0`.
+- `sp_RestoreRecord` checks the same rule, so the lock cannot be skipped from the browser. If it is still locked it returns `0`
+  and the message *"This record can be restored only after 1 hour."* is shown.
+- Records deleted before `DeletedDate` existed have no delete time and can be restored immediately.
+
+**Side effects on restore**
+- Rooms: its images are restored too.
+- Counter Box, Why Choose Us and Slider: `DisplayOrder` is re-sequenced.
+
+**Files:** `RestoreRecordsController`, `IRestoreRecordsService` / `RestoreRecordsService`,
+`IRestoreRecordsRepository` / `RestoreRecordsRepository`, `Models/RestoreRecord.cs`, `sp_GetRestoreRecords`,
+`sp_RestoreRecord`, `Areas/Admin/Views/RestoreRecords/RestoreRecords.cshtml`, `wwwroot/Admin/js/RestoreRecords.js`.
+
+**Adding another module**
+1. Add the `DeletedDate` column and a delete procedure that saves `DeletedDate = GETDATE()`.
+2. In `RestoreRecords_AllInOne.sql` add a `-- Module: <name>` block to `sp_GetRestoreRecords` and to `sp_RestoreRecord`.
+3. Add an entry to `restoreModules` in `RestoreRecords.js` (controller name and columns) and an option in the dropdown of `RestoreRecords.cshtml`.
+4. If the module needs a column that `Models/RestoreRecord.cs` does not have, add it there.
+5. The module's page must open its edit drawer for `?editId=` (this is handled once for every page in `AdminLayout.js`, it only needs a global `edit(id)` function).
+
+---
+
+## 15. Notes and Known Simplifications
+
+- Room amenities are stored as a comma-separated list on the `Room` row instead of a join table.
+- Restore Records covers the 10 modules above only; Booking, Users, Feedback and Contact Messages have no restore.
+- `Filters/RestoreRestrictionFilter.cs` is left from an earlier version and is not used by Restore Records; it can be removed together with its line in `Program.cs`.
+- Change the default Admin password and keep SMTP / Razorpay secrets out of source control.
