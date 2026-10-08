@@ -12,7 +12,7 @@ namespace CMS_HotelBooking.Services.Implementations
         {
             _repository = repository;
         }
-
+          
         // Get counts
         public async Task<DashboardCounts> GetCountsAsync() => await _repository.GetCountsAsync();
 

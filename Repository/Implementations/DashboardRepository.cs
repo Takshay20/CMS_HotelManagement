@@ -1,4 +1,4 @@
-using CMS_HotelBooking.Models;
+  using CMS_HotelBooking.Models;
 using CMS_HotelBooking.Repository.Interfaces;
 using Dapper;
 using System.Data;
