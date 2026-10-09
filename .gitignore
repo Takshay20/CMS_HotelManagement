@@ -28,3 +28,12 @@ publish/
 
 # NuGet
 packages/
+
+
+# Local secrets
+.env
+.env.*
+
+# Local development settings (only if it contains secrets)
+# Uncomment the next line if you want to ignore this file
+# appsettings.Development.json
