@@ -7,6 +7,5 @@ namespace CMS_HotelBooking.Services.Interfaces
         Task<List<AboutCta>> GetAllAsync();
         Task<AboutCta?> GetByIdAsync(int id);
         Task<int> SaveAsync(AboutCta model);
-        Task<int> DeleteAsync(int id);
     }
 }

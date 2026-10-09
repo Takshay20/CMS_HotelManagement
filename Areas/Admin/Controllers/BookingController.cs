@@ -31,12 +31,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.GetAllAsync();
 
-            return Json(
-                ResponseModel.SuccessResponse(
-                    "Success",
-                    result
-                )
-            );
+            return Json(ResponseModel.SuccessResponse("Success",result));
         }
 
         // Get booking record by id
@@ -47,44 +42,24 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (result == null)
             {
-                return Json(
-                    ResponseModel.ErrorResponse(
-                        "Record not found."
-                    )
-                );
+                return Json(ResponseModel.ErrorResponse("Record not found."));
             }
 
-            return Json(
-                ResponseModel.SuccessResponse(
-                    "Success",
-                    result
-                )
-            );
+            return Json(ResponseModel.SuccessResponse("Success",result));
         }
 
         // Update status
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int bookingId,string status)
         {
-            var (result, emailNote) = await _service.UpdateStatusWithEmailAsync(
-                    bookingId,
-                    status
-                );
+            var (result, emailNote) = await _service.UpdateStatusWithEmailAsync(bookingId,status);
 
             if (result > 0)
             {
-                return Json(
-                        ResponseModel.SuccessResponse(
-                        $"Booking marked as {status}.{emailNote}"
-                    )
-                );
+                return Json(ResponseModel.SuccessResponse($"Booking marked as {status}.{emailNote}" ));
             }
 
-            return Json(
-                ResponseModel.ErrorResponse(
-                    "Unable To Update Booking"
-                )
-            );
+            return Json(ResponseModel.ErrorResponse("Unable To Update Booking"));
         }
 
         // Delete booking record
@@ -95,103 +70,48 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (result > 0)
             {
-                return Json(
-                    ResponseModel.SuccessResponse(
-                        "Record Deleted Successfully."
-                    )
-                );
+                return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
             }
 
-            return Json(
-                ResponseModel.ErrorResponse(
-                    "Unable To Delete Record"
-                )
-            );
+            return Json(ResponseModel.ErrorResponse("Unable To Delete Record" ));
         }
 
         // Get alternative rooms
         [HttpGet]
-        public async Task<IActionResult> GetAlternativeRooms(
-            int bookingId)
+        public async Task<IActionResult> GetAlternativeRooms(int bookingId)
         {
-            var rooms =
-                await _service.GetAlternativeRoomsAsync(
-                    bookingId
-                );
+            var rooms = await _service.GetAlternativeRoomsAsync(bookingId);
 
-            return Json(
-                ResponseModel.SuccessResponse(
-                    "Success",
-                    rooms
-                )
-            );
+            return Json(ResponseModel.SuccessResponse("Success", rooms));
         }
 
         // Propose room change
         [HttpPost]
-        public async Task<IActionResult> ProposeRoomChange(
-            int bookingId,
-            int proposedRoomId,
-            string? note)
+        public async Task<IActionResult> ProposeRoomChange( int bookingId, int proposedRoomId,string? note)
         {
-            var (success, message) =
-                await _service.ProposeRoomChangeAsync(
-                    bookingId,
-                    proposedRoomId,
-                    note
-                );
+            var (success, message) = await _service.ProposeRoomChangeAsync(bookingId, proposedRoomId,note);
 
-            return success
-                ? Json(
-                    ResponseModel.SuccessResponse(
-                        message
-                    )
-                )
-                : Json(
-                    ResponseModel.ErrorResponse(
-                        message
-                    )
-                );
+            return success ? Json( ResponseModel.SuccessResponse(message)) : Json(ResponseModel.ErrorResponse(message));
         }
 
         // Send room change email
         [HttpPost]
-        public async Task<IActionResult> SendRoomChangeEmail(
-            int bookingId)
+        public async Task<IActionResult> SendRoomChangeEmail(int bookingId)
         {
-            var (success, message) =
-                await _service.SendRoomChangeEmailAsync(
-                    bookingId
-                );
+            var (success, message) = await _service.SendRoomChangeEmailAsync(bookingId);
 
-            return success
-                ? Json(
-                    ResponseModel.SuccessResponse(
-                        message
-                    )
-                )
-                : Json(
-                    ResponseModel.ErrorResponse(
-                        message
-                    )
-                );
+            return success? Json(ResponseModel.SuccessResponse( message)) : Json(ResponseModel.ErrorResponse( message));
         }
 
         // Show booking details
         [HttpGet]
-        public async Task<IActionResult> Details(
-            int bookingId)
+        public async Task<IActionResult> Details(int bookingId)
         {
-            var payment =
-                await _paymentService.GetByBookingIdAsync(
-                    bookingId
-                );
+            var payment = await _paymentService.GetByBookingIdAsync(bookingId);
 
             if (payment == null)
             {
-                return Content(
-                    "<div style='padding:20px;text-align:center;color:#dc2626;'>Payment details not found.</div>"
-                );
+                return Content("<div style='padding:20px;text-align:center;color:#dc2626;'>Payment details not found.</div>");
             }
 
             return PartialView("Details",payment);
@@ -199,13 +119,9 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
         // Get payment details
         [HttpGet]
-        public async Task<IActionResult> GetPaymentDetails(
-            int bookingId)
+        public async Task<IActionResult> GetPaymentDetails(int bookingId)
         {
-            var payment =
-                await _paymentService.GetByBookingIdAsync(
-                    bookingId
-                );
+            var payment = await _paymentService.GetByBookingIdAsync(bookingId);
 
             if (payment == null)
             {

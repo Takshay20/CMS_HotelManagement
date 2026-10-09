@@ -48,7 +48,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             if (model.SocialMedia == null)
                 return Json(ResponseModel.ErrorResponse("Invalid Data"));
 
-                        if (model.SocialMedia.SocialMediaId == 0)
+            if (model.SocialMedia.SocialMediaId == 0)
             {
                 var existingRecords = await _service.GetAllAsync();
                 model.SocialMedia.DisplayOrder = existingRecords.Count > 0 ? existingRecords.Max(x => x.DisplayOrder) + 1 : 1;
@@ -76,7 +76,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.DeleteAsync(id);
             if (result > 0)
-                return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
+            return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
             return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
     }

@@ -50,12 +50,7 @@ namespace CMS_HotelBooking.Controllers
         [HttpGet]
         public async Task<IActionResult> CheckAvailability(int roomId,DateTime checkIn,DateTime checkOut)
         {
-            var (available, message) =
-                await _bookingService.CheckAvailabilityAsync(
-                    roomId,
-                    checkIn,
-                    checkOut
-                );
+            var (available, message) = await _bookingService.CheckAvailabilityAsync(roomId,checkIn, checkOut);
 
             return Json(new { available, message });
         }
@@ -83,49 +78,26 @@ namespace CMS_HotelBooking.Controllers
                 SpecialRequest = model.SpecialRequest
             };
 
-            var (success, message) =
-                await _bookingService.CreateAsync(booking);
+            var (success, message) = await _bookingService.CreateAsync(booking);
 
-            return success
-                ? Json(ResponseModel.SuccessResponse(message))
-                : Json(ResponseModel.ErrorResponse(message));
+            return success ? Json(ResponseModel.SuccessResponse(message)) : Json(ResponseModel.ErrorResponse(message));
         }
 
         // Cancel booking
         [HttpPost]
         public async Task<IActionResult> Cancel(int id)
         {
-            var userId = int.Parse(
-                User.FindFirstValue(ClaimTypes.NameIdentifier)!
-            );
-
-            var (success, message, refundPercentage, refundAmount) =
-                await _bookingService.CancelByGuestAsync(id, userId);
-
-            return success
-                ? Json(ResponseModel.SuccessResponse(
-                    message,
-                    new { refundPercentage, refundAmount }))
-                : Json(ResponseModel.ErrorResponse(message));
+            var userId = int.Parse( User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var (success, message, refundPercentage, refundAmount) = await _bookingService.CancelByGuestAsync(id, userId);
+            return success ? Json(ResponseModel.SuccessResponse(message, new { refundPercentage, refundAmount })) : Json(ResponseModel.ErrorResponse(message));
         }
 
         // Respond room change
         [HttpPost]
-        public async Task<IActionResult> RespondRoomChange(
-            int id,
-            bool accept)
+        public async Task<IActionResult> RespondRoomChange(int id,bool accept)
         {
-            var userId = int.Parse(
-                User.FindFirstValue(ClaimTypes.NameIdentifier)!
-            );
-
-            var (success, message) =
-                await _bookingService.RespondRoomChangeAsync(
-                    id,
-                    userId,
-                    accept
-                );
-
+            var userId = int.Parse( User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var (success, message) = await _bookingService.RespondRoomChangeAsync(id,userId,accept);
             return success
                 ? Json(ResponseModel.SuccessResponse(message))
                 : Json(ResponseModel.ErrorResponse(message));

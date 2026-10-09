@@ -17,10 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<Amenity>(
-                "sp_GetAllAmenity",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<Amenity>( "sp_GetAllAmenity",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
@@ -32,17 +29,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameter = new DynamicParameters();
 
-            parameter.Add(
-                "@AmenityId",
-                id,
-                DbType.Int32
-            );
+            parameter.Add("@AmenityId",id,DbType.Int32);
 
-            return await connection.QueryFirstOrDefaultAsync<Amenity>(
-                "sp_GetAmenityById",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<Amenity>("sp_GetAmenityById",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Save amenity record
@@ -52,35 +41,12 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameter = new DynamicParameters();
 
-            parameter.Add(
-                "@AmenityId",
-                model.AmenityId,
-                DbType.Int32
-            );
+            parameter.Add("@AmenityId",model.AmenityId,DbType.Int32);
+            parameter.Add("@Name",model.Name,DbType.String);
+            parameter.Add("@IconClass", model.IconClass,DbType.String);
+            parameter.Add("@IsActive",model.IsActive,DbType.Boolean);
 
-            parameter.Add(
-                "@Name",
-                model.Name,
-                DbType.String
-            );
-
-            parameter.Add(
-                "@IconClass",
-                model.IconClass,
-                DbType.String
-            );
-
-            parameter.Add(
-                "@IsActive",
-                model.IsActive,
-                DbType.Boolean
-            );
-
-            return await connection.QuerySingleAsync<int>(
-                "sp_SaveAmenity",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>("sp_SaveAmenity",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Delete amenity record
@@ -90,17 +56,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameter = new DynamicParameters();
 
-            parameter.Add(
-                "@AmenityId",
-                id,
-                DbType.Int32
-            );
+            parameter.Add("@AmenityId",id,DbType.Int32);
 
-            return await connection.QuerySingleAsync<int>(
-                "sp_DeleteAmenity",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>("sp_DeleteAmenity",parameter,commandType: CommandType.StoredProcedure);
         }
     }
 }

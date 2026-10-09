@@ -13,9 +13,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         private readonly ISliderService _service;
         private readonly IWebHostEnvironment _environment;
 
-        public SliderController(
-            ISliderService service,
-            IWebHostEnvironment environment)
+        public SliderController(ISliderService service,IWebHostEnvironment environment)
         {
             _service = service;
             _environment = environment;
@@ -35,11 +33,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _service.GetAllAsync(pageKey);
 
             return Json(
-                ResponseModel.SuccessResponse(
-                    "Success",
-                    result
-                )
-            );
+                ResponseModel.SuccessResponse("Success",result));
         }
 
         // Get slider record by id
@@ -50,19 +44,10 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (result == null)
             {
-                return Json(
-                    ResponseModel.ErrorResponse(
-                        "Record not found."
-                    )
-                );
+                return Json(ResponseModel.ErrorResponse("Record not found."));
             }
 
-            return Json(
-                ResponseModel.SuccessResponse(
-                    "Success",
-                    result
-                )
-            );
+            return Json(ResponseModel.SuccessResponse("Success",result));
         }
 
         // Save slider record
@@ -71,26 +56,17 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             if (model.Slider == null)
             {
-                return Json(
-                    ResponseModel.ErrorResponse(
-                        "Invalid data."
-                    )
-                );
+                return Json(ResponseModel.ErrorResponse("Invalid data."));
             }
 
             if (model.Slider.SliderId == 0)
             {
                 if (model.ImageFile == null)
                 {
-                    return Json(
-                        ResponseModel.ErrorResponse(
-                            "Slider image is required."
-                        )
-                    );
+                    return Json(ResponseModel.ErrorResponse("Slider image is required."));
                 }
 
-                model.Slider.ImagePath =
-                    await UploadImage(model.ImageFile);
+                model.Slider.ImagePath = await UploadImage(model.ImageFile);
 
                 var records = await _service.GetAllAsync(model.Slider.PageKey);
 
@@ -99,52 +75,31 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
                         ? records.Max(x => x.DisplayOrder) + 1
                         : 1;
 
-                var result =
-                    await _service.SaveAsync(
-                        model.Slider
-                    );
+                var result = await _service.SaveAsync(model.Slider);
 
                 if (result > 0)
                 {
                     return Json(
-                        ResponseModel.SuccessResponse(
-                            "Record Saved Successfully."
-                        )
-                    );
+                        ResponseModel.SuccessResponse("Record Saved Successfully."));
                 }
 
-                return Json(
-                    ResponseModel.ErrorResponse(
-                        "Unable To Save Record."
-                    )
-                );
+                return Json(ResponseModel.ErrorResponse("Unable To Save Record."));
             }
 
-            var existing =
-                await _service.GetByIdAsync(
-                    model.Slider.SliderId
-                );
+            var existing =await _service.GetByIdAsync(model.Slider.SliderId);
 
             if (existing == null)
             {
-                return Json(
-                    ResponseModel.ErrorResponse(
-                        "Record not found."
-                    )
-                );
+                return Json(ResponseModel.ErrorResponse("Record not found."));
             }
 
             if (model.ImageFile != null)
             {
-                model.Slider.ImagePath =
-                    await UploadImage(
-                        model.ImageFile
-                    );
+                model.Slider.ImagePath = await UploadImage(model.ImageFile);
             }
             else
             {
-                model.Slider.ImagePath =
-                    existing.ImagePath;
+                model.Slider.ImagePath = existing.ImagePath;
             }
 
             model.Slider.DisplayOrder = existing.DisplayOrder;
@@ -153,31 +108,20 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             {
                 var pageRecords = await _service.GetAllAsync(model.Slider.PageKey);
 
-                model.Slider.DisplayOrder =
-                    pageRecords.Count > 0
-                        ? pageRecords.Max(x => x.DisplayOrder) + 1
-                        : 1;
+                model.Slider.DisplayOrder = pageRecords.Count > 0 ? pageRecords.Max(x => x.DisplayOrder) + 1 : 1;
             }
 
             var updateResult =
-                await _service.SaveAsync(
-                    model.Slider
-                );
+                await _service.SaveAsync(model.Slider);
 
             if (updateResult > 0)
             {
                 return Json(
-                    ResponseModel.SuccessResponse(
-                        "Record Updated Successfully."
-                    )
-                );
+                    ResponseModel.SuccessResponse("Record Updated Successfully."));
             }
 
             return Json(
-                ResponseModel.ErrorResponse(
-                    "Unable To Update Record."
-                )
-            );
+                ResponseModel.ErrorResponse("Unable To Update Record."));
         }
 
         // Delete slider record
@@ -190,65 +134,35 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             if (result > 0)
             {
                 return Json(
-                    ResponseModel.SuccessResponse(
-                        "Record Deleted Successfully."
-                    )
-                );
+                    ResponseModel.SuccessResponse("Record Deleted Successfully."));
             }
 
             return Json(
-                ResponseModel.ErrorResponse(
-                    "Unable To Delete Record."
-                )
-            );
+                ResponseModel.ErrorResponse("Unable To Delete Record."));
         }
 
         // Upload image and return saved path
         private async Task<string> UploadImage(
             IFormFile file)
         {
-            string folderPath =
-                Path.Combine(
-                    _environment.WebRootPath,
-                    "uploads",
-                    "slider"
-                );
+            string folderPath = Path.Combine(_environment.WebRootPath,"uploads","slider");
 
             if (!Directory.Exists(folderPath))
             {
-                Directory.CreateDirectory(
-                    folderPath
-                );
+                Directory.CreateDirectory(folderPath);
             }
 
-            string extension =
-                Path.GetExtension(
-                    file.FileName
-                );
+            string extension = Path.GetExtension(file.FileName);
 
-            string fileName =
-                Guid.NewGuid().ToString()
-                + extension;
+            string fileName = Guid.NewGuid().ToString() + extension;
 
-            string filePath =
-                Path.Combine(
-                    folderPath,
-                    fileName
-                );
+            string filePath = Path.Combine(folderPath,fileName);
 
-            using FileStream stream =
-                new FileStream(
-                    filePath,
-                    FileMode.Create
-                );
+            using FileStream stream = new FileStream(filePath,FileMode.Create);
 
             await file.CopyToAsync(stream);
 
-            return Path.Combine(
-                "uploads",
-                "slider",
-                fileName
-            ).Replace("\\", "/");
+            return Path.Combine("uploads","slider", fileName).Replace("\\", "/");
         }
     }
 }

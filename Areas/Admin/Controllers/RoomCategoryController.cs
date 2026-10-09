@@ -37,7 +37,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.GetByIdAsync(id);
             if (result == null)
-                return Json(ResponseModel.ErrorResponse("Record not found."));
+            return Json(ResponseModel.ErrorResponse("Record not found."));
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
@@ -83,14 +83,10 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             {
                 if (ex.Message.Contains("duplicate") || ex.Message.Contains("UNIQUE"))
                 {
-                    return Json(ResponseModel.ErrorResponse(
-                        "Room Category already exists."
-                    ));
+                    return Json(ResponseModel.ErrorResponse("Room Category already exists."));
                 }
 
-                return Json(ResponseModel.ErrorResponse(
-                    "Unable To Save Record"
-                ));
+                return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
             }
         }
 
@@ -101,7 +97,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.DeleteAsync(id);
             if (result > 0)
-                return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
+            return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
             return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
     }

@@ -87,6 +87,9 @@
                    name="ImageFile"
                    class="form-control"
                    accept="image/*" />
+            <input type="hidden"
+                   name="AboutStory.ImagePath"
+                   value="@Model.AboutStory.ImagePath" />
 
             @if (!string.IsNullOrEmpty(Model.AboutStory.ImagePath))
             {

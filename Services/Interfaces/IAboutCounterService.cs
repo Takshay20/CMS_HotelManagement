@@ -9,6 +9,5 @@ namespace CMS_HotelBooking.Services.Interfaces
         Task<int> SaveAsync(AboutCounter model);
         Task<int> DeleteAsync(int id);
         Task<int> RestoreAsync(int id);
-        Task<DateTime?> GetDeletedDateAsync(int id);
     }
 }

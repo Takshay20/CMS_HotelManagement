@@ -49,13 +49,10 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (model.Image1File != null)
             {
-                model.About.Image =
-                    await UploadImage(model.Image1File);
+                model.About.Image = await UploadImage(model.Image1File);
             }
 
-            var result = await _service.SaveAsync(
-                model.About
-            );
+            var result = await _service.SaveAsync(model.About);
 
             if (result > 0)
             {
@@ -76,34 +73,25 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
-            string folderPath = Path.Combine( _environment.WebRootPath,
-                "uploads",
-                "about"
-            );
+            string folderPath = Path.Combine( _environment.WebRootPath,"uploads","about");
 
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
-            string extension =
-                Path.GetExtension(file.FileName);
+            string extension = Path.GetExtension(file.FileName);
 
             string fileName =
                 Guid.NewGuid().ToString() + extension;
 
-            string filePath =
-                Path.Combine(folderPath, fileName);
+            string filePath = Path.Combine(folderPath, fileName);
 
             using FileStream stream =new FileStream(filePath,FileMode.Create);
 
             await file.CopyToAsync(stream);
 
-            return Path.Combine(
-                "uploads",
-                "about",
-                fileName
-            ).Replace("\\", "/");
+            return Path.Combine("uploads","about",fileName).Replace("\\", "/");
         }
     }
 }

@@ -43,73 +43,27 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameter = new DynamicParameters();
 
-            parameter.Add(
-                "@UserId",
-                model.UserId,
-                DbType.Int32
-            );
+            parameter.Add("@UserId",model.UserId,DbType.Int32);
 
-            parameter.Add(
-                "@RoomId",
-                model.RoomId,
-                DbType.Int32
-            );
+            parameter.Add("@RoomId",model.RoomId,DbType.Int32);
 
-            parameter.Add(
-                "@FullName",
-                model.FullName,
-                DbType.String
-            );
+            parameter.Add("@FullName",model.FullName,DbType.String);
 
-            parameter.Add(
-                "@Email",
-                model.Email,
-                DbType.String
-            );
+            parameter.Add("@Email",model.Email, DbType.String);
 
-            parameter.Add(
-                "@Phone",
-                model.Phone,
-                DbType.String
-            );
+            parameter.Add("@Phone",model.Phone,DbType.String);
 
-            parameter.Add(
-                "@CheckInDate",
-                model.CheckInDate.Date,
-                DbType.Date
-            );
+            parameter.Add("@CheckInDate",model.CheckInDate.Date,DbType.Date);
 
-            parameter.Add(
-                "@CheckOutDate",
-                model.CheckOutDate.Date,
-                DbType.Date
-            );
+            parameter.Add("@CheckOutDate",model.CheckOutDate.Date,DbType.Date);
 
-            parameter.Add(
-                "@Guests",
-                model.Guests,
-                DbType.Int32
-            );
+            parameter.Add("@Guests", model.Guests,DbType.Int32);
 
-            parameter.Add(
-                "@SpecialRequest",
-                model.SpecialRequest,
-                DbType.String
-            );
+            parameter.Add("@SpecialRequest",model.SpecialRequest,DbType.String);
 
-            parameter.Add(
-                "@TotalPrice",
-                model.TotalPrice,
-                DbType.Decimal,
-                precision: 15,
-                scale: 2
-            );
+            parameter.Add("@TotalPrice",model.TotalPrice,DbType.Decimal,precision: 15,scale: 2);
 
-            var bookingId = await connection.QuerySingleAsync<decimal>(
-                "sp_CreateBooking",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            var bookingId = await connection.QuerySingleAsync<decimal>("sp_CreateBooking",parameter,commandType: CommandType.StoredProcedure);
 
             return Convert.ToInt32(bookingId);
         }

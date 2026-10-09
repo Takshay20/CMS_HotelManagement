@@ -10,7 +10,6 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
     public class ContactMessageController : Controller
     {
         private readonly IContactMessageService _service;
-
         public ContactMessageController(IContactMessageService service)
         {
             _service = service;
@@ -45,7 +44,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _service.DeleteAsync(id);
             if (result > 0)
                 return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
-            return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
+                return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
         // Save admin reply

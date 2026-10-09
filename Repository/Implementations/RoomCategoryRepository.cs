@@ -17,10 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<RoomCategory>(
-                "sp_GetAllRoomCategory",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<RoomCategory>("sp_GetAllRoomCategory",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
@@ -32,17 +29,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@RoomCategoryId",
-                id,
-                DbType.Int32
-            );
+            parameters.Add( "@RoomCategoryId",id,DbType.Int32);
 
-            return await connection.QueryFirstOrDefaultAsync<RoomCategory>(
-                "sp_GetRoomCategoryById",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<RoomCategory>("sp_GetRoomCategoryById",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Save room category record
@@ -52,41 +41,12 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@RoomCategoryId",
-                model.RoomCategoryId,
-                DbType.Int32
-            );
-
-            parameters.Add(
-                "@Name",
-                model.Name,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@Description",
-                model.Description,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@DisplayOrder",
-                model.DisplayOrder,
-                DbType.Int32
-            );
-
-            parameters.Add(
-                "@IsActive",
-                model.IsActive,
-                DbType.Boolean
-            );
-
-            return await connection.QuerySingleAsync<int>(
-                "sp_SaveRoomCategory",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            parameters.Add("@RoomCategoryId",model.RoomCategoryId,DbType.Int32);
+            parameters.Add("@Name",model.Name,DbType.String);
+            parameters.Add("@Description",model.Description,DbType.String);
+            parameters.Add("@DisplayOrder",model.DisplayOrder,DbType.Int32);
+            parameters.Add("@IsActive",model.IsActive,DbType.Boolean);
+            return await connection.QuerySingleAsync<int>("sp_SaveRoomCategory",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Delete room category record
@@ -96,17 +56,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@RoomCategoryId",
-                id,
-                DbType.Int32
-            );
+            parameters.Add("@RoomCategoryId",id, DbType.Int32);
 
-            return await connection.QuerySingleAsync<int>(
-                "sp_DeleteRoomCategory",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>("sp_DeleteRoomCategory",parameters,commandType: CommandType.StoredProcedure);
         }
     }
 }

@@ -11,7 +11,6 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
     public class NavbarController : Controller
     {
         private readonly IMenuMasterService _service;
-
         public NavbarController(IMenuMasterService service)
         {
             _service = service;
@@ -48,7 +47,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             if (model.MenuMaster == null)
                 return Json(ResponseModel.ErrorResponse("Invalid Data"));
 
-                        if (model.MenuMaster.MenuMasterId == 0)
+            if (model.MenuMaster.MenuMasterId == 0)
             {
                 var existingRecords = await _service.GetAllAsync();
                 model.MenuMaster.DisplayOrder = existingRecords.Count > 0 ? existingRecords.Max(x => x.DisplayOrder) + 1 : 1;
@@ -56,8 +55,8 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             else
             {
                 var existing = await _service.GetByIdAsync(model.MenuMaster.MenuMasterId);
-                if (existing != null)
-                    model.MenuMaster.DisplayOrder = existing.DisplayOrder;
+            if (existing != null)
+                model.MenuMaster.DisplayOrder = existing.DisplayOrder;
             }
 
             var result = await _service.SaveAsync(model.MenuMaster);
@@ -76,7 +75,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.DeleteAsync(id);
             if (result > 0)
-                return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
+            return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
             return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
     }

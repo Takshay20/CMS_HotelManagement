@@ -21,11 +21,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@Email", email);
 
-            return await connection.QueryFirstOrDefaultAsync<Users>(
-                "sp_GetUserByEmail",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<Users>("sp_GetUserByEmail",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Get user record by id
@@ -37,11 +33,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@UserId", id);
 
-            return await connection.QueryFirstOrDefaultAsync<Users>(
-                "sp_GetUserById",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<Users>("sp_GetUserById",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Get all user records
@@ -49,10 +41,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<Users>(
-                "sp_GetAllUsers",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<Users>("sp_GetAllUsers",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
@@ -65,49 +54,18 @@ namespace CMS_HotelBooking.Repository.Implementations
             using var connection = GetConnection();
 
             var parameter = new DynamicParameters();
+            parameter.Add("@FullName",model.FullName);
+            parameter.Add("@Email", model.Email);
+            parameter.Add("@CountryCode",model.CountryCode);
+            parameter.Add( "@Phone",model.Phone);
+            parameter.Add("@PasswordHash",model.PasswordHash);
+            parameter.Add("@Role", role);
 
-            parameter.Add(
-                "@FullName",
-                model.FullName
-            );
-
-            parameter.Add(
-                "@Email",
-                model.Email
-            );
-
-            parameter.Add(
-                "@CountryCode",
-                model.CountryCode
-            );
-
-            parameter.Add(
-                "@Phone",
-                model.Phone
-            );
-
-            parameter.Add(
-                "@PasswordHash",
-                model.PasswordHash
-            );
-
-            parameter.Add(
-                "@Role",
-                role
-            );
-
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_RegisterUser",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_RegisterUser",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Save reset code
-        public async Task<int> SaveResetCodeAsync(
-    int userId,
-    string resetCode,
-    DateTime expiry)
+        public async Task<int> SaveResetCodeAsync(int userId,string resetCode,DateTime expiry)
         {
             using var connection = GetConnection();
 
@@ -117,60 +75,33 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameters.Add("@ResetCode", resetCode);
             parameters.Add("@ResetCodeExpiry", expiry);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_SaveResetCode",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_SaveResetCode",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Verify reset code
-        public async Task<bool> VerifyResetCodeAsync(
-            int userId,
-            string resetCode)
+        public async Task<bool> VerifyResetCodeAsync(int userId,string resetCode)
         {
             using var connection = GetConnection();
 
             var parameter = new DynamicParameters();
+            parameter.Add("@UserId",userId);
+            parameter.Add( "@ResetCode",resetCode);
 
-            parameter.Add(
-                "@UserId",
-                userId
-            );
-
-            parameter.Add(
-                "@ResetCode",
-                resetCode
-            );
-
-            var result =
-                await connection.QueryFirstOrDefaultAsync<int>(
-                    "sp_VerifyPasswordResetCode",
-                    parameter,
-                    commandType: CommandType.StoredProcedure
-                );
+            var result = await connection.QueryFirstOrDefaultAsync<int>("sp_VerifyPasswordResetCode",parameter,commandType: CommandType.StoredProcedure);
 
             return result == 1;
         }
 
         // Clear reset code
-        public async Task<int> ClearResetCodeAsync(
-            int userId)
+        public async Task<int> ClearResetCodeAsync( int userId)
         {
             using var connection = GetConnection();
 
             var parameter = new DynamicParameters();
 
-            parameter.Add(
-                "@UserId",
-                userId
-            );
+            parameter.Add("@UserId", userId);
 
-            return await connection.ExecuteAsync(
-                "sp_ClearPasswordResetCode",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.ExecuteAsync("sp_ClearPasswordResetCode",parameter,commandType: CommandType.StoredProcedure );
         }
 
         // Update password
@@ -181,22 +112,10 @@ namespace CMS_HotelBooking.Repository.Implementations
             using var connection = GetConnection();
 
             var parameter = new DynamicParameters();
+            parameter.Add("@UserId", userId);
+            parameter.Add("@PasswordHash",passwordHash);
 
-            parameter.Add(
-                "@UserId",
-                userId
-            );
-
-            parameter.Add(
-                "@PasswordHash",
-                passwordHash
-            );
-
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_UpdateUserPassword",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_UpdateUserPassword",parameter,commandType: CommandType.StoredProcedure );
         }
 
         // Toggle active
@@ -208,11 +127,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@UserId",id,DbType.Int32);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_ToggleUserActive",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_ToggleUserActive",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Delete user record
@@ -224,11 +139,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add( "@UserId",id);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_DeleteUser",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_DeleteUser",parameter,commandType: CommandType.StoredProcedure);
         }
     }
 }

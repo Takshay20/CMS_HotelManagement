@@ -109,8 +109,7 @@ using (var scope = app.Services.CreateScope())
         var factory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
         using IDbConnection connection = factory.CreateConnection();
 
-        var adminExists = connection.QueryFirstOrDefault<int>(
-            "SELECT COUNT(*) FROM Users WHERE Role = 'Admin'");
+        var adminExists = connection.QueryFirstOrDefault<int>("SELECT COUNT(*) FROM Users WHERE Role = 'Admin'");
 
         if (adminExists == 0)
         {
@@ -135,13 +134,10 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
 // Middleware pipeline
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

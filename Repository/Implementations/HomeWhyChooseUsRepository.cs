@@ -17,10 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<HomeWhyChooseUs>(
-                "sp_GetHomeWhyChooseUs",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<HomeWhyChooseUs>("sp_GetHomeWhyChooseUs",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
@@ -34,11 +31,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@HomeWhyChooseUsId", id);
 
-            return await connection.QueryFirstOrDefaultAsync<HomeWhyChooseUs>(
-                "sp_GetHomeWhyChooseUsById",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<HomeWhyChooseUs>("sp_GetHomeWhyChooseUsById",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Save home why choose us record
@@ -55,11 +48,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameter.Add("@DisplayOrder", model.DisplayOrder);
             parameter.Add("@IsActive", model.IsActive);
 
-            return await connection.QuerySingleAsync<int>(
-                "sp_SaveHomeWhyChooseUs",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>("sp_SaveHomeWhyChooseUs", parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Delete home why choose us record
@@ -71,32 +60,19 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@HomeWhyChooseUsId", id);
 
-            return await connection.QuerySingleAsync<int>(
-                "sp_DeleteHomeWhyChooseUs",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>( "sp_DeleteHomeWhyChooseUs",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Get all records
-        public async Task<IEnumerable<HomeWhyChooseUs>> GetAllRecordsAsync(
-    string filter)
+        public async Task<IEnumerable<HomeWhyChooseUs>> GetAllRecordsAsync(string filter)
         {
             using var connection = GetConnection();
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@Filter",
-                filter,
-                DbType.String
-            );
+            parameters.Add("@Filter",filter, DbType.String);
 
-            return await connection.QueryAsync<HomeWhyChooseUs>(
-                "sp_GetAllHomeWhyChooseUs",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryAsync<HomeWhyChooseUs>("sp_GetAllHomeWhyChooseUs",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Restore deleted home why choose us record
@@ -106,17 +82,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@HomeWhyChooseUsId",
-                id,
-                DbType.Int32
-            );
+            parameters.Add("@HomeWhyChooseUsId",id, DbType.Int32);
 
-            return await connection.ExecuteScalarAsync<int>(
-                "sp_RestoreHomeWhyChooseUs",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.ExecuteScalarAsync<int>("sp_RestoreHomeWhyChooseUs",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Get deleted date

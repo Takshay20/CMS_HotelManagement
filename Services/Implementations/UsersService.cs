@@ -37,10 +37,7 @@ namespace CMS_HotelBooking.Services.Implementations
             return await _repository.GetAllAsync();
         }
 
-        public async Task<(bool Success, string Message)> RegisterAsync(
-            Users model,
-            string password,
-            string role)
+        public async Task<(bool Success, string Message)> RegisterAsync(Users model,string password,string role)
         {
             if (model == null)
                 return (false, "Invalid user information.");
@@ -57,53 +54,31 @@ namespace CMS_HotelBooking.Services.Implementations
 
             if (existing != null)
             {
-                return (
-                    false,
-                    "An account with this email already exists."
-                );
+                return (false,"An account with this email already exists.");
             }
 
             model.PasswordHash = PasswordHelper.Hash(password);
 
-            var newId = await _repository.RegisterAsync(
-                model,
-                role
-            );
+            var newId = await _repository.RegisterAsync(model,role);
 
             if (newId <= 0)
             {
-                return (
-                    false,
-                    "Registration failed. Please try again."
-                );
+                return (false,"Registration failed. Please try again.");
             }
 
-            return (
-                true,
-                "Registration successful."
-            );
+            return (true,"Registration successful.");
         }
 
-        public async Task<(bool Success, Users? User, string Message)> LoginAsync(
-            string email,
-            string password)
+        public async Task<(bool Success, Users? User, string Message)> LoginAsync(string email,string password)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return (
-                    false,
-                    null,
-                    "Email address is required."
-                );
+                return (false,null,"Email address is required.");
             }
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                return (
-                    false,
-                    null,
-                    "Password is required."
-                );
+                return (false,null,"Password is required.");
             }
 
             email = email.Trim();
@@ -112,38 +87,20 @@ namespace CMS_HotelBooking.Services.Implementations
 
             if (user == null)
             {
-                return (
-                    false,
-                    null,
-                    "Invalid email or password."
-                );
+                return (false,null,"Invalid email or password.");
             }
 
             if (!user.IsActive)
             {
-                return (
-                    false,
-                    null,
-                    "Your account has been deactivated. Please contact the hotel."
-                );
+                return (false,null,"Your account has been deactivated. Please contact the hotel.");
             }
 
-            if (!PasswordHelper.Verify(
-                    password,
-                    user.PasswordHash))
+            if (!PasswordHelper.Verify(password,user.PasswordHash))
             {
-                return (
-                    false,
-                    null,
-                    "Invalid email or password."
-                );
+                return (false,null,"Invalid email or password.");
             }
 
-            return (
-                true,
-                user,
-                "Login successful."
-            );
+            return (true,user,"Login successful.");
         }
 
         // Toggle active
@@ -159,25 +116,16 @@ namespace CMS_HotelBooking.Services.Implementations
         }
 
         // Update password
-        public async Task<int> UpdatePasswordAsync(
-            int userId,
-            string passwordHash)
+        public async Task<int> UpdatePasswordAsync(int userId,string passwordHash)
         {
-            return await _repository.UpdatePasswordAsync(
-                userId,
-                passwordHash
-            );
+            return await _repository.UpdatePasswordAsync(userId,passwordHash);
         }
 
-        public async Task<(bool Success, string Message)> SendResetCodeAsync(
-            string email)
+        public async Task<(bool Success, string Message)> SendResetCodeAsync(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return (
-                    false,
-                    "Please enter your email address."
-                );
+                return (false,"Please enter your email address.");
             }
 
             email = email.Trim();
@@ -186,68 +134,42 @@ namespace CMS_HotelBooking.Services.Implementations
 
             if (user == null)
             {
-                return (
-                    false,
-                    "No account was found with this email address."
-                );
+                return (false,"No account was found with this email address.");
             }
 
-            var resetCode = Random.Shared
-                .Next(100000, 1000000)
-                .ToString();
+            var resetCode = Random.Shared.Next(100000, 1000000).ToString();
 
             var expiry = DateTime.Now.AddMinutes(10);
-
-            var result = await _repository.SaveResetCodeAsync(
-                user.UserId,
-                resetCode,
-                expiry
-            );
+            var result = await _repository.SaveResetCodeAsync(user.UserId,resetCode,expiry);
 
             if (result <= 0)
             {
-                return (
-                    false,
-                    "Unable to generate reset code. Please try again."
-                );
+                return (false, "Unable to generate reset code. Please try again.");
             }
 
             var emailStatus = await _emailService.SendPasswordResetCodeAsync(user.Email, user.FullName, resetCode);
 
             if (emailStatus == "Failed")
             {
-                return (
-                    false,
-                    "We generated a reset code but could not send the email. Please try again in a moment or contact support."
-                );
+                return (false, "We generated a reset code but could not send the email. Please try again in a moment or contact support.");
             }
 
-            return (
-                true,
-                emailStatus == "Disabled"
+            return (true,emailStatus == "Disabled"
                     ? $"Email sending is currently disabled. For testing, your reset code is: {resetCode}"
                     : "A 6-digit verification code has been sent to your email address. It will expire in 10 minutes."
             );
         }
 
-        public async Task<(bool Success, string Message)> VerifyResetCodeAsync(
-            string email,
-            string code)
+        public async Task<(bool Success, string Message)> VerifyResetCodeAsync(string email,string code)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return (
-                    false,
-                    "Email address is required."
-                );
+                return (false,"Email address is required.");
             }
 
             if (string.IsNullOrWhiteSpace(code))
             {
-                return (
-                    false,
-                    "Verification code is required."
-                );
+                return (false,"Verification code is required.");
             }
 
             email = email.Trim();
@@ -257,58 +179,33 @@ namespace CMS_HotelBooking.Services.Implementations
 
             if (user == null)
             {
-                return (
-                    false,
-                    "Invalid email address."
-                );
+                return (false,"Invalid email address.");
             }
 
-            var valid = await _repository.VerifyResetCodeAsync(
-                user.UserId,
-                code
-            );
-
+            var valid = await _repository.VerifyResetCodeAsync(user.UserId,code);
             if (!valid)
             {
-                return (
-                    false,
-                    "Invalid or expired verification code."
-                );
+                return (false,"Invalid or expired verification code.");
             }
 
-            return (
-                true,
-                "Verification code verified successfully."
-            );
+            return (true,"Verification code verified successfully.");
         }
 
-        public async Task<(bool Success, string Message)> ResetPasswordAsync(
-            string email,
-            string code,
-            string newPassword)
+        public async Task<(bool Success, string Message)> ResetPasswordAsync(string email,string code,string newPassword)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return (
-                    false,
-                    "Email address is required."
-                );
+                return (false,"Email address is required.");
             }
 
             if (string.IsNullOrWhiteSpace(code))
             {
-                return (
-                    false,
-                    "Verification code is required."
-                );
+                return (false,"Verification code is required.");
             }
 
             if (string.IsNullOrWhiteSpace(newPassword))
             {
-                return (
-                    false,
-                    "New password is required."
-                );
+                return (false,"New password is required.");
             }
 
             email = email.Trim();
@@ -318,48 +215,26 @@ namespace CMS_HotelBooking.Services.Implementations
 
             if (user == null)
             {
-                return (
-                    false,
-                    "Invalid email address."
-                );
+                return (false,"Invalid email address.");
             }
 
-            var valid = await _repository.VerifyResetCodeAsync(
-                user.UserId,
-                code
-            );
+            var valid = await _repository.VerifyResetCodeAsync(user.UserId,code);
 
             if (!valid)
             {
-                return (
-                    false,
-                    "Invalid or expired verification code."
-                );
+                return (false,"Invalid or expired verification code.");
             }
-
             var passwordHash = PasswordHelper.Hash(newPassword);
-
-            var result = await _repository.UpdatePasswordAsync(
-                user.UserId,
-                passwordHash
-            );
+            var result = await _repository.UpdatePasswordAsync(user.UserId,passwordHash);
 
             if (result <= 0)
             {
-                return (
-                    false,
-                    "Unable to reset password. Please try again."
-                );
+                return (false,"Unable to reset password. Please try again.");
             }
 
-            await _repository.ClearResetCodeAsync(
-                user.UserId
-            );
+            await _repository.ClearResetCodeAsync(user.UserId);
 
-            return (
-                true,
-                "Your password has been reset successfully."
-            );
+            return (true, "Your password has been reset successfully.");
         }
     }
 }

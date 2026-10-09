@@ -36,7 +36,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.ToggleActiveAsync(id);
             if (result > 0)
-                return Json(ResponseModel.SuccessResponse("Status Updated Successfully."));
+            return Json(ResponseModel.SuccessResponse("Status Updated Successfully."));
             return Json(ResponseModel.ErrorResponse("Unable To Update Status"));
         }
 
@@ -46,7 +46,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.DeleteAsync(id);
             if (result > 0)
-                return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
+            return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
             return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
     }

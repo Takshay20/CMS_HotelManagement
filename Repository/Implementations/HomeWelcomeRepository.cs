@@ -17,10 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            return await connection.QueryFirstOrDefaultAsync<HomeWelcome>(
-                "sp_GetAllHomeWelcome",
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<HomeWelcome>("sp_GetAllHomeWelcome",commandType: CommandType.StoredProcedure);
         }
 
         // Update home welcome record
@@ -42,11 +39,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameters.Add("@ExperienceYears", model.ExperienceYears);
             parameters.Add("@DisplayOrder", model.DisplayOrder);
 
-            var result = await connection.QuerySingleAsync<int>(
-                "sp_SaveHomeWelcome",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QuerySingleAsync<int>("sp_SaveHomeWelcome",parameters,commandType: CommandType.StoredProcedure);
 
             return result;
         }

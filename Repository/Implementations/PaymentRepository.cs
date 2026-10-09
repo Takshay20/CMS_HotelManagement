@@ -19,17 +19,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@BookingId",
-                bookingId,
-                DbType.Int32
-            );
+            parameters.Add("@BookingId",bookingId,DbType.Int32);
 
-            return await connection.QueryFirstOrDefaultAsync<Payment>(
-                "sp_GetPaymentByBookingId",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<Payment>("sp_GetPaymentByBookingId",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Get by order id
@@ -39,17 +31,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@OrderId",
-                orderId,
-                DbType.String
-            );
+            parameters.Add("@OrderId",orderId,DbType.String);
 
-            return await connection.QueryFirstOrDefaultAsync<Payment>(
-                "sp_GetPaymentByOrderId",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<Payment>("sp_GetPaymentByOrderId",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Create payment record
@@ -59,154 +43,42 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@BookingId",
-                payment.BookingId,
-                DbType.Int32
-            );
+            parameters.Add("@BookingId",payment.BookingId,DbType.Int32);
+            parameters.Add("@UserId",payment.UserId,DbType.Int32);
+            parameters.Add("@Amount",payment.Amount,DbType.Decimal,precision: 15,scale: 2);
+            parameters.Add("@OrderId",payment.OrderId,DbType.String);
+            parameters.Add("@GatewayPaymentId",payment.GatewayPaymentId,DbType.String);
+            parameters.Add("@PaymentStatus",payment.PaymentStatus,DbType.String);
+            parameters.Add("@PaymentDate",payment.PaymentDate,DbType.DateTime);
+            parameters.Add("@FailureReason",payment.FailureReason,DbType.String);
 
-            parameters.Add(
-                "@UserId",
-                payment.UserId,
-                DbType.Int32
-            );
-
-            parameters.Add(
-                "@Amount",
-                payment.Amount,
-                DbType.Decimal,
-                precision: 15,
-                scale: 2
-            );
-
-            parameters.Add(
-                "@OrderId",
-                payment.OrderId,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@GatewayPaymentId",
-                payment.GatewayPaymentId,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@PaymentStatus",
-                payment.PaymentStatus,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@PaymentDate",
-                payment.PaymentDate,
-                DbType.DateTime
-            );
-
-            parameters.Add(
-                "@FailureReason",
-                payment.FailureReason,
-                DbType.String
-            );
-
-            return await connection.QuerySingleAsync<int>(
-                "sp_CreatePayment",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>("sp_CreatePayment",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Update payment order
-        public async Task<int> UpdatePaymentOrderAsync(
-            int paymentId,
-            decimal amount,
-            string orderId,
-            string paymentStatus)
+        public async Task<int> UpdatePaymentOrderAsync(int paymentId,decimal amount,string orderId,string paymentStatus)
         {
             using var connection = GetConnection();
-
             var parameters = new DynamicParameters();
+            parameters.Add("@PaymentId",paymentId,DbType.Int32);
+            parameters.Add("@Amount",amount,DbType.Decimal,precision: 15,scale: 2);
+            parameters.Add("@OrderId",orderId,DbType.String);
+            parameters.Add("@PaymentStatus",paymentStatus,DbType.String);
 
-            parameters.Add(
-                "@PaymentId",
-                paymentId,
-                DbType.Int32
-            );
-
-            parameters.Add(
-                "@Amount",
-                amount,
-                DbType.Decimal,
-                precision: 15,
-                scale: 2
-            );
-
-            parameters.Add(
-                "@OrderId",
-                orderId,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@PaymentStatus",
-                paymentStatus,
-                DbType.String
-            );
-
-            return await connection.QuerySingleAsync<int>(
-                "sp_UpdatePaymentOrder",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>("sp_UpdatePaymentOrder",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Update status
-        public async Task<int> UpdateStatusAsync(
-            int paymentId,
-            string paymentStatus,
-            string? gatewayPaymentId,
-            DateTime? paymentDate,
-            string? failureReason)
+        public async Task<int> UpdateStatusAsync(int paymentId,string paymentStatus,string? gatewayPaymentId, DateTime? paymentDate,string? failureReason)
         {
             using var connection = GetConnection();
-
             var parameters = new DynamicParameters();
-
-            parameters.Add(
-                "@PaymentId",
-                paymentId,
-                DbType.Int32
-            );
-
-            parameters.Add(
-                "@PaymentStatus",
-                paymentStatus,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@GatewayPaymentId",
-                gatewayPaymentId,
-                DbType.String
-            );
-
-            parameters.Add(
-                "@PaymentDate",
-                paymentDate,
-                DbType.DateTime
-            );
-
-            parameters.Add(
-                "@FailureReason",
-                failureReason,
-                DbType.String
-            );
-
-            return await connection.ExecuteScalarAsync<int>(
-                "sp_UpdatePaymentStatus",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            parameters.Add("@PaymentId",paymentId,DbType.Int32);
+            parameters.Add("@PaymentStatus",paymentStatus,DbType.String);
+            parameters.Add("@GatewayPaymentId",gatewayPaymentId,DbType.String);
+            parameters.Add("@PaymentDate",paymentDate,DbType.DateTime);
+            parameters.Add("@FailureReason",failureReason,DbType.String);
+            return await connection.ExecuteScalarAsync<int>("sp_UpdatePaymentStatus",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Get by payment id
@@ -216,17 +88,9 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@PaymentId",
-                paymentId,
-                DbType.Int32
-            );
+            parameters.Add("@PaymentId",paymentId,DbType.Int32);
 
-            return await connection.QueryFirstOrDefaultAsync<Payment>(
-                "sp_GetPaymentByPaymentId",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<Payment>("sp_GetPaymentByPaymentId",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Update payment amount
@@ -238,25 +102,11 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@PaymentId",
-                paymentId,
-                DbType.Int32
-            );
+            parameters.Add("@PaymentId",paymentId,DbType.Int32);
 
-            parameters.Add(
-                "@Amount",
-                amount,
-                DbType.Decimal,
-                precision: 15,
-                scale: 2
-            );
+            parameters.Add("@Amount",amount,DbType.Decimal,precision: 15,scale: 2);
 
-            return await connection.ExecuteScalarAsync<int>(
-                "sp_UpdatePaymentAmount",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.ExecuteScalarAsync<int>("sp_UpdatePaymentAmount",parameters,commandType: CommandType.StoredProcedure);
         }
     }
 }

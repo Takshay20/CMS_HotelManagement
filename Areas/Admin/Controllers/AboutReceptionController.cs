@@ -23,9 +23,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> AboutReception()
         {
-            var data = (await _service.GetAllAsync())
-                .OrderBy(x => x.DisplayOrder)
-                .FirstOrDefault();
+            var data = (await _service.GetAllAsync()).OrderBy(x => x.DisplayOrder).FirstOrDefault();
             var model = new AboutReceptionVM();
             if (data != null)
             {

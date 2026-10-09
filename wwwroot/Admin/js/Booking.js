@@ -1,36 +1,34 @@
 // Page load: setup and event handlers
 $(document).ready(function () {
-
+    var params = new URLSearchParams(window.location.search);
+    var chartStatus = params.get("status");
+    if (chartStatus) {
+        $("#ddlStatusFilter").val(chartStatus);
+    }
     loadData();
-
     // Status filter dropdown change
     $("#ddlStatusFilter, #txtSearch").on("change keyup", function () {
         render();
     });
-
     // Close payment modal button click
     $("#btnClosePaymentModal").on("click", function () {
         closePaymentModal();
     });
-
     // Payment modal click
     $("#paymentModal").on("click", function (e) {
         if (e.target === this) {
             closePaymentModal();
         }
     });
-
     // Close drawer click
     $("#closeDrawer, #btnCancel").on("click", function () {
         $("#drawer").removeClass("active");
     });
-
     // Save button click
     $("#btnSave").on("click", function () {
 
         var bookingId = $("#crBookingId").val();
         var roomId = $("#crRoomList").val();
-
         var ok = validateForm([
             {
                 id: "crRoomList",
@@ -39,16 +37,12 @@ $(document).ready(function () {
                 type: "select"
             }
         ]);
-
         if (!ok) {
             return;
         }
-
         var $btn = $(this);
-
         $btn.prop("disabled", true)
             .text("Sending...");
-
         // AJAX call to /Admin/Booking/ProposeRoomChange
         $.ajax({
             url: "/Admin/Booking/ProposeRoomChange",
@@ -58,33 +52,24 @@ $(document).ready(function () {
                 proposedRoomId: roomId,
                 note: $("#crNote").val()
             },
-
             success: function (r) {
-
                 if (r.success) {
-
                     Swal.fire({
                         icon: "success",
                         title: r.message,
                         timer: 1800,
                         showConfirmButton: false
                     });
-
                     $("#drawer").removeClass("active");
-
                     loadData();
-
                 } else {
-
                     Swal.fire({
                         icon: "error",
                         title: r.message
                     });
                 }
             },
-
             error: function () {
-
                 Swal.fire({
                     icon: "error",
                     title: "Unable To Change Room"
@@ -98,32 +83,21 @@ $(document).ready(function () {
             }
         });
     });
-
 });
-
-
 var bookingData = [];
-
-
 // Load data
 function loadData() {
-
     // AJAX call to /Admin/Booking/GetAll
     $.ajax({
         url: "/Admin/Booking/GetAll",
         type: "GET",
-
         success: function (res) {
-
             bookingData = res.data || res;
-
             if (!Array.isArray(bookingData)) {
                 bookingData = [];
             }
-
             render();
         },
-
         error: function () {
 
             $("#tblData tbody").html(`
@@ -137,21 +111,15 @@ function loadData() {
     });
 }
 
-
 // Render
 function render() {
-
-    var statusFilter =
-        ($("#ddlStatusFilter").val() || "").toLowerCase();
-
-    var search =
-        ($("#txtSearch").val() || "").toLowerCase();
-
+    var params = new URLSearchParams(window.location.search);
+    var chartStatus = (params.get("status") || "").toLowerCase();
+    var dropdownStatus = ($("#ddlStatusFilter").val() || "").toLowerCase();
+    var statusFilter = dropdownStatus || chartStatus;
+    var search = ($("#txtSearch").val() || "").toLowerCase();
     var data = bookingData.filter(function (item) {
-
-        var status =
-            (item.status || "").toLowerCase();
-
+    var status = (item.status || "").toLowerCase();
         var text =
             (
                 (item.fullName || "") +
@@ -164,17 +132,13 @@ function render() {
                 " " +
                 (item.roomNumber || "")
             ).toLowerCase();
-
         return (
             (!statusFilter || status === statusFilter) &&
             (!search || text.includes(search))
         );
     });
-
     var html = "";
-
     if (!data.length) {
-
         html = `
             <tr>
                 <td colspan="9"
@@ -183,42 +147,30 @@ function render() {
                 </td>
             </tr>
         `;
-
         $("#tblData tbody").html(html);
-
         return;
     }
-
     $.each(data, function (_, item) {
-
         var status =
             (item.status || "").toLowerCase();
-
         var roomChange =
             (item.roomChangeStatus || "").toLowerCase();
-
         html += `
             <tr>
-
                 <td>
                     <strong>
                         ${escapeHtml(item.fullName || "")}
                     </strong>
-
                     <br>
-
                     <small>
                         ${escapeHtml(item.email || "")}
                         |
                         ${escapeHtml(item.phone || "")}
                     </small>
                 </td>
-
                 <td>
                     ${escapeHtml(item.roomTitle || "")}
-
                     <br>
-
                     <small>
                         (#${escapeHtml(item.roomNumber || "")})
                     </small>
@@ -247,28 +199,14 @@ function render() {
                         }
                     )}
                 </td>
-
                 <td>
-                    ${statusBadge(
-                        item.status,
-                        roomChange,
-                        item.emailStatus
-                    )}
+                    ${statusBadge(item.status,roomChange,item.emailStatus)}
                 </td>
-
                 <td>
-                    ${paymentStatusBadge(
-                        item.paymentStatus,
-                        item.status
-                    )}
+                    ${paymentStatusBadge(item.paymentStatus,item.status)}
                 </td>
-
                 <td>
-                    ${actionButtons(
-                        item,
-                        status,
-                        roomChange
-                    )}
+                    ${actionButtons(item,status, roomChange)}
                 </td>
 
             </tr>
@@ -278,19 +216,11 @@ function render() {
     $("#tblData tbody").html(html);
 }
 
-
 // Status badge
-function statusBadge(
-    status,
-    roomChange,
-    emailStatus
-) {
-
-    var value =
-        (status || "Pending").toLowerCase();
-
+function statusBadge(status,roomChange,emailStatus )
+    {
+    var value = (status || "Pending").toLowerCase();
     var html = "";
-
     if (value === "approved") {
 
         html = `
@@ -342,11 +272,8 @@ function statusBadge(
             </span>
         `;
     }
-
-    if (
-        emailStatus &&
-        emailStatus.toLowerCase() === "sent"
-    ) {
+    if (emailStatus && emailStatus.toLowerCase() === "sent")
+        {
 
         html += `
             <br>
@@ -362,27 +289,16 @@ function statusBadge(
             </span>
         `;
     }
-
     return html;
 }
 
-
 // Payment status badge
-function paymentStatusBadge(
-    paymentStatus,
-    bookingStatus
-) {
-
-    var payment =
-        (paymentStatus || "Pending").toLowerCase();
-
-    var booking =
-        (bookingStatus || "").toLowerCase();
-
-    if (
-        booking === "rejected" ||
-        booking === "cancelled"
-    ) {
+function paymentStatusBadge(paymentStatus,bookingStatus) 
+{
+    var payment = (paymentStatus || "Pending").toLowerCase();
+    var booking = (bookingStatus || "").toLowerCase();
+    if (booking === "rejected" || booking === "cancelled") 
+    {
 
         return `
             <span class="status-badge danger">
@@ -429,9 +345,7 @@ function paymentStatusBadge(
             </span>
         `;
     }
-
     if (payment === "refunded") {
-
         return `
             <span class="status-badge info">
 
@@ -442,7 +356,6 @@ function paymentStatusBadge(
             </span>
         `;
     }
-
     return `
         <span class="status-badge warning">
 
@@ -454,19 +367,15 @@ function paymentStatusBadge(
     `;
 }
 
-
 // Action buttons
 function actionButtons(
     item,
     status,
     roomChange
 ) {
-
     var id = item.bookingId;
-
     var payment =
         (item.paymentStatus || "").toLowerCase();
-
     var buttons = `
         <button
             type="button"
@@ -478,11 +387,8 @@ function actionButtons(
         </button>
     `;
 
-
     if (status === "pending") {
-
         if (roomChange === "pending") {
-
             buttons += `
                 <button
                     type="button"
@@ -515,7 +421,6 @@ function actionButtons(
             `;
         }
 
-
         buttons += `
             <button
                 type="button"
@@ -530,14 +435,11 @@ function actionButtons(
             </button>
         `;
 
-
         if (roomChange !== "pending") {
 
             buttons +=
                 roomChangeButton(item);
         }
-
-
         buttons += `
             <button
                 type="button"
@@ -548,13 +450,9 @@ function actionButtons(
 
             </button>
         `;
-
         return buttons;
     }
-
-
     if (status === "approved") {
-
         buttons += `
             <button
                 type="button"
@@ -565,10 +463,7 @@ function actionButtons(
 
             </button>
         `;
-
-
         if (payment === "paid") {
-
             buttons += `
                 <button
                     type="button"
@@ -583,17 +478,13 @@ function actionButtons(
 
                 </button>
             `;
-
         } else {
 
             buttons +=
                 roomChangeButton(item);
         }
-
         return buttons;
     }
-
-
     buttons += `
         <button
             type="button"
@@ -608,7 +499,6 @@ function actionButtons(
     return buttons;
 }
 
-
 // Room change button
 function roomChangeButton(item) {
 
@@ -617,7 +507,6 @@ function roomChangeButton(item) {
         " (#" +
         (item.roomNumber || "") +
         ")";
-
     return `
         <button
             type="button"
@@ -626,80 +515,50 @@ function roomChangeButton(item) {
                 ${item.bookingId},
                 '${escapeAttribute(room)}'
             )">
-
             <i class="fa-solid fa-bed"></i>
-
         </button>
     `;
 }
-
-
 // View booking
 function viewBooking(bookingId) {
-
     var booking = null;
-
     for (
         var i = 0;
         i < bookingData.length;
         i++
     ) {
-
         if (
             Number(
                 bookingData[i].bookingId
             ) === Number(bookingId)
         ) {
-
             booking =
                 bookingData[i];
-
             break;
         }
     }
-
-
     if (!booking) {
-
         Swal.fire({
             icon: "error",
             title: "Booking Not Found",
             text: "Booking details could not be found."
         });
-
         return;
     }
-
-
     var room =
         (booking.roomTitle || "Hotel Room") +
-        (
-            booking.roomNumber
-                ? " (#" +
-                  booking.roomNumber +
-                  ")"
-                : ""
-        );
-
-
+        (booking.roomNumber? " (#" + booking.roomNumber + ")" : "");
     var paymentStatus =
         booking.paymentStatus ||
         "Pending";
-
-
     Swal.fire({
-
         title: "Booking Details",
-
         width: "680px",
-
         html: `
-
             <div style="
                 text-align:left;
                 padding:5px 10px;
             ">
-
                 <div style="
                     display:grid;
                     grid-template-columns:
@@ -707,104 +566,67 @@ function viewBooking(bookingId) {
                     gap:14px;
                     margin-bottom:15px;
                 ">
-
                     <div>
-
-                        <strong>
+                     <strong>
                             Booking ID
                         </strong>
-
                         <br>
-
                         #${escapeHtml(
                             String(
                                 booking.bookingId ||
                                 ""
                             )
                         )}
-
                     </div>
-
-
                     <div>
-
                         <strong>
                             Guest Name
                         </strong>
-
                         <br>
-
                         ${escapeHtml(
                             booking.fullName ||
                             ""
                         )}
-
                     </div>
-
-
                     <div>
-
                         <strong>
                             Email
                         </strong>
-
                         <br>
-
                         ${escapeHtml(
                             booking.email ||
                             ""
                         )}
-
                     </div>
-
-
                     <div>
-
                         <strong>
                             Phone
                         </strong>
-
                         <br>
-
                         ${escapeHtml(
                             booking.phone ||
                             ""
                         )}
-
                     </div>
-
-
                     <div>
-
                         <strong>
                             Room
                         </strong>
-
                         <br>
-
                         ${escapeHtml(room)}
-
                     </div>
-
-
                     <div>
-
                         <strong>
                             Guests
                         </strong>
-
                         <br>
-
                         ${escapeHtml(
                             String(
                                 booking.guests ||
                                 0
                             )
                         )}
-
                     </div>
-
-
                     <div>
 
                         <strong>
@@ -818,10 +640,7 @@ function viewBooking(bookingId) {
                         )}
 
                     </div>
-
-
                     <div>
-
                         <strong>
                             Check-out
                         </strong>
@@ -833,113 +652,71 @@ function viewBooking(bookingId) {
                         )}
 
                     </div>
-
-
                     <div>
-
                         <strong>
                             Total Amount
                         </strong>
-
                         <br>
-
-                        ₹${Number(
-                            booking.totalPrice ||
-                            0
-                        ).toLocaleString(
-                            "en-IN",
+                        ₹${Number(booking.totalPrice || 0).toLocaleString( "en-IN",
                             {
-                                minimumFractionDigits:
-                                    2,
-
-                                maximumFractionDigits:
-                                    2
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
                             }
                         )}
-
                     </div>
-
-
                     <div>
-
                         <strong>
                             Payment
                         </strong>
-
                         <br>
-
                         ${escapeHtml(
                             paymentStatus
                         )}
-
                     </div>
-
-
                     <div>
-
                         <strong>
                             Booking Status
                         </strong>
-
                         <br>
-
                         ${escapeHtml(
                             booking.status ||
                             "Pending"
                         )}
-
                     </div>
-
                 </div>
-
-
                 ${
                     booking.specialRequest
                         ? `
-
                             <div style="
                                 margin-top:15px;
                                 padding:12px;
                                 background:#f7f7f7;
                                 border-radius:8px;
                             ">
-
                                 <strong>
                                     Special Request
                                 </strong>
-
                                 <p style="
                                     margin:6px 0 0;
                                     color:#555;
                                 ">
-
                                     ${escapeHtml(
                                         booking.specialRequest
                                     )}
-
                                 </p>
-
                             </div>
-
                         `
                         : ""
                 }
-
             </div>
-
         `,
-
         icon: "info",
-
         confirmButtonText: "Close"
-
     });
 }
 
-
 // View payment
 function viewPayment(bookingId) {
-
     $("#paymentDetailsContent").html(`
         <div style="
             padding:30px;
@@ -948,32 +725,23 @@ function viewPayment(bookingId) {
             Loading payment details...
         </div>
     `);
-
     $("#paymentModal").addClass("active");
 
     // AJAX call to /Admin/Booking/GetPaymentDetails
     $.ajax({
-
         url: "/Admin/Booking/GetPaymentDetails",
-
         type: "GET",
-
         data: {
             bookingId: bookingId
         },
-
         dataType: "json",
-
         success: function (res) {
-
             console.log("Payment Response:", res);
-
             if (
                 !res ||
                 res.success !== true ||
                 !res.data
             ) {
-
                 $("#paymentDetailsContent").html(`
                     <div style="
                         padding:30px;
@@ -987,24 +755,15 @@ function viewPayment(bookingId) {
                         }
                     </div>
                 `);
-
                 return;
             }
-
             var p = res.data;
-
-            var status =
-                (p.paymentStatus || "Pending")
-                    .toLowerCase();
-
+            var status = (p.paymentStatus || "Pending") .toLowerCase();
             var statusColor = "#856404";
             var statusBg = "#fff3cd";
-
             if (status === "paid") {
-
                 statusColor = "#198754";
                 statusBg = "#e8f7ee";
-
             }
             else if (
                 status === "failed" ||
@@ -1022,28 +781,13 @@ function viewPayment(bookingId) {
                 statusBg = "#eaf2ff";
             }
 
-            var paymentDate =
-                p.paymentDate
-                    ? new Date(
-                        p.paymentDate
-                    ).toLocaleString("en-IN")
-                    : "Not Paid";
-
-            var createdDate =
-                p.createdDate
-                    ? new Date(
-                        p.createdDate
-                    ).toLocaleString("en-IN")
-                    : "Not Available";
-
+            var paymentDate = p.paymentDate ? new Date(p.paymentDate).toLocaleString("en-IN") : "Not Paid";
+            var createdDate = p.createdDate? new Date( p.createdDate).toLocaleString("en-IN"): "Not Available";
             $("#paymentDetailsContent").html(`
-
                 <div class="payment-detail-row">
-
                     <span>
                         Payment ID
                     </span>
-
                     <strong>
                         #${escapeHtml(
                             String(
@@ -1051,16 +795,11 @@ function viewPayment(bookingId) {
                             )
                         )}
                     </strong>
-
                 </div>
-
-
                 <div class="payment-detail-row">
-
                     <span>
                         Booking ID
                     </span>
-
                     <strong>
                         #${escapeHtml(
                             String(
@@ -1069,16 +808,11 @@ function viewPayment(bookingId) {
                             )
                         )}
                     </strong>
-
                 </div>
-
-
                 <div class="payment-detail-row">
-
                     <span>
                         Amount
                     </span>
-
                     <strong>
                         ₹${Number(
                             p.amount || 0
@@ -1090,95 +824,65 @@ function viewPayment(bookingId) {
                             }
                         )}
                     </strong>
-
                 </div>
-
-
                 <div class="payment-detail-row">
-
                     <span>
                         Status
                     </span>
-
                     <strong style="
                         color:${statusColor};
                         background:${statusBg};
                         padding:6px 12px;
                         border-radius:15px;
                     ">
-
                         ${escapeHtml(
                             p.paymentStatus ||
                             "Pending"
                         )}
-
                     </strong>
-
                 </div>
-
-
                 <div class="payment-detail-row">
-
                     <span>
                         Order ID
                     </span>
-
                     <strong>
                         ${escapeHtml(
                             p.orderId ||
                             "Not Generated"
                         )}
                     </strong>
-
                 </div>
-
-
                 <div class="payment-detail-row">
-
                     <span>
                         Gateway Payment ID
                     </span>
-
                     <strong>
                         ${escapeHtml(
                             p.gatewayPaymentId ||
                             "Not Available"
                         )}
                     </strong>
-
                 </div>
-
-
                 <div class="payment-detail-row">
-
                     <span>
                         Payment Date
                     </span>
-
                     <strong>
                         ${escapeHtml(
                             paymentDate
                         )}
                     </strong>
-
                 </div>
-
-
                 <div class="payment-detail-row">
-
                     <span>
                         Created Date
                     </span>
-
                     <strong>
                         ${escapeHtml(
                             createdDate
                         )}
                     </strong>
-
                 </div>
-
-
                 ${
                     p.failureReason
                         ? `
@@ -1189,40 +893,31 @@ function viewPayment(bookingId) {
                                 color:#dc2626;
                                 border-radius:8px;
                             ">
-
                                 <strong>
                                     Failure Reason:
                                 </strong>
-
                                 <div style="
                                     margin-top:5px;
                                 ">
-
                                     ${escapeHtml(
                                         p.failureReason
                                     )}
-
                                 </div>
 
                             </div>
                         `
                         : ""
                 }
-
             `);
         },
-
         error: function (xhr) {
-
             console.log(
                 "GetPaymentDetails Error:",
                 xhr.status
             );
-
             console.log(
                 xhr.responseText
             );
-
             $("#paymentDetailsContent").html(`
                 <div style="
                     padding:30px;
@@ -1255,217 +950,113 @@ function updateStatus(bookingId, status) {
             : "Yes, Reject";
 
     Swal.fire({
-
         title: title,
-
         text: text,
-
         icon: "warning",
-
         showCancelButton: true,
-
         confirmButtonText: confirmText,
-
         cancelButtonText: "Cancel",
-
         reverseButtons: true
-
     }).then(function (result) {
-
         if (!result.isConfirmed) {
             return;
         }
 
         // AJAX call to /Admin/Booking/UpdateStatus
         $.ajax({
-
             url: "/Admin/Booking/UpdateStatus",
-
             type: "POST",
-
             data: {
                 bookingId: bookingId,
                 status: status
             },
-
             beforeSend: function () {
-
                 Swal.fire({
-
-                    title:
-                        status === "Approved"
-                            ? "Approving..."
-                            : "Rejecting...",
-
+                    title: status === "Approved"? "Approving...": "Rejecting...",
                     text: "Please wait.",
-
                     allowOutsideClick: false,
-
                     allowEscapeKey: false,
-
                     didOpen: function () {
                         Swal.showLoading();
                     }
-
                 });
             },
-
             success: function (res) {
-
                 if (res && res.success) {
-
                     Swal.fire({
-
                         icon: "success",
-
                         title:
                             status === "Approved"
                                 ? "Booking Approved"
                                 : "Booking Rejected",
-
                         text:
                             res.message ||
                             "Booking status updated successfully.",
-
                         timer: 1800,
-
                         showConfirmButton: false
-
                     });
-
                     loadData();
-
                 }
                 else {
-
                     Swal.fire({
-
                         icon: "error",
-
                         title: "Unable To Update Booking",
-
-                        text:
-                            res && res.message
-                                ? res.message
-                                : "Something went wrong."
-
+                        text: res && res.message ? res.message : "Something went wrong."
                     });
                 }
             },
-
             error: function (xhr) {
-
-                console.log(
-                    "Update Status Error:",
-                    xhr.status
-                );
-
-                console.log(
-                    xhr.responseText
-                );
-
+                console.log("Update Status Error:",xhr.status);
+                console.log(xhr.responseText);
                 Swal.fire({
-
                     icon: "error",
-
                     title: "Server Error",
-
-                    text:
-                        "Unable to update booking status."
-
+                    text: "Unable to update booking status."
                 });
             }
         });
     });
 }
-
-
 // Close payment modal
 function closePaymentModal() {
-
-    $("#paymentModal")
-        .removeClass("active");
-
-    $("#paymentDetailsContent")
-        .html("");
-}
-
+    $("#paymentModal").removeClass("active");
+    $("#paymentDetailsContent").html("");}
 
 // Open change room
-function openChangeRoom(
-    id,
-    currentRoom
+function openChangeRoom(id,currentRoom
 ) {
-
-    $("#crBookingId")
-        .val(id);
-
-
-    $("#crCurrentRoom")
-        .html(
-            "<strong>Current Room:</strong> " +
-            escapeHtml(currentRoom)
-        );
-
-
-    $("#crRoomList")
-        .html(
-            "<option value=''>Loading rooms...</option>"
-        );
-
-
-    $("#crNoRooms")
-        .hide();
-
-
-    $("#drawer")
-        .addClass("active");
-
+    $("#crBookingId").val(id);
+    $("#crCurrentRoom").html("<strong>Current Room:</strong> " +escapeHtml(currentRoom));
+    $("#crRoomList").html("<option value=''>Loading rooms...</option>");
+    $("#crNoRooms").hide();
+    $("#drawer").addClass("active");
 
     // AJAX call to /Admin/Booking/GetAlternativeRooms
     $.ajax({
-
         url:
             "/Admin/Booking/GetAlternativeRooms",
-
-        type:
-            "GET",
-
+        type:"GET",
         data: {
-            bookingId:
-                id
+            bookingId: id
         },
-
-
         success: function (res) {
+            var rooms = res.data || res;
 
-            var rooms =
-                res.data || res;
-
-
-            var html =
-                "<option value=''>Select Room</option>";
-
-
+            var html = "<option value=''>Select Room</option>";
             if (
                 !rooms ||
                 !rooms.length
             ) {
-
                 $("#crRoomList")
                     .html(
                         "<option value=''>No rooms available</option>"
                     );
-
-
                 $("#crNoRooms")
                     .show();
 
 
                 return;
             }
-
-
             $.each(
                 rooms,
                 function (_, room) {
@@ -1488,75 +1079,35 @@ function openChangeRoom(
                     `;
                 }
             );
-
-
             $("#crRoomList")
                 .html(html);
         },
-
-
         error: function () {
-
             $("#crRoomList")
                 .html(
                     "<option value=''>Unable to load rooms</option>"
                 );
         }
-
     });
 }
-
-
 // Format date
 function formatDate(value) {
-
     if (!value) {
         return "";
     }
-
-
-    var date =
-        new Date(value);
-
-
-    if (
-        isNaN(
-            date.getTime()
-        )
-    )
+    var date = new Date(value);
+    if (isNaN(date.getTime()))
     {
-
         return value;
     }
-
-
-    return date.toLocaleDateString(
-        "en-GB"
-    );
+    return date.toLocaleDateString("en-GB");
 }
-
-
 // Escape html
 function escapeHtml(value) {
 
-    return $("<div>")
-        .text(value || "")
-        .html();
+    return $("<div>").text(value || "").html();
 }
-
-
 // Escape attribute
 function escapeAttribute(value) {
-
-    return String(
-        value || ""
-    )
-        .replace(
-            /\\/g,
-            "\\\\"
-        )
-        .replace(
-            /'/g,
-            "\\'"
-        );
+    return String(value || "").replace(/\\/g,"\\\\" ).replace(/'/g,"\\'");
 }

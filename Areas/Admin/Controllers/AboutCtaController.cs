@@ -25,8 +25,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> AboutCta()
         {
-            var data = (await _service.GetAllAsync())
-                .FirstOrDefault();
+            var data = (await _service.GetAllAsync()).FirstOrDefault();
 
             var model = new AboutCtaVM();
 

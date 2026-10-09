@@ -12,9 +12,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         private readonly IHomeWelcomeService _homeWelcomeService;
         private readonly IWebHostEnvironment _environment;
 
-        public HomeWelcomeController(
-            IHomeWelcomeService homeWelcomeService,
-            IWebHostEnvironment environment)
+        public HomeWelcomeController(IHomeWelcomeService homeWelcomeService,IWebHostEnvironment environment)
         {
             _homeWelcomeService = homeWelcomeService;
             _environment = environment;
@@ -51,26 +49,22 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (model.Image1File != null)
             {
-                model.HomeWelcome.Image1Path =
-                    await UploadImage(model.Image1File);
+                model.HomeWelcome.Image1Path = await UploadImage(model.Image1File);
             }
 
             if (model.Image2File != null)
             {
-                model.HomeWelcome.Image2Path =
-                    await UploadImage(model.Image2File);
+                model.HomeWelcome.Image2Path = await UploadImage(model.Image2File);
             }
 
             if (model.Image3File != null)
             {
-                model.HomeWelcome.Image3Path =
-                    await UploadImage(model.Image3File);
+                model.HomeWelcome.Image3Path = await UploadImage(model.Image3File);
             }
 
             model.HomeWelcome.DisplayOrder = 1;
 
-            var result = await _homeWelcomeService.UpdateAsync(
-                model.HomeWelcome
+            var result = await _homeWelcomeService.UpdateAsync(model.HomeWelcome
             );
 
             if (result > 0)
@@ -92,11 +86,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
-            string folderPath = Path.Combine(
-                _environment.WebRootPath,
-                "uploads",
-                "home"
-            );
+            string folderPath = Path.Combine(_environment.WebRootPath, "uploads","home");
 
             if (!Directory.Exists(folderPath))
             {
@@ -105,22 +95,15 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             string extension = Path.GetExtension(file.FileName);
 
-            string fileName =
-                Guid.NewGuid().ToString() + extension;
+            string fileName = Guid.NewGuid().ToString() + extension;
 
-            string filePath =
-                Path.Combine(folderPath, fileName);
+            string filePath = Path.Combine(folderPath, fileName);
 
-            using FileStream stream =
-                new FileStream(filePath, FileMode.Create);
+            using FileStream stream = new FileStream(filePath, FileMode.Create);
 
             await file.CopyToAsync(stream);
 
-            return Path.Combine(
-                "uploads",
-                "home",
-                fileName
-            ).Replace("\\", "/");
+            return Path.Combine("uploads","home",fileName ).Replace("\\", "/");
         }
     }
 }

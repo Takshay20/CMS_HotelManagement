@@ -15,49 +15,21 @@ namespace CMS_HotelBooking.Services
         }
 
         // Send email
-        private async Task<string> SendEmailAsync(
-            string toEmail,
-            string toName,
-            string subject,
-            string body)
+        private async Task<string> SendEmailAsync( string toEmail,string toName, string subject,string body)
         {
             try
             {
-                bool isEnabled = _configuration.GetValue<bool>(
-                    "EmailSettings:IsEnabled",
-                    false
-                );
+                bool isEnabled = _configuration.GetValue<bool>( "EmailSettings:IsEnabled",false );
 
                 if (!isEnabled)
                     return "Disabled";
+                string smtpHost = _configuration["EmailSettings:SmtpHost"]?? "smtp.gmail.com";
 
-                string smtpHost =
-                    _configuration["EmailSettings:SmtpHost"]
-                    ?? "smtp.gmail.com";
-
-                int smtpPort =
-                    _configuration.GetValue<int>(
-                        "EmailSettings:SmtpPort",
-                        587
-                    );
-
-                bool enableSsl =
-                    _configuration.GetValue<bool>(
-                        "EmailSettings:EnableSsl",
-                        true
-                    );
-
-                string senderEmail =
-                    _configuration["EmailSettings:SenderEmail"]
-                    ?? "";
-
-                string senderPassword =
-                    _configuration["EmailSettings:SenderPassword"]
-                    ?? "";
-
-                string senderName =
-                    _configuration["EmailSettings:SenderName"]
-                    ?? "Royal Paradise Hotel";
+                int smtpPort =  _configuration.GetValue<int>("EmailSettings:SmtpPort",587 );
+                bool enableSsl = _configuration.GetValue<bool>( "EmailSettings:EnableSsl",true );
+                string senderEmail = _configuration["EmailSettings:SenderEmail"] ?? "";
+                string senderPassword = _configuration["EmailSettings:SenderPassword"] ?? "";
+                string senderName = _configuration["EmailSettings:SenderName"] ?? "Royal Paradise Hotel";
 
                 if (string.IsNullOrWhiteSpace(toEmail))
                     return "Failed";
@@ -69,38 +41,19 @@ namespace CMS_HotelBooking.Services
                     return "Failed";
 
                 using var mail = new MailMessage();
-
-                mail.From = new MailAddress(
-                    senderEmail,
-                    senderName
-                );
-
-                mail.To.Add(
-                    new MailAddress(
-                        toEmail,
-                        string.IsNullOrWhiteSpace(toName)
-                            ? "Guest"
-                            : toName
-                    )
-                );
-
+                mail.From = new MailAddress(senderEmail,senderName);
+                mail.To.Add(new MailAddress( toEmail,string.IsNullOrWhiteSpace(toName) ? "Guest" : toName));
                 mail.Subject = subject;
                 mail.Body = body;
                 mail.IsBodyHtml = true;
                 mail.BodyEncoding = System.Text.Encoding.UTF8;
                 mail.SubjectEncoding = System.Text.Encoding.UTF8;
 
-                using var smtp = new SmtpClient(
-                    smtpHost,
-                    smtpPort
-                );
+                using var smtp = new SmtpClient(smtpHost,smtpPort);
 
                 smtp.EnableSsl = enableSsl;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(
-                    senderEmail,
-                    senderPassword
-                );
+                smtp.Credentials = new NetworkCredential(senderEmail,senderPassword);
 
                 await smtp.SendMailAsync(mail);
 
@@ -108,22 +61,16 @@ namespace CMS_HotelBooking.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(
-                    "Email Error: " + ex.Message
-                );
+                Console.WriteLine("Email Error: " + ex.Message );
 
                 return "Failed";
             }
         }
 
         // Send booking received
-        public async Task<string> SendBookingReceivedAsync(
-            Booking booking)
+        public async Task<string> SendBookingReceivedAsync(Booking booking)
         {
-            string room = GetRoomName(
-                booking.RoomTitle,
-                booking.RoomNumber
-            );
+            string room = GetRoomName(booking.RoomTitle,booking.RoomNumber);
 
             string body = BuildEmailLayout(
                 "Booking Request Received",
@@ -161,22 +108,14 @@ namespace CMS_HotelBooking.Services
                 "
             );
 
-            return await SendEmailAsync(
-                booking.Email,
-                booking.FullName,
-                $"Booking Request Received - #{booking.BookingId}",
-                body
-            );
+            return await SendEmailAsync(booking.Email,booking.FullName,$"Booking Request Received - #{booking.BookingId}",body);
         }
 
         // Send booking status update
         public async Task<string> SendBookingStatusUpdateAsync(
             Booking booking)
         {
-            string status =
-                string.IsNullOrWhiteSpace(booking.Status)
-                    ? "Pending"
-                    : booking.Status;
+            string status =string.IsNullOrWhiteSpace(booking.Status) ? "Pending": booking.Status;
 
             string heading = "Booking Status Updated";
             string color = "#d4af37";
@@ -207,10 +146,7 @@ namespace CMS_HotelBooking.Services
 
             if (status.Equals("Approved", StringComparison.OrdinalIgnoreCase))
             {
-                string paymentStatus =
-                    string.IsNullOrWhiteSpace(booking.PaymentStatus)
-                        ? "Pending"
-                        : booking.PaymentStatus;
+                string paymentStatus =string.IsNullOrWhiteSpace(booking.PaymentStatus) ? "Pending" : booking.PaymentStatus;
 
                 if (paymentStatus.Equals("Paid", StringComparison.OrdinalIgnoreCase))
                 {
@@ -270,14 +206,9 @@ namespace CMS_HotelBooking.Services
                 }
             }
 
-            string room = GetRoomName(
-                booking.RoomTitle,
-                booking.RoomNumber
-            );
+            string room = GetRoomName(booking.RoomTitle,booking.RoomNumber);
 
-            string body = BuildEmailLayout(
-                heading,
-                color,
+            string body = BuildEmailLayout(heading,color,
                 $@"
                     <h2 style='margin-top:0;color:#222;'>
                         Dear {booking.FullName},
@@ -306,23 +237,13 @@ namespace CMS_HotelBooking.Services
                 "
             );
 
-            return await SendEmailAsync(
-                booking.Email,
-                booking.FullName,
-                $"Booking {status} - #{booking.BookingId}",
-                body
-            );
+            return await SendEmailAsync(booking.Email,booking.FullName,$"Booking {status} - #{booking.BookingId}",body);
         }
 
         // Send payment completed
-        public async Task<string> SendPaymentCompletedAsync(
-            Booking booking,
-            Payment payment)
+        public async Task<string> SendPaymentCompletedAsync(Booking booking,Payment payment)
         {
-            string room = GetRoomName(
-                booking.RoomTitle,
-                booking.RoomNumber
-            );
+            string room = GetRoomName(booking.RoomTitle,booking.RoomNumber);
 
             string body = BuildEmailLayout(
                 "Payment Completed",
@@ -428,32 +349,15 @@ namespace CMS_HotelBooking.Services
                 "
             );
 
-            return await SendEmailAsync(
-                booking.Email,
-                booking.FullName,
-                $"Payment Successful - Booking #{booking.BookingId}",
-                body
-            );
+            return await SendEmailAsync(booking.Email,booking.FullName,$"Payment Successful - Booking #{booking.BookingId}",body);
         }
 
         // Send room change request
-        public async Task<string> SendRoomChangeRequestAsync(
-            Booking booking)
+        public async Task<string> SendRoomChangeRequestAsync(Booking booking)
         {
-            string oldRoom = GetRoomName(
-                booking.RoomTitle,
-                booking.RoomNumber
-            );
-
-            string newRoom = GetRoomName(
-                booking.ProposedRoomTitle,
-                booking.ProposedRoomNumber
-            );
-
-            string note =
-                string.IsNullOrWhiteSpace(booking.RoomChangeNote)
-                    ? "The hotel has proposed an alternative room for your booking."
-                    : booking.RoomChangeNote;
+            string oldRoom = GetRoomName(booking.RoomTitle,booking.RoomNumber);
+            string newRoom = GetRoomName(booking.ProposedRoomTitle,booking.ProposedRoomNumber);
+            string note = string.IsNullOrWhiteSpace(booking.RoomChangeNote) ? "The hotel has proposed an alternative room for your booking." : booking.RoomChangeNote;
 
             string body = BuildEmailLayout(
                 "Room Change Request",
@@ -524,22 +428,13 @@ namespace CMS_HotelBooking.Services
                 "
             );
 
-            return await SendEmailAsync(
-                booking.Email,
-                booking.FullName,
-                $"Room Change Request - Booking #{booking.BookingId}",
-                body
-            );
+            return await SendEmailAsync(booking.Email,booking.FullName,$"Room Change Request - Booking #{booking.BookingId}",body);
         }
 
         // Send booking cancelled
-        public async Task<string> SendBookingCancelledAsync(
-            Booking booking)
+        public async Task<string> SendBookingCancelledAsync(Booking booking)
         {
-            string room = GetRoomName(
-                booking.RoomTitle,
-                booking.RoomNumber
-            );
+            string room = GetRoomName(booking.RoomTitle, booking.RoomNumber);
 
             string body = BuildEmailLayout(
                 "Booking Cancelled",
@@ -572,24 +467,13 @@ namespace CMS_HotelBooking.Services
                 "
             );
 
-            return await SendEmailAsync(
-                booking.Email,
-                booking.FullName,
-                $"Booking Cancelled - #{booking.BookingId}",
-                body
-            );
+            return await SendEmailAsync( booking.Email,booking.FullName,$"Booking Cancelled - #{booking.BookingId}", body);
         }
 
         // Send password reset code
-        public async Task<string> SendPasswordResetCodeAsync(
-            string toEmail,
-            string fullName,
-            string resetCode)
+        public async Task<string> SendPasswordResetCodeAsync(string toEmail,string fullName, string resetCode)
         {
-            string name =
-                string.IsNullOrWhiteSpace(fullName)
-                    ? "Guest"
-                    : fullName;
+            string name =string.IsNullOrWhiteSpace(fullName) ? "Guest" : fullName;
 
             string body = BuildEmailLayout(
                 "Password Reset Request",
@@ -629,18 +513,11 @@ namespace CMS_HotelBooking.Services
                 "
             );
 
-            return await SendEmailAsync(
-                toEmail,
-                name,
-                "Your Password Reset Code - Royal Paradise Hotel",
-                body
-            );
+            return await SendEmailAsync(toEmail,name,"Your Password Reset Code - Royal Paradise Hotel",body);
         }
 
         // Send booking reminder
-        public async Task<string> SendBookingReminderAsync(
-            Booking booking,
-            string reminderType)
+        public async Task<string> SendBookingReminderAsync(Booking booking,string reminderType)
         {
             string subject;
             string heading;
@@ -649,42 +526,31 @@ namespace CMS_HotelBooking.Services
             switch (reminderType)
             {
                 case "24H":
-                    subject =
-                        $"Reminder: Your Stay is Tomorrow - Booking #{booking.BookingId}";
+                    subject = $"Reminder: Your Stay is Tomorrow - Booking #{booking.BookingId}";
                     heading = "Your Stay is Tomorrow";
-                    message =
-                        "This is a friendly reminder that your stay at Royal Paradise Hotel is scheduled for tomorrow.";
+                    message ="This is a friendly reminder that your stay at Royal Paradise Hotel is scheduled for tomorrow.";
                     break;
 
                 case "12H":
-                    subject =
-                        $"Reminder: Your Stay is in 12 Hours - Booking #{booking.BookingId}";
+                    subject = $"Reminder: Your Stay is in 12 Hours - Booking #{booking.BookingId}";
                     heading = "Your Stay is in 12 Hours";
-                    message =
-                        "This is a friendly reminder that your stay at Royal Paradise Hotel is scheduled in approximately 12 hours.";
+                    message = "This is a friendly reminder that your stay at Royal Paradise Hotel is scheduled in approximately 12 hours.";
                     break;
 
                 case "6H":
-                    subject =
-                        $"Reminder: Your Stay Starts in 6 Hours - Booking #{booking.BookingId}";
+                    subject = $"Reminder: Your Stay Starts in 6 Hours - Booking #{booking.BookingId}";
                     heading = "Your Stay Starts in 6 Hours";
-                    message =
-                        "Your stay at Royal Paradise Hotel is scheduled to begin in approximately 6 hours.";
+                    message = "Your stay at Royal Paradise Hotel is scheduled to begin in approximately 6 hours.";
                     break;
 
                 default:
-                    subject =
-                        $"Booking Reminder - #{booking.BookingId}";
+                    subject =$"Booking Reminder - #{booking.BookingId}";
                     heading = "Booking Reminder";
-                    message =
-                        "This is a reminder about your upcoming stay at Royal Paradise Hotel.";
+                    message ="This is a reminder about your upcoming stay at Royal Paradise Hotel.";
                     break;
             }
 
-            string room = GetRoomName(
-                booking.RoomTitle,
-                booking.RoomNumber
-            );
+            string room = GetRoomName( booking.RoomTitle,booking.RoomNumber);
 
             string body = BuildEmailLayout(
                 heading,
@@ -734,23 +600,13 @@ namespace CMS_HotelBooking.Services
                 "
             );
 
-            return await SendEmailAsync(
-                booking.Email,
-                booking.FullName,
-                subject,
-                body
-            );
+            return await SendEmailAsync(booking.Email,booking.FullName,subject,body);
         }
 
         // Get room name
-        private string GetRoomName(
-            string? title,
-            string? number)
+        private string GetRoomName(string? title,string? number)
         {
-            string room =
-                string.IsNullOrWhiteSpace(title)
-                    ? "Hotel Room"
-                    : title;
+            string room =string.IsNullOrWhiteSpace(title)? "Hotel Room": title;
 
             if (!string.IsNullOrWhiteSpace(number))
                 room += $" - Room {number}";
@@ -759,9 +615,7 @@ namespace CMS_HotelBooking.Services
         }
 
         // Build booking details
-        private string BuildBookingDetails(
-            Booking booking,
-            string room)
+        private string BuildBookingDetails(Booking booking,string room)
         {
             return $@"
                 <h3 style='color:#222;
@@ -837,8 +691,7 @@ namespace CMS_HotelBooking.Services
         }
 
         // Build booking dates
-        private string BuildBookingDates(
-            Booking booking)
+        private string BuildBookingDates( Booking booking)
         {
             return $@"
                 <div style='margin-top:25px;
@@ -859,19 +712,11 @@ namespace CMS_HotelBooking.Services
         }
 
         // Build common email layout
-        private string BuildEmailLayout(
-            string title,
-            string color,
-            string content)
+        private string BuildEmailLayout(string title,string color,string content)
         {
-            string hotelEmail =
-                _configuration["EmailSettings:SenderEmail"]
-                ?? "";
+            string hotelEmail =_configuration["EmailSettings:SenderEmail"]?? "";
 
-            string hotelName =
-                _configuration["EmailSettings:SenderName"]
-                ?? "Royal Paradise Hotel";
-
+            string hotelName =_configuration["EmailSettings:SenderName"]?? "Royal Paradise Hotel";
             return $@"
 <!DOCTYPE html>
 <html>

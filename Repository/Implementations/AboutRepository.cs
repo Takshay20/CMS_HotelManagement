@@ -17,9 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            return await connection.QueryFirstOrDefaultAsync<About>(
-                "sp_GetAbout",
-                commandType: CommandType.StoredProcedure
+            return await connection.QueryFirstOrDefaultAsync<About>("sp_GetAbout",commandType: CommandType.StoredProcedure
             );
         }
 
@@ -40,11 +38,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameters.Add("@TotalRooms", model.TotalRooms);
             parameters.Add("@HappyGuests", model.HappyGuests);
 
-            var result = await connection.QuerySingleAsync<int>(
-                "sp_SaveAbout",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QuerySingleAsync<int>("sp_SaveAbout",parameters,commandType: CommandType.StoredProcedure);
 
             return result;
         }

@@ -141,20 +141,16 @@ function bindBookingChart(data) {
                 var label = this.data.labels[index];
 
                 if (label === "Pending") {
-                    window.location.href =
-                        "/Admin/Booking/Booking?status=Pending";
+                    window.location.href = "/Admin/Booking/Booking?status=Pending";
                 }
                 else if (label === "Approved") {
-                    window.location.href =
-                        "/Admin/Booking/Booking?status=Approved";
+                    window.location.href = "/Admin/Booking/Booking?status=Approved";
                 }
                 else if (label === "Rejected") {
-                    window.location.href =
-                        "/Admin/Booking/Booking?status=Rejected";
+                    window.location.href = "/Admin/Booking/Booking?status=Rejected";
                 }
                 else if (label === "Cancelled") {
-                    window.location.href =
-                        "/Admin/Booking/Booking?status=Cancelled";
+                    window.location.href = "/Admin/Booking/Booking?status=Cancelled";
                 }
             },
             onHover: function (event, elements) {

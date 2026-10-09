@@ -16,9 +16,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<AboutCounter>(
-                "sp_GetAllAboutCounter",
-                commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<AboutCounter>("sp_GetAllAboutCounter",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
@@ -31,10 +29,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             var parameter = new DynamicParameters();
             parameter.Add("@Filter", filter);
 
-            var result = await connection.QueryAsync<AboutCounter>(
-                "sp_GetAllAboutCounterRecords",
-                parameter,
-                commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<AboutCounter>("sp_GetAllAboutCounterRecords",parameter,commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
@@ -47,10 +42,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             var parameter = new DynamicParameters();
             parameter.Add("@AboutCounterId", id);
 
-            return await connection.QueryFirstOrDefaultAsync<AboutCounter>(
-                "sp_GetAboutCounterById",
-                parameter,
-                commandType: CommandType.StoredProcedure);
+            return await connection.QueryFirstOrDefaultAsync<AboutCounter>("sp_GetAboutCounterById",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Save about counter record
@@ -68,10 +60,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameter.Add("@DisplayOrder", model.DisplayOrder);
             parameter.Add("@IsActive", model.IsActive);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_SaveAboutCounter",
-                parameter,
-                commandType: CommandType.StoredProcedure);
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_SaveAboutCounter",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Delete about counter record
@@ -82,10 +71,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             var parameter = new DynamicParameters();
             parameter.Add("@AboutCounterId", id);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_DeleteAboutCounter",
-                parameter,
-                commandType: CommandType.StoredProcedure);
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_DeleteAboutCounter",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Restore deleted about counter record
@@ -96,16 +82,9 @@ namespace CMS_HotelBooking.Repository.Implementations
             var parameter = new DynamicParameters();
             parameter.Add("@AboutCounterId", id);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_RestoreAboutCounter",
-                parameter,
-                commandType: CommandType.StoredProcedure);
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_RestoreAboutCounter",parameter,commandType: CommandType.StoredProcedure);
         }
 
-        // Get deleted date
-        public Task<DateTime?> GetDeletedDateAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+     
     }
 }

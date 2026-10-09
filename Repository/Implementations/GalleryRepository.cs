@@ -41,10 +41,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameter.Add("@IsActive", model.IsActive);
 
             return await connection.QuerySingleAsync<int>(
-                "sp_SaveGallery",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+                "sp_SaveGallery",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Delete gallery record

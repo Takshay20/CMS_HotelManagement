@@ -14,29 +14,23 @@ namespace CMS_HotelBooking.ViewModels
         [StringLength(150)]
         public string Email { get; set; } = string.Empty;
 
-
         [Required(ErrorMessage = "Country code is required.")]
         public string CountryCode { get; set; } = "+91";
 
-
         [Required(ErrorMessage = "Phone number is required.")]
         public string Phone { get; set; } = string.Empty;
-
 
         [Required(ErrorMessage = "Password is required.")]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long.")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
-
         [Required(ErrorMessage = "Confirm Password is required.")]
         [DataType(DataType.Password)]
         [Compare("Password",ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
-
-        public IEnumerable<ValidationResult> Validate(
-            ValidationContext validationContext)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             string code = CountryCode?.Trim() ?? "";
             string phone = Phone?.Trim() ?? "";

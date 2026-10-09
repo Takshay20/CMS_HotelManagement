@@ -9,7 +9,6 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
     public class DashboardController : Controller
     {
         private readonly IDashboardService _service;
-
         public DashboardController(IDashboardService service)
         {
             _service = service;

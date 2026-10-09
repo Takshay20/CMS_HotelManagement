@@ -149,13 +149,9 @@ namespace CMS_HotelBooking.Services.Implementations
             return freeRooms;
         }
 
-        public async Task<(bool Success, string Message)> ProposeRoomChangeAsync(
-    int bookingId,
-    int proposedRoomId,
-    string? note)
+        public async Task<(bool Success, string Message)> ProposeRoomChangeAsync(int bookingId,int proposedRoomId,string? note)
         {
-            var booking =
-                await _repository.GetByIdAsync(bookingId);
+            var booking = await _repository.GetByIdAsync(bookingId);
 
             if (booking == null)
             {
@@ -172,83 +168,44 @@ namespace CMS_HotelBooking.Services.Implementations
 
             if (proposedRoom.RoomCategoryId != booking.RoomCategoryId)
             {
-                return (
-                    false,
-                    "Please choose a room from the same category as the original booking."
-                );
+                return (false,"Please choose a room from the same category as the original booking.");
             }
 
-            var conflicts =
-                await _repository.GetConflictCountAsync(
-                    proposedRoomId,
-                    booking.CheckInDate,
-                    booking.CheckOutDate,
-                    bookingId
-                );
+            var conflicts = await _repository.GetConflictCountAsync(proposedRoomId, booking.CheckInDate,booking.CheckOutDate,bookingId);
 
             if (conflicts > 0)
             {
-                return (
-                    false,
-                    "The selected room is also booked for these dates. Please choose a different room."
-                );
+                return ( false,"The selected room is also booked for these dates. Please choose a different room.");
             }
 
             var result =
-                await _repository.ProposeRoomChangeAsync(
-                    bookingId,
-                    proposedRoomId,
-                    note
-                );
+                await _repository.ProposeRoomChangeAsync(bookingId,proposedRoomId,note);
 
             if (result <= 0)
             {
-                return (
-                    false,
-                    "Unable to propose room change."
-                );
+                return (false,"Unable to propose room change.");
             }
 
-            return (
-                true,
-                "Room change proposed successfully."
-            );
+            return (true, "Room change proposed successfully.");
         }
-        public async Task<(bool Success, string Message)> SendRoomChangeEmailAsync(
-    int bookingId)
+        public async Task<(bool Success, string Message)> SendRoomChangeEmailAsync(int bookingId)
         {
-            var booking =
-                await _repository.GetByIdAsync(bookingId);
+            var booking =await _repository.GetByIdAsync(bookingId);
 
             if (booking == null)
             {
                 return (false, "Booking not found.");
             }
 
-            var emailStatus =
-                await _emailService.SendRoomChangeRequestAsync(
-                    booking
-                );
+            var emailStatus =await _emailService.SendRoomChangeRequestAsync(booking);
+            await _repository.UpdateEmailStatusAsync( bookingId,emailStatus,"RoomChange");
 
-            await _repository.UpdateEmailStatusAsync(
-                bookingId,
-                emailStatus,
-                "RoomChange"
-            );
-
-            return (
-                true,
-                EmailNoteFor(emailStatus)
-            );
+            return (true,EmailNoteFor(emailStatus));
         }
 
-        public async Task<(bool Success, string Message)> RespondRoomChangeAsync(
-    int bookingId,
-    int userId,
-    bool accept)
+        public async Task<(bool Success, string Message)> RespondRoomChangeAsync(int bookingId,int userId, bool accept)
         {
-            var booking =
-                await _repository.GetByIdAsync(bookingId);
+            var booking =await _repository.GetByIdAsync(bookingId);
 
             if (booking == null || booking.UserId != userId)
             {
@@ -257,82 +214,45 @@ namespace CMS_HotelBooking.Services.Implementations
 
             if (booking.RoomChangeStatus != "Pending")
             {
-                return (
-                    false,
-                    "There is no pending room change request for this booking."
-                );
+                return (false, "There is no pending room change request for this booking.");
             }
 
-            var result =
-                await _repository.RespondRoomChangeAsync(
-                    bookingId,
-                    accept
-                );
+            var result =await _repository.RespondRoomChangeAsync(bookingId,accept);
 
             if (result <= 0)
             {
-                return (
-                    false,
-                    "Unable to process your response. Please try again."
-                );
+                return (false,"Unable to process your response. Please try again.");
             }
 
             if (!accept)
             {
-                var emailStatus =
-                    await _emailService.SendBookingCancelledAsync(
-                        booking
-                    );
+                var emailStatus =await _emailService.SendBookingCancelledAsync(booking);
 
-                await _repository.UpdateEmailStatusAsync(
-                    bookingId,
-                    emailStatus,
-                    "Cancelled"
-                );
+                await _repository.UpdateEmailStatusAsync(bookingId,emailStatus, "Cancelled");
 
-                return (
-                    true,
-                    "Your booking has been cancelled as requested."
-                );
+                return (true, "Your booking has been cancelled as requested.");
             }
 
-            var updatedBooking =
-                await _repository.GetByIdAsync(bookingId);
+            var updatedBooking =await _repository.GetByIdAsync(bookingId);
 
             if (updatedBooking == null)
             {
-                return (
-                    false,
-                    "Booking was updated but could not be loaded again."
-                );
+                return (false,"Booking was updated but could not be loaded again." );
             }
 
-            var payment =
-                await _paymentService.GetByBookingIdAsync(
-                    bookingId
-                );
+            var payment =await _paymentService.GetByBookingIdAsync(bookingId);
 
             if (payment != null)
             {
-                var paymentResult =
-                    await _paymentService.UpdatePaymentAmountAsync(
-                        payment.PaymentId,
-                        updatedBooking.TotalPrice
-                    );
+                var paymentResult = await _paymentService.UpdatePaymentAmountAsync(payment.PaymentId,updatedBooking.TotalPrice);
 
                 if (!paymentResult.Success)
                 {
-                    return (
-                        false,
-                        "Room changed successfully, but payment amount could not be updated."
-                    );
+                    return ( false, "Room changed successfully, but payment amount could not be updated.");
                 }
             }
 
-            return (
-                true,
-                "Great! Your booking and payment amount have been updated to the new room."
-            );
+            return (true,"Great! Your booking and payment amount have been updated to the new room.");
         }
 
         public async Task<(bool Success, string Message, int RefundPercentage, decimal RefundAmount)> CancelByGuestAsync(int bookingId, int userId)

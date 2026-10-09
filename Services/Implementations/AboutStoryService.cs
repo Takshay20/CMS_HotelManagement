@@ -22,7 +22,8 @@ namespace CMS_HotelBooking.Services.Implementations
         // Save about story record
         public async Task<int> SaveAsync(AboutStory model) => await _repository.SaveAsync(model);
 
-        // Delete about story record
-        public async Task<int> DeleteAsync(int id) => await _repository.DeleteAsync(id);
+
+
+        
     }
 }

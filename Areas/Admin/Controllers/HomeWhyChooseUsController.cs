@@ -12,7 +12,6 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
     public class HomeWhyChooseUsController : Controller
     {
         private readonly IHomeWhyChooseUsService _service;
-
         public HomeWhyChooseUsController(IHomeWhyChooseUsService service)
         {
             _service = service;
@@ -36,10 +35,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAllAsync();
-
-            return Json(
-                ResponseModel.SuccessResponse("Success", result)
-            );
+            return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
         // Get home why choose us record by id
@@ -50,14 +46,10 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (result == null)
             {
-                return Json(
-                    ResponseModel.ErrorResponse("Record not found.")
-                );
+                return Json(ResponseModel.ErrorResponse("Record not found."));
             }
 
-            return Json(
-                ResponseModel.SuccessResponse("Success", result)
-            );
+            return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
         // Save home why choose us record
@@ -66,52 +58,33 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             if (model.HomeWhyChooseUs == null)
             {
-                return Json(
-                    ResponseModel.ErrorResponse("Invalid Data")
-                );
+                return Json( ResponseModel.ErrorResponse("Invalid Data"));
             }
 
             if (model.HomeWhyChooseUs.HomeWhyChooseUsId == 0)
             {
                 var existingRecords = await _service.GetAllAsync();
-
-                model.HomeWhyChooseUs.DisplayOrder =
-                    existingRecords.Count > 0
-                    ? existingRecords.Max(x => x.DisplayOrder) + 1
-                    : 1;
+                model.HomeWhyChooseUs.DisplayOrder = existingRecords.Count > 0 ? existingRecords.Max(x => x.DisplayOrder) + 1 : 1;
             }
             else
             {
-                var existing = await _service.GetByIdAsync(
-                    model.HomeWhyChooseUs.HomeWhyChooseUsId
-                );
+                var existing = await _service.GetByIdAsync(model.HomeWhyChooseUs.HomeWhyChooseUsId);
 
                 if (existing != null)
                 {
-                    model.HomeWhyChooseUs.DisplayOrder =
-                        existing.DisplayOrder;
+                    model.HomeWhyChooseUs.DisplayOrder = existing.DisplayOrder;
                 }
             }
-
-            var result = await _service.SaveAsync(
-                model.HomeWhyChooseUs
-            );
+            var result = await _service.SaveAsync(model.HomeWhyChooseUs);
 
             if (result > 0)
             {
-                string message =
-                    model.HomeWhyChooseUs.HomeWhyChooseUsId == 0
-                    ? "Record Saved Successfully."
-                    : "Record Updated Successfully.";
+                string message = model.HomeWhyChooseUs.HomeWhyChooseUsId == 0 ? "Record Saved Successfully." : "Record Updated Successfully.";
 
-                return Json(
-                    ResponseModel.SuccessResponse(message)
-                );
+                return Json(ResponseModel.SuccessResponse(message));
             }
 
-            return Json(
-                ResponseModel.ErrorResponse("Unable To Save Record")
-            );
+            return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
         }
 
         // Delete home why choose us record
@@ -122,18 +95,10 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
             if (result > 0)
             {
-                return Json(
-                    ResponseModel.SuccessResponse(
-                        "Record Deleted Successfully."
-                    )
-                );
+                return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
             }
 
-            return Json(
-                ResponseModel.ErrorResponse(
-                    "Unable To Delete Record"
-                )
-            );
+            return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
         // Get all records
@@ -142,12 +107,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _service.GetAllRecordsAsync(filter);
 
-            return Json(
-                ResponseModel.SuccessResponse(
-                    "Success",
-                    result
-                )
-            );
+            return Json(ResponseModel.SuccessResponse("Success",result));
         }
 
         // Restore deleted home why choose us record
@@ -161,27 +121,14 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
 
                 if (result > 0)
                 {
-                    return Json(
-                        ResponseModel.SuccessResponse(
-                            "Record restored successfully.",
-                            result
-                        )
-                    );
+                    return Json(ResponseModel.SuccessResponse("Record restored successfully.",result));
                 }
 
-                return Json(
-                    ResponseModel.ErrorResponse(
-                        "Record could not be restored."
-                    )
-                );
+                return Json(ResponseModel.ErrorResponse("Record could not be restored." ));
             }
             catch (Exception ex)
             {
-                return Json(
-                    ResponseModel.ErrorResponse(
-                        ex.Message
-                    )
-                );
+                return Json(ResponseModel.ErrorResponse(ex.Message));
             }
         }
     }

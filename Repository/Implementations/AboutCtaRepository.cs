@@ -17,10 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<AboutCta>(
-                "sp_GetAboutCta",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<AboutCta>("sp_GetAboutCta",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
@@ -30,10 +27,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<AboutCta>(
-                "sp_GetAboutCta",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<AboutCta>("sp_GetAboutCta", commandType: CommandType.StoredProcedure);
 
             return result.FirstOrDefault(x => x.AboutCtaId == id);
         }
@@ -52,19 +46,11 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameter.Add("@ButtonUrl", model.ButtonUrl);
             parameter.Add("@ImagePath", model.ImagePath);
 
-            var result = await connection.QuerySingleAsync<int>(
-                "sp_SaveAboutCta",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QuerySingleAsync<int>("sp_SaveAboutCta",parameter,commandType: CommandType.StoredProcedure);
 
             return result;
         }
 
-        // Delete about cta record
-        public async Task<int> DeleteAsync(int id)
-        {
-            return 0;
-        }
+    
     }
 }

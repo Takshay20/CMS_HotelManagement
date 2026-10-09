@@ -41,25 +41,16 @@ namespace CMS_HotelBooking.Controllers
                 Phone = model.Phone?.Trim()
             };
 
-            var (success, message) =
-                await _usersService.RegisterAsync(
-                    user,
-                    model.Password,
-                    "Customer"
-                );
+            var (success, message) = await _usersService.RegisterAsync(user,model.Password,"Customer");
 
             if (!success)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    message
-                );
+                ModelState.AddModelError(string.Empty, message );
 
                 return View(model);
             }
 
-            TempData["SuccessMessage"] =
-                "Registration successful. Please login to continue.";
+            TempData["SuccessMessage"] = "Registration successful. Please login to continue.";
 
             return RedirectToAction(nameof(Login));
         }
@@ -70,45 +61,25 @@ namespace CMS_HotelBooking.Controllers
         {
             if (User.Identity?.IsAuthenticated == true)
                 return RedirectToAction("Index", "Home");
-
             ViewBag.ReturnUrl = returnUrl;
-
             return View();
         }
 
         // Submit login form
         [HttpPost]
-        public async Task<IActionResult> Login(
-            LoginVM model,
-            string? returnUrl = null)
+        public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
         {
-            var (success, user, message) =
-                await _usersService.LoginAsync(
-                    model.Email,
-                    model.Password
-                );
-
+            var (success, user, message) = await _usersService.LoginAsync(model.Email,model.Password);
             if (!success || user == null)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    message
-                );
-
+                ModelState.AddModelError(string.Empty,message);
                 ViewBag.ReturnUrl = returnUrl;
-
                 return View(model);
             }
 
-            if (!string.Equals(
-                user.Role,
-                model.LoginAs,
-                StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(user.Role,model.LoginAs,StringComparison.OrdinalIgnoreCase))
             {
-                string expected =
-                    user.Role == "Admin"
-                        ? "Admin"
-                        : "User";
+                string expected = user.Role == "Admin" ? "Admin" : "User";
 
                 ModelState.AddModelError(
                     string.Empty,
@@ -160,9 +131,7 @@ namespace CMS_HotelBooking.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme
-            );
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Login", "Account");
         }
@@ -195,10 +164,10 @@ namespace CMS_HotelBooking.Controllers
             }
 
             TempData["SuccessMessage"] =result.Message;
-            return RedirectToAction(
-                nameof(VerifyResetCode),
-                new { email = email }
-            );
+            return RedirectToAction(nameof(VerifyResetCode),
+                new { 
+                    email = email 
+                });
         }
 
         // Open verify reset code page

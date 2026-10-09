@@ -13,9 +13,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         }
 
         // Get by booking and type
-        public async Task<BookingReminder?> GetByBookingAndTypeAsync(
-            int bookingId,
-            string reminderType)
+        public async Task<BookingReminder?> GetByBookingAndTypeAsync(int bookingId,string reminderType)
         {
             using var connection = GetConnection();
 
@@ -24,11 +22,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameters.Add("@BookingId", bookingId);
             parameters.Add("@ReminderType", reminderType);
 
-            return await connection.QueryFirstOrDefaultAsync<BookingReminder>(
-                "sp_GetBookingReminder",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<BookingReminder>("sp_GetBookingReminder",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Create booking reminder record
@@ -39,31 +33,15 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             var parameters = new DynamicParameters();
 
-            parameters.Add(
-                "@BookingId",
-                reminder.BookingId
-            );
+            parameters.Add("@BookingId",reminder.BookingId);
 
-            parameters.Add(
-                "@ReminderType",
-                reminder.ReminderType
-            );
+            parameters.Add("@ReminderType",reminder.ReminderType);
 
-            parameters.Add(
-                "@SentDate",
-                reminder.SentDate
-            );
+            parameters.Add("@SentDate",reminder.SentDate);
 
-            parameters.Add(
-                "@IsSent",
-                reminder.IsSent
-            );
+            parameters.Add("@IsSent",reminder.IsSent);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_CreateBookingReminder",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_CreateBookingReminder",parameters,commandType: CommandType.StoredProcedure);
         }
 
         // Get bookings for reminder
@@ -71,10 +49,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<Booking>(
-                "sp_GetBookingsForReminder",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<Booking>("sp_GetBookingsForReminder",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }

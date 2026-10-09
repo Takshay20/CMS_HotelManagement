@@ -9,9 +9,7 @@ namespace CMS_HotelBooking.Services.Implementations
         private readonly IBookingReminderRepository _reminderRepository;
         private readonly IEmailService _emailService;
 
-        public BookingReminderService(
-            IBookingReminderRepository reminderRepository,
-            IEmailService emailService)
+        public BookingReminderService(IBookingReminderRepository reminderRepository,IEmailService emailService)
         {
             _reminderRepository = reminderRepository;
             _emailService = emailService;
@@ -20,8 +18,7 @@ namespace CMS_HotelBooking.Services.Implementations
         // Process reminders
         public async Task ProcessRemindersAsync()
         {
-            var bookings =
-                await _reminderRepository.GetBookingsForReminderAsync();
+            var bookings = await _reminderRepository.GetBookingsForReminderAsync();
 
             if (bookings == null || bookings.Count == 0)
                 return;
@@ -32,29 +29,13 @@ namespace CMS_HotelBooking.Services.Implementations
             {
                 try
                 {
-                    var checkInDateTime =
-                        booking.CheckInDate.Date.AddHours(11);
+                    var checkInDateTime =booking.CheckInDate.Date.AddHours(11);
 
-                    await ProcessReminderAsync(
-                        booking,
-                        checkInDateTime.AddHours(-24),
-                        "24H",
-                        now
-                    );
+                    await ProcessReminderAsync(booking,checkInDateTime.AddHours(-24),"24H",now);
 
-                    await ProcessReminderAsync(
-                        booking,
-                        checkInDateTime.AddHours(-12),
-                        "12H",
-                        now
-                    );
+                    await ProcessReminderAsync( booking,checkInDateTime.AddHours(-12),"12H",now);
 
-                    await ProcessReminderAsync(
-                        booking,
-                        checkInDateTime.AddHours(-6),
-                        "6H",
-                        now
-                    );
+                    await ProcessReminderAsync(booking,checkInDateTime.AddHours(-6),"6H",now);
                 }
                 catch (Exception ex)
                 {
@@ -66,11 +47,7 @@ namespace CMS_HotelBooking.Services.Implementations
         }
 
         // Process reminder
-        private async Task ProcessReminderAsync(
-            Booking booking,
-            DateTime reminderTime,
-            string reminderType,
-            DateTime now)
+        private async Task ProcessReminderAsync(Booking booking,DateTime reminderTime,string reminderType,DateTime now)
         {
             if (now < reminderTime)
                 return;
@@ -79,22 +56,14 @@ namespace CMS_HotelBooking.Services.Implementations
                 return;
 
             var existingReminder =
-                await _reminderRepository.GetByBookingAndTypeAsync(
-                    booking.BookingId,
-                    reminderType
-                );
+                await _reminderRepository.GetByBookingAndTypeAsync(booking.BookingId,reminderType);
 
-            if (existingReminder != null &&
-                existingReminder.IsSent)
+            if (existingReminder != null && existingReminder.IsSent)
             {
                 return;
             }
 
-            var emailStatus =
-                await _emailService.SendBookingReminderAsync(
-                    booking,
-                    reminderType
-                );
+            var emailStatus =await _emailService.SendBookingReminderAsync(booking,reminderType);
 
             if (emailStatus == "Sent")
             {
@@ -108,15 +77,11 @@ namespace CMS_HotelBooking.Services.Implementations
 
                 await _reminderRepository.CreateAsync(reminder);
 
-                Console.WriteLine(
-                    $"{reminderType} reminder sent for BookingId {booking.BookingId}"
-                );
+                Console.WriteLine($"{reminderType} reminder sent for BookingId {booking.BookingId}");
             }
             else
             {
-                Console.WriteLine(
-                    $"{reminderType} reminder failed for BookingId {booking.BookingId}. Email Status: {emailStatus}"
-                );
+                Console.WriteLine($"{reminderType} reminder failed for BookingId {booking.BookingId}. Email Status: {emailStatus}");
             }
         }
     }

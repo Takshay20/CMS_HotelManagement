@@ -27,14 +27,9 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<AboutStory>(
-                "sp_GetAboutStory",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<AboutStory>("sp_GetAboutStory", commandType: CommandType.StoredProcedure);
 
-            return result.FirstOrDefault(
-                x => x.AboutStoryId == id
-            );
+            return result.FirstOrDefault( x => x.AboutStoryId == id);
         }
 
         // Save about story record
@@ -54,21 +49,10 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameters.Add("@ImagePath", model.ImagePath);
 
-            var result = await connection.QuerySingleAsync<int>(
-                "sp_SaveAboutStory",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QuerySingleAsync<int>("sp_SaveAboutStory",parameters,commandType: CommandType.StoredProcedure);
 
             return result;
         }
 
-        // Delete about story record
-        public Task<int> DeleteAsync(int id)
-        {
-            throw new NotSupportedException(
-                "SQL does not contain a delete procedure for AboutStory. Use the SQL-supported Save/Get operations."
-            );
-        }
     }
 }

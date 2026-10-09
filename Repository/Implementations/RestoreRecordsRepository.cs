@@ -17,11 +17,12 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            return await connection.QueryAsync<RestoreRecord>(
-                "sp_GetRestoreRecords",
-                new { Module = module, Filter = filter },
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryAsync<RestoreRecord>("sp_GetRestoreRecords",
+                new {
+                    Module = module, 
+                    Filter = filter 
+                },
+                commandType: CommandType.StoredProcedure);
         }
 
         // Restore deleted restore record
@@ -29,11 +30,12 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            return await connection.ExecuteScalarAsync<int>(
-                "sp_RestoreRecord",
-                new { Module = module, Id = id },
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.ExecuteScalarAsync<int>("sp_RestoreRecord",
+                new {
+                    Module = module, 
+                    Id = id 
+                },
+                commandType: CommandType.StoredProcedure);
         }
     }
 }

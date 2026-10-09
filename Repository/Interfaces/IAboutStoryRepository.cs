@@ -7,6 +7,6 @@ namespace CMS_HotelBooking.Repository.Interfaces
         Task<List<AboutStory>> GetAllAsync();
         Task<AboutStory?> GetByIdAsync(int id);
         Task<int> SaveAsync(AboutStory model);
-        Task<int> DeleteAsync(int id);
+
     }
 }

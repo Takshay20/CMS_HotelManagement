@@ -9,13 +9,9 @@ namespace CMS_HotelBooking.Controllers
     public class HomeViewModel
     {
         public List<Slider> Sliders { get; set; } = new();
-
         public HomeWelcome? Welcome { get; set; }
-
         public List<HomeWhyChooseUs> WhyChooseUs { get; set; } = new();
-
         public List<Room> FeaturedRooms { get; set; } = new();
-
         public List<Feedback> Testimonials { get; set; } = new();
     }
 
@@ -49,25 +45,19 @@ namespace CMS_HotelBooking.Controllers
         public async Task<IActionResult> Index()
         {
             var welcome = await _homeWelcomeService.GetAsync();
-
             var whyChooseUs = await _whyChooseUsService.GetAllAsync();
-
             var model = new HomeViewModel
             {
                 Sliders = await _sliderService.GetAllAsync("Home"),
-
                 Welcome = welcome,
-
                 WhyChooseUs = whyChooseUs
                     .Where(x => x.IsActive)
                     .OrderBy(x => x.DisplayOrder)
                     .ToList(),
 
                 FeaturedRooms = await _roomService.GetFeaturedAsync(6),
-
                 Testimonials = await _feedbackService.GetApprovedAsync(9)
             };
-
             return View(model);
         }
 
@@ -130,42 +120,24 @@ namespace CMS_HotelBooking.Controllers
                 if (!allowedExtensions.Contains(extension))
                 {
                     return Json(
-                        ResponseModel.ErrorResponse(
-                            "Only JPG, JPEG, PNG, WEBP and JFIF images are allowed."
-                        )
-                    );
+                        ResponseModel.ErrorResponse("Only JPG, JPEG, PNG, WEBP and JFIF images are allowed." ));
                 }
 
                 if (model.ImageFile.Length > 5 * 1024 * 1024)
                 {
-                    return Json(
-                        ResponseModel.ErrorResponse(
-                            "Image size cannot exceed 5 MB."
-                        )
-                    );
+                    return Json(ResponseModel.ErrorResponse("Image size cannot exceed 5 MB."));
                 }
 
-                string folderPath =
-                    Path.Combine(
-                        _environment.WebRootPath,
-                        "uploads",
-                        "feedback"
-                    );
+                string folderPath =Path.Combine(_environment.WebRootPath,"uploads","feedback");
 
                 if (!Directory.Exists(folderPath))
                 {
                     Directory.CreateDirectory(folderPath);
                 }
 
-                string fileName =
-                    Guid.NewGuid().ToString() +
-                    extension;
+                string fileName =Guid.NewGuid().ToString() +extension;
 
-                string filePath =
-                    Path.Combine(
-                        folderPath,
-                        fileName
-                    );
+                string filePath =Path.Combine(folderPath, fileName);
 
                 using (FileStream stream =
                     new FileStream(

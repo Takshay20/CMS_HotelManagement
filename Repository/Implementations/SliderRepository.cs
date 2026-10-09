@@ -21,11 +21,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@PageKey", pageKey);
 
-            var result = await connection.QueryAsync<Slider>(
-                "sp_GetAllSlider",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryAsync<Slider>("sp_GetAllSlider",parameter,commandType: CommandType.StoredProcedure );
 
             return result.ToList();
         }
@@ -39,11 +35,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@SliderId", id);
 
-            return await connection.QueryFirstOrDefaultAsync<Slider>(
-                "sp_GetSliderById",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<Slider>("sp_GetSliderById",parameter, commandType: CommandType.StoredProcedure);
         }
 
         // Save slider record
@@ -63,11 +55,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameter.Add("@DisplayOrder", model.DisplayOrder);
             parameter.Add("@IsActive", model.IsActive);
 
-            return await connection.QuerySingleAsync<int>(
-                "sp_SaveSlider",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QuerySingleAsync<int>("sp_SaveSlider",parameter,commandType: CommandType.StoredProcedure);
         }
 
         // Delete slider record
@@ -79,11 +67,7 @@ namespace CMS_HotelBooking.Repository.Implementations
 
             parameter.Add("@SliderId", id);
 
-            return await connection.QueryFirstOrDefaultAsync<int>(
-                "sp_DeleteSlider",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            return await connection.QueryFirstOrDefaultAsync<int>("sp_DeleteSlider",parameter,commandType: CommandType.StoredProcedure);
         }
     }
 }

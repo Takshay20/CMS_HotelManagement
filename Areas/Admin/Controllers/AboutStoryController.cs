@@ -21,9 +21,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> AboutStory()
         {
-            var data = (await _service.GetAllAsync())
-                .OrderBy(x => x.DisplayOrder)
-                .FirstOrDefault();
+            var data = (await _service.GetAllAsync()).OrderBy(x => x.DisplayOrder).FirstOrDefault();
             var model = new AboutStoryVM();
             if (data != null)
             {
@@ -69,34 +67,19 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         // Upload image and return saved path
         private async Task<string> UploadImage(IFormFile file)
         {
-            string folderPath = Path.Combine(_environment.WebRootPath,
-                "uploads",
-                "about"
+            string folderPath = Path.Combine(_environment.WebRootPath,"uploads", "about"
             );
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
-            string extension =
-                Path.GetExtension(file.FileName);
-
-            string fileName =
-                Guid.NewGuid().ToString() + extension;
-
-            string filePath =
-                Path.Combine(folderPath, fileName);
-
-            using FileStream stream =new FileStream(
-                    filePath,
-                    FileMode.Create
-                );
+            string extension = Path.GetExtension(file.FileName);
+            string fileName = Guid.NewGuid().ToString() + extension;
+            string filePath = Path.Combine(folderPath, fileName);
+            using FileStream stream =new FileStream(filePath,FileMode.Create);
             await file.CopyToAsync(stream);
 
-            return Path.Combine(
-                "uploads",
-                "about",
-                fileName
-            ).Replace("\\", "/");
+            return Path.Combine("uploads","about",fileName).Replace("\\", "/");
         }
     }
 }

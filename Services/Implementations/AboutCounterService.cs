@@ -49,10 +49,6 @@ namespace CMS_HotelBooking.Services.Implementations
             return await _repository.RestoreAsync(id);
         }
 
-        // Get deleted date
-        public async Task<DateTime?> GetDeletedDateAsync(int id)
-        {
-            return await _repository.GetDeletedDateAsync(id);
-        }
+     
     }
 }

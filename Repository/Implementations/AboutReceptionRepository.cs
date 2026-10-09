@@ -13,9 +13,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         public async Task<List<AboutReception>> GetAllAsync()
         {
             using var connection = GetConnection();
-            var result = await connection.QueryAsync<AboutReception>(
-                "sp_GetAboutReception",
-                commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<AboutReception>("sp_GetAboutReception",commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
 
@@ -23,9 +21,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         public async Task<AboutReception?> GetByIdAsync(int id)
         {
             using var connection = GetConnection();
-            var result = await connection.QueryAsync<AboutReception>(
-                "sp_GetAboutReception",
-                commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<AboutReception>("sp_GetAboutReception",commandType: CommandType.StoredProcedure);
             return result.FirstOrDefault(x => x.AboutReceptionId == id);
         }
 
@@ -39,17 +35,8 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameters.Add("@Description", model.Description);
             parameters.Add("@ImagePath", model.ImagePath);
 
-            return await connection.QuerySingleAsync<int>(
-                "sp_SaveAboutReception",
-                parameters,
-                commandType: CommandType.StoredProcedure);
+            return await connection.QuerySingleAsync<int>("sp_SaveAboutReception", parameters,commandType: CommandType.StoredProcedure);
         }
 
-        // Delete about reception record
-        public Task<int> DeleteAsync(int id)
-        {
-            throw new NotSupportedException(
-                "SQL does not contain a delete procedure for AboutReception. Use the SQL-supported Save/Get operations.");
-        }
     }
 }

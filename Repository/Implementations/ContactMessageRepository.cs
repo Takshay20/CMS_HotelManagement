@@ -39,11 +39,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameter.Add("@Subject", model.Subject);
             parameter.Add("@Message", model.Message);
 
-            var result = await connection.QueryFirstOrDefaultAsync<decimal>(
-                "sp_SubmitContactMessage",
-                parameter,
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connection.QueryFirstOrDefaultAsync<decimal>("sp_SubmitContactMessage", parameter,commandType: CommandType.StoredProcedure);
 
             return Convert.ToInt32(result);
         }

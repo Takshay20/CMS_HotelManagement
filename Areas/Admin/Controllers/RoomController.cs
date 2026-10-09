@@ -15,11 +15,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         private readonly IAmenityService _amenityService;
         private readonly IWebHostEnvironment _environment;
 
-        public RoomController(
-            IRoomService roomService,
-            IRoomCategoryService categoryService,
-            IAmenityService amenityService,
-            IWebHostEnvironment environment)
+        public RoomController(IRoomService roomService,IRoomCategoryService categoryService,IAmenityService amenityService,IWebHostEnvironment environment)
         {
             _roomService = roomService;
             _categoryService = categoryService;
@@ -47,7 +43,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _roomService.GetByIdAsync(id);
             if (result == null)
-                return Json(ResponseModel.ErrorResponse("Record not found."));
+            return Json(ResponseModel.ErrorResponse("Record not found."));
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
@@ -111,7 +107,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _roomService.DeleteAsync(id);
             if (result > 0)
                 return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
-            return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
+                return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
         // Delete image

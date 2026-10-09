@@ -14,9 +14,7 @@ namespace CMS_HotelBooking.Controllers
         private readonly IPaymentService _paymentService;
         private readonly RazorpaySettings _razorpaySettings;
 
-        public PaymentController(
-            IPaymentService paymentService,
-            IOptions<RazorpaySettings> razorpayOptions)
+        public PaymentController(IPaymentService paymentService,IOptions<RazorpaySettings> razorpayOptions)
         {
             _paymentService = paymentService;
             _razorpaySettings = razorpayOptions.Value;
@@ -35,29 +33,16 @@ namespace CMS_HotelBooking.Controllers
             }
 
             var result =
-                await _paymentService.CreatePaymentAsync(
-                    id,
-                    userId);
+                await _paymentService.CreatePaymentAsync(id, userId);
 
             if (!result.Success && result.Payment != null)
             {
-                ViewBag.RazorpayKey =
-                    _razorpaySettings.KeyId;
-
-                ViewBag.OrderId =
-                    result.Payment.OrderId;
-
-                ViewBag.Amount =
-                    result.Payment.Amount;
-
-                ViewBag.PaymentId =
-                    result.Payment.PaymentId;
-
-                ViewBag.BookingId =
-                    result.Payment.BookingId;
-
-                ViewBag.Message =
-                    result.Message;
+                ViewBag.RazorpayKey = _razorpaySettings.KeyId;
+                ViewBag.OrderId = result.Payment.OrderId;
+                ViewBag.Amount = result.Payment.Amount;
+                ViewBag.PaymentId = result.Payment.PaymentId;
+                ViewBag.BookingId = result.Payment.BookingId;
+                ViewBag.Message = result.Message;
 
                 return View(result.Payment);
             }
@@ -70,42 +55,25 @@ namespace CMS_HotelBooking.Controllers
                     $"Message: {result.Message}"
                 );
             }
-
-            ViewBag.RazorpayKey =
-                _razorpaySettings.KeyId;
-
-            ViewBag.OrderId =
-                result.Payment.OrderId;
-
-            ViewBag.Amount =
-                result.Payment.Amount;
-
-            ViewBag.PaymentId =
-                result.Payment.PaymentId;
-
-            ViewBag.BookingId =
-                result.Payment.BookingId;
+            ViewBag.RazorpayKey = _razorpaySettings.KeyId;
+            ViewBag.OrderId = result.Payment.OrderId;
+            ViewBag.Amount = result.Payment.Amount;
+            ViewBag.PaymentId = result.Payment.PaymentId;
+            ViewBag.BookingId = result.Payment.BookingId;
 
             return View(result.Payment);
         }
 
         // Show payment details
         [HttpGet]
-        public async Task<IActionResult> Details(
-            int bookingId)
+        public async Task<IActionResult> Details(int bookingId)
         {
-            var payment =
-                await _paymentService
-                    .GetByBookingIdAsync(bookingId);
+            var payment = await _paymentService.GetByBookingIdAsync(bookingId);
 
             if (payment == null)
             {
-                TempData["Error"] =
-                    "Payment record not found.";
-
-                return RedirectToAction(
-                    "MyBookings",
-                    "Booking");
+                TempData["Error"] ="Payment record not found.";
+                return RedirectToAction("MyBookings","Booking");
             }
 
             return View(payment);
@@ -113,10 +81,7 @@ namespace CMS_HotelBooking.Controllers
 
         // Verify payment
         [HttpPost]
-        public async Task<IActionResult> VerifyPayment(
-    string razorpay_payment_id,
-    string razorpay_order_id,
-    string razorpay_signature)
+        public async Task<IActionResult> VerifyPayment(string razorpay_payment_id, string razorpay_order_id, string razorpay_signature)
         {
             try
             {
@@ -179,9 +144,7 @@ namespace CMS_HotelBooking.Controllers
                 return Json(new
                 {
                     success = false,
-                    message =
-                        "Payment verification failed: "
-                        + ex.Message
+                    message = "Payment verification failed: "+ ex.Message
                 });
             }
         }

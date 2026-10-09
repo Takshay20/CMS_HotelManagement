@@ -6,7 +6,6 @@ namespace CMS_HotelBooking.ViewModels
     public class BookingVM
     {
         [Required] public int RoomId { get; set; }
-
         [Required(ErrorMessage = "Full name is required.")]
         [StringLength(150, MinimumLength = 3, ErrorMessage = "Full name must be between 3 and 150 characters.")]
         public string FullName { get; set; } = string.Empty;

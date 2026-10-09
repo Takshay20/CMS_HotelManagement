@@ -8,8 +8,7 @@ namespace CMS_HotelBooking.Services.Implementations
     {
         private readonly IGalleryRepository _repository;
 
-        public GalleryService(
-            IGalleryRepository repository)
+        public GalleryService(IGalleryRepository repository)
         {
             _repository = repository;
         }
