@@ -9,5 +9,5 @@ namespace CMS_HotelBooking.Services.Interfaces
         Task<int> SaveAsync(AboutStory model);
 
 
-    }
+    } 
 }
