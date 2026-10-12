@@ -73,7 +73,7 @@ namespace CMS_HotelBooking.Repository.Implementations
             parameter.Add("@Description",model.Description,DbType.String);
             parameter.Add("@PricePerNight",model.PricePerNight,DbType.Decimal);
             parameter.Add("@MaxGuests",model.MaxGuests,DbType.Int32);
-            parameter.Add("@SizeSqft",model.SizeSqft,DbType.Int32);
+            parameter.Add("@SizeSqft",model.SizeSqft,DbType.String);
             parameter.Add("@ImagePath",model.ImagePath,DbType.String);
             parameter.Add("@AmenityIds",model.AmenityIds,DbType.String);
             parameter.Add("@IsFeatured",model.IsFeatured,DbType.Boolean);

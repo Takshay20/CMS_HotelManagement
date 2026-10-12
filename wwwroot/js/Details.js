@@ -440,3 +440,73 @@
     );
 
 });
+
+
+// Room photos: click a small photo to open it large (lightbox with next/previous)
+$(function () {
+
+    var $lightbox = $("#rdLightbox");
+    var images = [];
+    var current = 0;
+
+    function show(index) {
+        current = (index + images.length) % images.length;
+
+        $("#rdLbImg").attr("src", images[current]);
+        $("#rdLbCount").text((current + 1) + " / " + images.length);
+    }
+
+    function openLightbox(index) {
+        images = $(".rd-thumbs img").map(function () {
+            return $(this).attr("src");
+        }).get();
+
+        show(index);
+
+        $lightbox.addClass("active");
+        $("body").css("overflow", "hidden");
+    }
+
+    function closeLightbox() {
+        $lightbox.removeClass("active");
+        $("body").css("overflow", "");
+    }
+
+    $(document).on("click", ".rd-thumbs img", function () {
+        openLightbox($(".rd-thumbs img").index(this));
+    });
+
+    $("#rdLbClose").click(closeLightbox);
+
+    // click on the dark background also closes
+    $lightbox.click(function (e) {
+        if (e.target === this) {
+            closeLightbox();
+        }
+    });
+
+    $("#rdLbPrev").click(function () {
+        show(current - 1);
+    });
+
+    $("#rdLbNext").click(function () {
+        show(current + 1);
+    });
+
+    // keyboard: Esc closes, arrow keys change the photo
+    $(document).keydown(function (e) {
+        if (!$lightbox.hasClass("active")) {
+            return;
+        }
+
+        if (e.key === "Escape") {
+            closeLightbox();
+        }
+        else if (e.key === "ArrowLeft") {
+            show(current - 1);
+        }
+        else if (e.key === "ArrowRight") {
+            show(current + 1);
+        }
+    });
+});

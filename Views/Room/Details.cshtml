@@ -102,7 +102,88 @@
         height: 75px;
         object-fit: cover;
         border-radius: 8px;
+        cursor: zoom-in;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .rd-thumbs img:hover {
+        transform: scale(1.06);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
+    }
+
+    /* Lightbox: opens a thumbnail in full size */
+    .rd-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, .92);
+    }
+
+    .rd-lightbox.active {
+        display: flex;
+    }
+
+    .rd-lightbox img {
+        max-width: 90vw;
+        max-height: 85vh;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, .6);
+        animation: rdZoom .25s ease;
+    }
+
+    @@keyframes rdZoom {
+        from { transform: scale(.92); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .rd-lb-close,
+    .rd-lb-nav {
+        position: absolute;
+        border: none;
+        color: #fff;
+        background: rgba(255, 255, 255, .15);
         cursor: pointer;
+        line-height: 1;
+        border-radius: 50%;
+        transition: background .2s;
+    }
+
+    .rd-lb-close:hover,
+    .rd-lb-nav:hover {
+        background: rgba(255, 255, 255, .3);
+    }
+
+    .rd-lb-close {
+        top: 20px;
+        right: 24px;
+        width: 44px;
+        height: 44px;
+        font-size: 28px;
+    }
+
+    .rd-lb-nav {
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+
+    .rd-lb-prev { left: 24px; }
+    .rd-lb-next { right: 24px; }
+
+    .rd-lb-count {
+        position: absolute;
+        bottom: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        font-size: 14px;
+        letter-spacing: 1px;
     }
 
     .rd-side h3 {
@@ -357,6 +438,14 @@
 
     </div>
 
+</div>
+
+<div class="rd-lightbox" id="rdLightbox">
+    <button type="button" class="rd-lb-close" id="rdLbClose" aria-label="Close">&times;</button>
+    <button type="button" class="rd-lb-nav rd-lb-prev" id="rdLbPrev" aria-label="Previous">&#10094;</button>
+    <img id="rdLbImg" src="" alt="Room photo" />
+    <button type="button" class="rd-lb-nav rd-lb-next" id="rdLbNext" aria-label="Next">&#10095;</button>
+    <div class="rd-lb-count" id="rdLbCount"></div>
 </div>
 
 @section Scripts {

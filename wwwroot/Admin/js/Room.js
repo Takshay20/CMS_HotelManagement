@@ -70,6 +70,14 @@ $(document).ready(function () {
             return;
         }
 
+        // Size format check (e.g. 350 sqft)
+        var size = $.trim($("#SizeSqft").val());
+
+        if (size !== "" && !/^\d{2,5}(\.\d+)?\s*(sq\.?\s?ft|sqft|sq\.?\s?feet|square\s?feet)?$/i.test(size)) {
+            showFieldError("SizeSqft", "Enter size like 350 sqft.");
+            return;
+        }
+
         var checkedAmenities = [];
 
         $(".amenityCheck:checked").each(function () {
@@ -130,11 +138,25 @@ $(document).ready(function () {
                 }
                 else {
 
-                    Swal.fire({
-                        icon: "error",
-                        title: r.message
-                    });
+                    // field specific error shows inside the form, others in a pop-up
+                    if (r.data && r.data.field) {
+                        showFieldError(r.data.field, r.message);
+                    }
+                    else {
+                        Swal.fire({
+                            icon: "error",
+                            title: r.message
+                        });
+                    }
                 }
+            },
+
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: "Server error",
+                    text: "Something went wrong while saving. Please try again."
+                });
             }
         });
     });
@@ -474,6 +496,9 @@ function edit(id) {
                     .show();
             }
 
+            // additional photos of this room (with delete button)
+            renderGallery(item.images);
+
             $("#drawer").addClass("active");
         }
     });
@@ -572,6 +597,9 @@ function clearForm() {
 
     $("#imgPreview").hide();
 
+    $("#existingGallery").empty().hide();
+    $("#galleryHint").hide();
+
     $(".amenityCheck")
         .prop("checked", false);
 }
@@ -584,4 +612,97 @@ $(function () {
             edit(editId);
         }, 300);
     }
+});
+
+// Show an error under one form field (cleared automatically when the user types)
+function showFieldError(id, message) {
+    $("#" + id).addClass("invalid").focus();
+    $("#err-" + id).addClass("show").text(message);
+}
+
+// Show the saved additional photos of a room inside the edit form
+function renderGallery(images) {
+
+    var $box = $("#existingGallery").empty();
+
+    if (!images || images.length === 0) {
+        $box.hide();
+        $("#galleryHint").hide();
+        return;
+    }
+
+    var html = "";
+
+    $.each(images, function (i, img) {
+        html += '<div class="gallery-item">'
+            + '<img src="/' + img.imagePath + '" alt="Room photo" />'
+            + '<button type="button" class="gallery-del" data-id="' + img.roomImageId + '" title="Delete photo">'
+            + '<i class="fa-solid fa-trash"></i></button>'
+            + '</div>';
+    });
+
+    $box.html(html).show();
+    $("#galleryHint").show();
+}
+
+// Delete one additional photo (asks first, removes it from the form on success)
+$(document).on("click", ".gallery-del", function () {
+
+    var id = $(this).data("id");
+    var $item = $(this).closest(".gallery-item");
+
+    Swal.fire({
+        title: "Delete this photo?",
+        text: "It will be removed from the room photos.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete"
+    }).then(function (result) {
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        $.ajax({
+            url: "/Admin/Room/DeleteImage",
+            type: "POST",
+            data: { roomImageId: id },
+
+            success: function (r) {
+
+                if (r.success) {
+
+                    $item.remove();
+
+                    if ($("#existingGallery .gallery-item").length === 0) {
+                        $("#existingGallery").hide();
+                        $("#galleryHint").hide();
+                    }
+
+                    Swal.fire({
+                        icon: "success",
+                        title: r.message,
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+
+                    loadData();
+                }
+                else {
+                    Swal.fire({
+                        icon: "error",
+                        title: r.message
+                    });
+                }
+            },
+
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: "Server error",
+                    text: "Unable to delete the photo. Please try again."
+                });
+            }
+        });
+    });
 });

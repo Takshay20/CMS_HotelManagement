@@ -3,6 +3,7 @@ using CMS_HotelBooking.Services.Interfaces;
 using CMS_HotelBooking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace CMS_HotelBooking.Areas.Admin.Controllers
 {
@@ -14,13 +15,20 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         private readonly IRoomCategoryService _categoryService;
         private readonly IAmenityService _amenityService;
         private readonly IWebHostEnvironment _environment;
+        private readonly ILogger<RoomController> _logger;
 
-        public RoomController(IRoomService roomService,IRoomCategoryService categoryService,IAmenityService amenityService,IWebHostEnvironment environment)
+        public RoomController(
+            IRoomService roomService,
+            IRoomCategoryService categoryService,
+            IAmenityService amenityService,
+            IWebHostEnvironment environment,
+            ILogger<RoomController> logger)
         {
             _roomService = roomService;
             _categoryService = categoryService;
             _amenityService = amenityService;
             _environment = environment;
+            _logger = logger;
         }
 
         // Open room page
@@ -43,7 +51,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
         {
             var result = await _roomService.GetByIdAsync(id);
             if (result == null)
-            return Json(ResponseModel.ErrorResponse("Record not found."));
+                return Json(ResponseModel.ErrorResponse("Record not found."));
             return Json(ResponseModel.SuccessResponse("Success", result));
         }
 
@@ -63,41 +71,76 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             if (model.Room == null)
                 return Json(ResponseModel.ErrorResponse("Invalid Data"));
 
-            if (model.ImageFile != null)
-                model.Room.ImagePath = await UploadImage(model.ImageFile);
-            else if (model.Room.RoomId == 0)
-                return Json(ResponseModel.ErrorResponse("Please choose a cover image."));
+            // Size must look like "350 sqft" (a plain number is saved as "350 sqft")
+            var size = (model.Room.SizeSqft ?? "").Trim();
 
-            if (model.Room.RoomId == 0)
+            if (size != "")
             {
-                var existingRooms = await _roomService.GetAllAsync();
-                model.Room.DisplayOrder = existingRooms.Count > 0 ? existingRooms.Max(x => x.DisplayOrder) + 1 : 1;
-            }
-            else
-            {
-                var existingRoom = await _roomService.GetByIdAsync(model.Room.RoomId);
-                if (existingRoom != null)
-                    model.Room.DisplayOrder = existingRoom.DisplayOrder;
+                var match = Regex.Match(size, @"^(\d{2,5}(?:\.\d+)?)\s*(?:sq\.?\s?ft|sqft|sq\.?\s?feet|square\s?feet)?$", RegexOptions.IgnoreCase);
+
+                if (!match.Success)
+                    return Json(new ResponseModel { Success = false, Message = "Enter size like 350 sqft.", Data = new { field = "SizeSqft" } });
+
+                size = match.Groups[1].Value + " sqft";
             }
 
-            var roomId = await _roomService.SaveAsync(model.Room);
+            model.Room.SizeSqft = size == "" ? null : size;
 
-            if (roomId > 0)
+            try
             {
-                if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
+                if (model.ImageFile != null)
+                    model.Room.ImagePath = await UploadImage(model.ImageFile);
+                else if (model.Room.RoomId == 0)
+                    return Json(ResponseModel.ErrorResponse("Please choose a cover image."));
+
+                if (model.Room.RoomId == 0)
                 {
-                    int order = 1;
-                    foreach (var file in model.GalleryFiles)
-                    {
-                        var path = await UploadImage(file);
-                        await _roomService.AddImageAsync(roomId, path, order++);
-                    }
+                    var existingRooms = await _roomService.GetAllAsync();
+                    model.Room.DisplayOrder = existingRooms.Count > 0 ? existingRooms.Max(x => x.DisplayOrder) + 1 : 1;
+                }
+                else
+                {
+                    var existingRoom = await _roomService.GetByIdAsync(model.Room.RoomId);
+                    if (existingRoom != null)
+                        model.Room.DisplayOrder = existingRoom.DisplayOrder;
                 }
 
-                string message = model.Room.RoomId == 0 ? "Record Saved Successfully." : "Record Updated Successfully.";
-                return Json(ResponseModel.SuccessResponse(message));
+                var roomId = await _roomService.SaveAsync(model.Room);
+
+                if (roomId > 0)
+                {
+                    if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
+                    {
+                        int order = 1;
+
+                        // while editing, new photos continue after the existing ones
+                        if (model.Room.RoomId > 0)
+                        {
+                            var current = await _roomService.GetByIdAsync(roomId);
+
+                            if (current?.Images != null && current.Images.Count > 0)
+                                order = current.Images.Max(i => i.DisplayOrder) + 1;
+                        }
+
+                        foreach (var file in model.GalleryFiles)
+                        {
+                            var path = await UploadImage(file);
+                            await _roomService.AddImageAsync(roomId, path, order++);
+                        }
+                    }
+
+                    string message = model.Room.RoomId == 0 ? "Record Saved Successfully." : "Record Updated Successfully.";
+                    return Json(ResponseModel.SuccessResponse(message));
+                }
+
+                return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
             }
-            return Json(ResponseModel.ErrorResponse("Unable To Save Record"));
+            catch (Exception ex)
+            {
+                // error is logged for the developer; the admin sees a clear message in the form
+                _logger.LogError(ex, "Room save failed");
+                return Json(ResponseModel.ErrorResponse("Unable to save the room. Please check the entered values and try again."));
+            }
         }
 
         // Delete room record
@@ -107,7 +150,7 @@ namespace CMS_HotelBooking.Areas.Admin.Controllers
             var result = await _roomService.DeleteAsync(id);
             if (result > 0)
                 return Json(ResponseModel.SuccessResponse("Record Deleted Successfully."));
-                return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
+            return Json(ResponseModel.ErrorResponse("Unable To Delete Record"));
         }
 
         // Delete image
