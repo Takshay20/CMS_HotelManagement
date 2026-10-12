@@ -46,8 +46,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         }
 
         // Get featured
-        public async Task<List<Room>> GetFeaturedAsync(
-            int top = 6)
+        public async Task<List<Room>> GetFeaturedAsync(int top = 6)
         {
             using var connection = GetConnection();
 
@@ -109,8 +108,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         }
 
         // Delete image
-        public async Task<int> DeleteImageAsync(
-            int roomImageId)
+        public async Task<int> DeleteImageAsync(int roomImageId)
         {
             using var connection = GetConnection();
 

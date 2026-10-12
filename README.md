@@ -96,7 +96,7 @@ On first start the app creates a default Admin user if none exists.
 
 | Role     | Email                          | Password  |
 |----------|--------------------------------|-----------|
-| Admin    | admin@royalparadise.com        | Admin@123 |
+| Admin    | royalparadisehotels15@gmail.com        | Admin@123 |
 | Customer | register at `/Account/Register` | —        |
 
 Admin panel: `/Admin/Dashboard/Dashboard`. Change the default password before production.
