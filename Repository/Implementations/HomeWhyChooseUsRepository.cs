@@ -17,7 +17,7 @@ namespace CMS_HotelBooking.Repository.Implementations
         {
             using var connection = GetConnection();
 
-            var result = await connection.QueryAsync<HomeWhyChooseUs>("sp_GetHomeWhyChooseUs",commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<HomeWhyChooseUs>("sp_GetAllHomeWhyChooseUs",commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
